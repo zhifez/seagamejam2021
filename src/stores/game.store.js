@@ -19,6 +19,7 @@ const createPlayer = (name, color, crows) => {
         storedItems: [],// [ 'stick', 'stone', 'food', 'gem', 'ring', 'coin', ],
         vp: 0,
         hasTakenAction: false,
+        isReproducing: false,
     };
 }
 
@@ -76,6 +77,10 @@ export const takeAction = (index, actionIndex) => {
             else if (action.type.includes('storage')) {
                 ++nextPlayers[nextState.turn].storageLevel;
             }
+        }
+        else if (action.type.includes('reproduce')) {
+            nextPlayers[nextState.turn].utilizedCrows += 2;
+            nextPlayers[nextState.turn].isReproducing = true;
         }
 
         if (!nextPlayers[nextState.turn].hasTakenAction) {
@@ -141,6 +146,10 @@ export const endRound = () => {
         let nextPlayers = [...state.players];
         for (let a=0; a<nextPlayers.length; ++a) {
             nextPlayers[a].utilizedCrows = 0;
+            if (nextPlayers[a].isReproducing) {
+                ++nextPlayers[a].crows;
+                nextPlayers[a].isReproducing = false;
+            }
         }
 
         nextState.players = nextPlayers;

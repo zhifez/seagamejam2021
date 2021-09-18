@@ -1,6 +1,6 @@
 <script>
     import { itemIconMap } from '../../../stores/gameData';
-    import { game, storageCapacityPerLevel, takeAction } from '../../../stores/game.store';
+    import { game, nestCapacityPerLevel, storageCapacityPerLevel, takeAction } from '../../../stores/game.store';
     import Tooltip from '../../../components/Tooltip.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
 
@@ -40,6 +40,11 @@
     }
 
     const onTakeAction = (actionIndex) => {
+        if ($game.canEndRound) {
+            alert('The round has ended. Press "End Round" to start a new round.');
+            return;
+        }
+
         if (activePlayer.hasTakenAction) {
             alert('You have already taken an action!\nTake a Crown Action or end your turn.');
             return;
@@ -82,6 +87,20 @@
             }
             else {
                 alert(`Your don't have enough resources to take this action.`);
+                return;
+            }
+        }
+        else if (type.includes('reproduce')) {
+            if (activePlayer.isReproducing) {
+                alert(`You can only take this action once per round.`);
+                return;
+            }
+            if (activePlayer.crows >= activePlayer.nestLevel * nestCapacityPerLevel) {
+                alert(`Your Nest cannot occupy anymore Crow.`);
+                return;
+            }
+            if (activePlayer.crows - activePlayer.utilizedCrows < 2) {
+                alert('You do not have enough Crow for this action.');
                 return;
             }
         }
@@ -130,9 +149,18 @@
                     {/if}
 
                     {#if index in $game.actions && (a + s) in $game.actions[index]}
-                    <div class={`absolute top-4 w-full h-full text-${$game.actions[index][a + s]}`}>
+                    <div 
+                        class={`absolute top-4 w-full h-full text-${$game.actions[index][a + s]}
+                        ${type.includes('reproduce') ? 'opacity-80' : ''}
+                        `}
+                    >
                         <FaCrow />
                     </div>
+                    {#if type.includes('reproduce')}
+                    <div class={`absolute top-6 left-4 z-10 w-full h-full text-${$game.actions[index][a + s]}`}>
+                        <FaCrow />
+                    </div>
+                    {/if}
                     {/if}
                 </div>
             </Tooltip>

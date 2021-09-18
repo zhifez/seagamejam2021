@@ -100,6 +100,7 @@
             label="End Round"
             textClass={'text-lg'}
             color={'yellow-800'}
+            hoverColor={'yellow-700'}
             on:click={onBtnEndRound}
         />
         {:else}

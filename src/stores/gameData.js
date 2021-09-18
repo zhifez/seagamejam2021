@@ -151,8 +151,17 @@ export const actions = [
     {
         name: 'Reproduce (once per round)',
         hint: 'Once per round, send 2 Crows here to reproduce a new Crow, to be used in the next round.',
-        type: 'action',
+        type: 'reproduce-action',
         rows: 2,
+        actions: [
+            {
+                name: 'Try for baby (with success)',
+                conditions: [
+                    { key: 'crow', quantity: 2 },
+                ],
+                space: 0,
+            },
+        ]
     },
     // {
     //     name: 'Trade with Black Market',
