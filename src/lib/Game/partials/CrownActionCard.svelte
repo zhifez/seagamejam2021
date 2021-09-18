@@ -2,9 +2,10 @@
     import { dungeonSize } from '../../../stores/gameData.store';
     import CrownActionTile from './CrownActionTile.svelte';
 
+    export let index = -1;
     export let name = '';
     export let hint = '';
-    export const type = 'action';
+    export let type = 'action';
 </script>
 
 <div class="col-span-2 row-span-3">

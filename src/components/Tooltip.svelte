@@ -15,17 +15,19 @@
     const onFocus = () => {}
 </script>
 
-<div 
-    on:mouseover={onMouseOver}
-    on:mouseleave={onMouseLeave}
-    on:focus={onFocus}
->
-    <slot />
-</div>
+<div class="relative">
+    <div 
+        on:mouseover={onMouseOver}
+        on:mouseleave={onMouseLeave}
+        on:focus={onFocus}
+    >
+        <slot />
+    </div>
 
-{#if isHovered && !disabled}
-<div class="rounded-md shadow px-2 py-1 bg-white absolute z-10 min-w-32">
-    <p class="text-sm font-semibold">{title}</p>
-    <p class="text-xs">{subtitle}</p>
+    {#if isHovered && !disabled}
+    <div class="rounded-md shadow px-2 py-1 bg-white absolute z-10 min-w-32">
+        <p class="text-sm font-semibold">{title}</p>
+        <p class="text-xs">{subtitle}</p>
+    </div>
+    {/if}
 </div>
-{/if}

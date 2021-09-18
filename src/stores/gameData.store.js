@@ -18,20 +18,60 @@ import GiCrownCoin from 'svelte-icons/gi/GiCrownCoin.svelte';
 export const actions = readable([
     {
         name: 'Collect Stick',
-        type: 'action'
+        type: 'action',
+        actions: [
+            {
+                name: 'Take 2 Sticks',
+                rewards: [
+                    { key: 'stick', quantity: 2 }
+                ],
+                space: 1,
+            },
+            {
+                name: 'Take 1 Stick',
+                rewards: [
+                    { key: 'stick', quantity: 1 }
+                ],
+                space: -1,
+            }
+        ]
+    },
+    {
+        name: 'Collect Stone',
+        type: 'action',
+        actions: [
+            {
+                name: 'Take 2 Stones',
+                rewards: [
+                    { key: 'stone', quantity: 2 }
+                ],
+                space: 1,
+            },
+            {
+                name: 'Take 1 Stone',
+                rewards: [
+                    { key: 'stone', quantity: 1 }
+                ],
+                space: -1,
+            }
+        ]
     },
     {
         name: 'Steal Food',
         type: 'action',
         actions: [
             {
-                name: 'Take 2 food',
-                rewards: ['food', 'food'],
+                name: 'Take 2 Food',
+                rewards: [
+                    { key: 'food', quantity: 2 }
+                ],
                 space: 1,
             },
             {
-                name: 'Take 1 food',
-                rewards: ['food'],
+                name: 'Take 1 Food',
+                rewards: [
+                    { key: 'food', quantity: 1 }
+                ],
                 space: -1,
             }
         ]
@@ -41,27 +81,43 @@ export const actions = readable([
         type: 'action',
         actions: [
             {
-                name: 'Take 2 gems',
-                rewards: ['gem', 'gem'],
+                name: 'Take 2 Gems',
+                rewards: [
+                    { key: 'gem', quantity: 2 }
+                ],
                 space: 1,
             },
             {
-                name: 'Take 1 gem',
-                rewards: ['gem'],
+                name: 'Take 1 Gem',
+                rewards: [
+                    { key: 'gem', quantity: 1 }
+                ],
                 space: -1,
             }
         ]
     },
     {
         name: 'Steal Ring',
-        type: 'action'
+        type: 'action',
+        actions: [
+            {
+                name: 'Take 2 Rings',
+                rewards: [
+                    { key: 'ring', quantity: 2 }
+                ],
+                space: 1,
+            },
+            {
+                name: 'Take 1 Ring',
+                rewards: [
+                    { key: 'ring', quantity: 1 }
+                ],
+                space: -1,
+            }
+        ]
     },
     {
-        name: 'Collect Stone',
-        type: 'action'
-    },
-    {
-        name: 'Crown',
+        name: 'Crown Action',
         hint: 'You can take this action any time during your turn.',
         type: 'crown-action'
     },
@@ -158,30 +214,36 @@ export const itemIconMap = readable({
         name: 'Stick',
         hint: 'For building use',
         icon: GiWoodStick,
+        iconColor: 'text-yellow-800',
     },
     'stone': {
         name: 'Stone',
         hint: 'For building use',
         icon: GiRock,
+        iconColor: 'text-gray-600',
     },
     'food': {
         name: 'Food',
         hint: 'Probably trash; For consumption/trading use',
         icon: FaDrumstickBite,
+        iconColor: 'text-yellow-600',
     },
     'gem': {
         name: `Someone's Gem`,
         hint: 'Stolen; For trading use',
         icon: FaGem,
+        iconColor: 'text-green-400',
     },
     'ring': {
         name: `Someone's Ring`,
         hint: 'Stolen; For trading use',
         icon: GiRing,
+        iconColor: 'text-yellow-500',
     },
     'coin': {
         name: 'Stolen Coin',
         hint: 'Stolen; For trading use',
         icon: GiCrownCoin,
+        iconColor: 'text-yellow-500',
     },
 });

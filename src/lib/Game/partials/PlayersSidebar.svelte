@@ -33,7 +33,8 @@
         {#each $game.players as player, i}
         <div 
             class={`col-span-1 text-${player.color} p-2
-            ${$game.turn === i ? '' : 'bg-yellow-800'}
+            border-b-4 mx-2
+            ${$game.turn === i ? 'border-yellow-800' : 'border-transparent'}
             `}
         >
             <div class="w-full h-6">
@@ -44,6 +45,10 @@
     </div>
     <div class="h-full p-3 flex flex-col justify-between">
         <div>
+            <div class="flex items-center mb-1">
+                <h5 class="font-semibold">VP:</h5>
+                <p class="ml-2">{activePlayer.vp}</p>
+            </div>
             <div class="flex justify-between items-center mb-1">
                 <h5 class="font-semibold">Nest</h5>
                 <p class="text-sm">Lvl. {activePlayer.nestLevel}</p>
@@ -71,7 +76,7 @@
                         title={$itemIconMap[item].name}
                         subtitle={$itemIconMap[item].hint}
                     >
-                        <div class="h-6">
+                        <div class={`w-8 h-8 ${$itemIconMap[item].iconColor} p-1 bg-white`}>
                             <svelte:component this={$itemIconMap[item].icon} />
                         </div>
                     </Tooltip>

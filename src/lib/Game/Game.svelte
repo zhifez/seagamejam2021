@@ -10,8 +10,8 @@
     </div>
     <div class="col-span-4 bg-yellow-600">
         <div class="grid grid-cols-4 grid-rows-5 gap-3 h-screen p-3">
-            {#each $actions as action}
-            <ActionCard action={action} />
+            {#each $actions as action, i}
+            <ActionCard index={i} action={action} />
             {/each}
         </div>
     </div>

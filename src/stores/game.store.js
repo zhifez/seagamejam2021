@@ -15,9 +15,8 @@ const createPlayer = (name, color, crows) => {
         utilizedCrows: 0, 
         nestLevel: 1, 
         storageLevel: 1,
-        storedItems: [
-            'food', 'stick', 'gem', 'ring', 'stone', 'coin'
-        ],
+        storedItems: [],// [ 'stick', 'stone', 'food', 'gem', 'ring', 'coin', ],
+        vp: 0,
         hasTakenAction: false,
     };
 }
@@ -32,17 +31,27 @@ export const game = writable({
     ],
     round: 0, turn: 0, canEndRound: false,
     layer: 0,
+    actions: {},
 });
 
-export const takeAction = () => {
+export const takeAction = (index, actionIndex) => {
     game.update(state => {
         let nextState = {...state};
         let nextPlayers = [...state.players];
+        let nextActions = {...state.actions};
 
-        ++nextPlayers[nextState.turn].utilizedCrows;
-        nextPlayers[nextState.turn].hasTakenAction = true;
+        if (!nextPlayers[nextState.turn].hasTakenAction) {
+            // Store action log
+            nextActions[index] = {...nextActions[index]};
+            nextActions[index][actionIndex] = nextPlayers[nextState.turn].color;
+
+            // Update current player's status
+            ++nextPlayers[nextState.turn].utilizedCrows;
+            nextPlayers[nextState.turn].hasTakenAction = true;
+        }
 
         nextState.players = nextPlayers;
+        nextState.actions = nextActions;
         return nextState;
     });
 }
@@ -98,6 +107,7 @@ export const endRound = () => {
         }
 
         nextState.players = nextPlayers;
+        nextState.actions = {};
         return nextState;
     });
 }
