@@ -1,7 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { game } from '../../../stores/game.store';
-    import { crownActions, dungeonSize, dungeonLayers } from '../../../stores/playerActions.store';
+    import { crownActions, dungeonSize, dungeonLayers } from '../../../stores/gameData.store';
     import Tooltip from '../../../components/Tooltip.svelte';
     
     export let x = 0;

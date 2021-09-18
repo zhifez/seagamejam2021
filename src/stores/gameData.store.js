@@ -8,6 +8,12 @@ import GiClosedDoors from 'svelte-icons/gi/GiClosedDoors.svelte';
 import GiWoodenDoor from 'svelte-icons/gi/GiWoodenDoor.svelte';
 import GiDefensiveWall from 'svelte-icons/gi/GiDefensiveWall.svelte';
 import GiStoneWall from 'svelte-icons/gi/GiStoneWall.svelte';
+import GiWoodStick from 'svelte-icons/gi/GiWoodStick.svelte'
+import GiRock from 'svelte-icons/gi/GiRock.svelte';
+import FaDrumstickBite from 'svelte-icons/fa/FaDrumstickBite.svelte';
+import FaGem from 'svelte-icons/fa/FaGem.svelte';
+import GiRing from 'svelte-icons/gi/GiRing.svelte';
+import GiCrownCoin from 'svelte-icons/gi/GiCrownCoin.svelte';
 
 export const actions = readable([
     {
@@ -56,7 +62,7 @@ export const actions = readable([
     },
     {
         name: 'Crown',
-        hint: 'You can take this action any time.',
+        hint: 'You can take this action any time',
         type: 'crown-action'
     },
     {
@@ -84,8 +90,8 @@ export const actions = readable([
         type: 'action'
     },
     {
-        name: 'Hire',
-        hint: 'Lasts 3 rounds.',
+        name: 'Hire Human',
+        hint: 'Lasts 1 round',
         type: 'action'
     },
 ]);
@@ -146,3 +152,36 @@ export const dungeonLayers = readable([
     ['rune', 'trap'],
     ['crown']
 ]);
+
+export const itemIconMap = readable({
+    'stick': {
+        name: 'Stick',
+        hint: 'For building use',
+        icon: GiWoodStick,
+    },
+    'stone': {
+        name: 'Stone',
+        hint: 'For building use',
+        icon: GiRock,
+    },
+    'food': {
+        name: 'Food',
+        hint: 'Probably trash; For consumption/trading use',
+        icon: FaDrumstickBite,
+    },
+    'gem': {
+        name: `Someone's Gem`,
+        hint: 'Stolen; For trading use',
+        icon: FaGem,
+    },
+    'ring': {
+        name: `Someone's Ring`,
+        hint: 'Stolen; For trading use',
+        icon: GiRing,
+    },
+    'coin': {
+        name: 'Stolen Coin',
+        hint: 'Stolen; For trading use',
+        icon: GiCrownCoin,
+    },
+});

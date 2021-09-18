@@ -24,7 +24,7 @@
 </div>
 
 {#if isHovered && !disabled}
-<div class="rounded-md shadow px-2 py-1 bg-white absolute z-10">
+<div class="rounded-md shadow px-2 py-1 bg-white absolute z-10 min-w-32">
     <p class="text-sm font-semibold">{title}</p>
     <p class="text-xs">{subtitle}</p>
 </div>

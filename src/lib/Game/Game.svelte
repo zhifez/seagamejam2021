@@ -1,5 +1,5 @@
 <script>
-    import { actions } from '../../stores/playerActions.store';
+    import { actions } from '../../stores/gameData.store';
     import PlayersSidebar from './partials/PlayersSidebar.svelte';
     import ActionCard from './partials/ActionCard.svelte';
 

@@ -1,5 +1,5 @@
 <script>
-    import { dungeonSize } from '../../../stores/playerActions.store';
+    import { dungeonSize } from '../../../stores/gameData.store';
     import CrownActionTile from './CrownActionTile.svelte';
 
     export let name = '';
