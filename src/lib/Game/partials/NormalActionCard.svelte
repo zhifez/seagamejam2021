@@ -1,4 +1,6 @@
 <script>
+    import { takeAction } from '../../../stores/game.store';
+
     export let name = '';
     export let hint = '';
     export let type = 'action';
@@ -10,6 +12,7 @@
         border-2 border-yellow-300 hover:border-yellow-800 cursor-pointer
         flex flex-col justify-between
         `}
+        on:click={takeAction}
     >
         <section>
             <h1 class="font-semibold">{name}</h1>

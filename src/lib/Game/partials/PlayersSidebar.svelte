@@ -6,12 +6,8 @@
     import Button from '../../../components/Button.svelte';
 
     let activePlayer;
-    let hasTakenAction = false;
     $: {
         activePlayer = $game.players[$game.turn];
-        if (activePlayer !== $game.players[$game.turn]) {
-            hasTakenAction = false;
-        }
     }
 
     const onBtnPass = () => {
@@ -92,17 +88,19 @@
         />
         {:else}
         <div class="flex flex-col gap-3">
+            {#if !activePlayer.hasTakenAction}
             <Button 
                 label="Pass"
                 textClass={'text-lg'}
                 hint="Will utilize a Crow"
                 on:click={onBtnPass}
             />
+            {/if}
             <Button 
                 label="Next Turn"
                 textClass={'text-lg'}
                 on:click={onBtnNextTurn}
-                disabled={!hasTakenAction}
+                disabled={!activePlayer.hasTakenAction}
             />
         </div>
         {/if}

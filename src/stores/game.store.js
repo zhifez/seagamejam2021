@@ -18,6 +18,7 @@ const createPlayer = (name, color, crows) => {
         storedItems: [
             'food', 'stick', 'gem', 'ring', 'stone', 'coin'
         ],
+        hasTakenAction: false,
     };
 }
 
@@ -33,14 +34,29 @@ export const game = writable({
     layer: 0,
 });
 
+export const takeAction = () => {
+    game.update(state => {
+        let nextState = {...state};
+        let nextPlayers = [...state.players];
+
+        ++nextPlayers[nextState.turn].utilizedCrows;
+        nextPlayers[nextState.turn].hasTakenAction = true;
+
+        nextState.players = nextPlayers;
+        return nextState;
+    });
+}
+
 export const nextTurn = (passed = false) => {
     game.update(state => {
         let nextState = {...state};
         let nextPlayers = [...state.players];
 
+        // Current player update
         if (passed) {
             ++nextPlayers[nextState.turn].utilizedCrows;
         }
+        nextPlayers[nextState.turn].hasTakenAction = false;
 
         let hasNextPlayer = false;
         let turn = nextState.turn + 1; // Switch to next player
