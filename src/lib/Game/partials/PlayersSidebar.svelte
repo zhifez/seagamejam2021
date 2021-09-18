@@ -1,6 +1,6 @@
 <script>
     import { endRound, game, nextTurn } from '../../../stores/game.store';
-    import { itemIconMap } from '../../../stores/gameData.store';
+    import { itemIconMap } from '../../../stores/gameData';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import Tooltip from '../../../components/Tooltip.svelte';
     import Button from '../../../components/Button.svelte';
@@ -73,11 +73,11 @@
                 {#each activePlayer.storedItems as item}
                 <div class="relative">
                     <Tooltip
-                        title={$itemIconMap[item].name}
-                        subtitle={$itemIconMap[item].hint}
+                        title={itemIconMap[item].name}
+                        subtitle={itemIconMap[item].hint}
                     >
-                        <div class={`w-8 h-8 ${$itemIconMap[item].iconColor} p-1 bg-white`}>
-                            <svelte:component this={$itemIconMap[item].icon} />
+                        <div class={`w-8 h-8 ${itemIconMap[item].iconColor} p-1 bg-white`}>
+                            <svelte:component this={itemIconMap[item].icon} />
                         </div>
                     </Tooltip>
                 </div>

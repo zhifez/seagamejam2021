@@ -1,7 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { game } from '../../../stores/game.store';
-    import { crownActions, dungeonSize, dungeonLayers } from '../../../stores/gameData.store';
+    import { crownActions, dungeonSize, dungeonLayers } from '../../../stores/gameData';
     import Tooltip from '../../../components/Tooltip.svelte';
     
     export let x = 0;
@@ -23,8 +23,8 @@
         else {
             layerIndex = 3;
         }
-        let layer = $dungeonLayers[layerIndex];
-        tile = $crownActions[layer[(x + y) % layer.length]];
+        let layer = dungeonLayers[layerIndex];
+        tile = crownActions[layer[(x + y) % layer.length]];
         disabled = $game.layer < layerIndex;
     }
 

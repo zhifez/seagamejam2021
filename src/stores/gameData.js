@@ -1,4 +1,3 @@
-import { readable } from 'svelte/store';
 import GiImperialCrown from 'svelte-icons/gi/GiImperialCrown.svelte';
 import GiRuneStone from 'svelte-icons/gi/GiRuneStone.svelte';
 import GiMantrap from 'svelte-icons/gi/GiMantrap.svelte';
@@ -15,7 +14,7 @@ import FaGem from 'svelte-icons/fa/FaGem.svelte';
 import GiRing from 'svelte-icons/gi/GiRing.svelte';
 import GiCrownCoin from 'svelte-icons/gi/GiCrownCoin.svelte';
 
-export const actions = readable([
+export const actions = [
     {
         name: 'Collect Stick',
         type: 'action',
@@ -150,9 +149,9 @@ export const actions = readable([
         hint: 'Lasts 1 round.',
         type: 'action'
     },
-]);
+];
 
-export const crownActions = readable({
+export const crownActions = {
     'crown': {
         name: "Steal the Crown",
         vp: 50,
@@ -198,18 +197,18 @@ export const crownActions = readable({
         vp: 2,
         icon: GiStoneWall,
     },
-});
+};
 
 export const dungeonSize = 7;
 
-export const dungeonLayers = readable([
+export const dungeonLayers = [
     ['wall', 'door', 'guard'],
     ['wall-str', 'room', 'crown-guard'],
     ['rune', 'trap'],
     ['crown']
-]);
+];
 
-export const itemIconMap = readable({
+export const itemIconMap = {
     'stick': {
         name: 'Stick',
         hint: 'For building use',
@@ -246,4 +245,4 @@ export const itemIconMap = readable({
         icon: GiCrownCoin,
         iconColor: 'text-yellow-500',
     },
-});
+};

@@ -1,5 +1,5 @@
 <script>
-    import { itemIconMap } from '../../../stores/gameData.store';
+    import { itemIconMap } from '../../../stores/gameData';
     import { game, takeAction } from '../../../stores/game.store';
     import Tooltip from '../../../components/Tooltip.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
@@ -57,8 +57,8 @@
                     <div class="grid grid-cols-2 gap-1">
                         {#each action.rewards as reward, r}
                         {#each Array(reward.quantity) as _, i}
-                        <div class={`col-span-1 ${$itemIconMap[reward.key].iconColor}`}>
-                            <svelte:component this={$itemIconMap[reward.key].icon} />
+                        <div class={`col-span-1 ${itemIconMap[reward.key].iconColor}`}>
+                            <svelte:component this={itemIconMap[reward.key].icon} />
                         </div>
                         {/each}
                         {/each}

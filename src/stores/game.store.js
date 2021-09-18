@@ -1,4 +1,5 @@
 import { writable } from "svelte/store";
+import { actions } from "./gameData";
 
 const colors = [
     'red-500',
@@ -39,6 +40,8 @@ export const takeAction = (index, actionIndex) => {
         let nextState = {...state};
         let nextPlayers = [...state.players];
         let nextActions = {...state.actions};
+
+        console.log(actions[index].actions[Math.min(actionIndex, actions[index].actions.length)]);
 
         if (!nextPlayers[nextState.turn].hasTakenAction) {
             // Store action log
