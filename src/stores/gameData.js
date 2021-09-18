@@ -17,7 +17,7 @@ import GiCrownCoin from 'svelte-icons/gi/GiCrownCoin.svelte';
 export const actions = [
     {
         name: 'Collect Stick',
-        type: 'action',
+        type: 'take-action',
         actions: [
             {
                 name: 'Take 2 Sticks',
@@ -37,7 +37,7 @@ export const actions = [
     },
     {
         name: 'Collect Stone',
-        type: 'action',
+        type: 'take-action',
         actions: [
             {
                 name: 'Take 2 Stones',
@@ -57,7 +57,7 @@ export const actions = [
     },
     {
         name: 'Steal Food',
-        type: 'action',
+        type: 'take-action',
         actions: [
             {
                 name: 'Take 2 Food',
@@ -77,7 +77,7 @@ export const actions = [
     },
     {
         name: 'Steal Gem',
-        type: 'action',
+        type: 'take-action',
         actions: [
             {
                 name: 'Take 2 Gems',
@@ -96,20 +96,20 @@ export const actions = [
         ]
     },
     {
-        name: 'Steal Ring',
-        type: 'action',
+        name: 'Steal Coin',
+        type: 'take-action',
         actions: [
             {
-                name: 'Take 2 Rings',
+                name: 'Take 2 Coins',
                 rewards: [
-                    { key: 'ring', quantity: 2 }
+                    { key: 'coin', quantity: 2 }
                 ],
                 space: 1,
             },
             {
-                name: 'Take 1 Ring',
+                name: 'Take 1 Coin',
                 rewards: [
-                    { key: 'ring', quantity: 1 }
+                    { key: 'coin', quantity: 1 }
                 ],
                 space: -1,
             }
@@ -117,36 +117,70 @@ export const actions = [
     },
     {
         name: 'Crown Action',
-        hint: 'You can take this action any time during your turn.',
+        hint: 'You can take any one of these actions any time during your turn.',
         type: 'crown-action'
     },
     {
-        name: 'Build (Nest/Storage)',
+        name: 'Upgrade Nest',
+        hint: 'Requires 10 Sticks.',
+        type: 'upgrade-action',
+        actions: [
+            {
+                name: 'Upgrade your Nest',
+                conditions: [
+                    { key: 'stick', quantity: 10 }
+                ],
+                rewards: [
+                    { key: 'nest', quantity: 1 }
+                ],
+                space: 0,
+            },
+        ]
+    },
+    {
+        name: 'Upgrade Storage',
+        hint: 'Requires 5 Sticks and 10 Stones.',
+        type: 'upgrade-action',
+        actions: [
+            {
+                name: 'Upgrade your Storage',
+                conditions: [
+                    { key: 'stick', quantity: 5 },
+                    { key: 'stone', quantity: 10 }
+                ],
+                rewards: [
+                    { key: 'storage', quantity: 1 }
+                ],
+                space: 0,
+            },
+        ]
+    },
+    {
+        name: 'Reproduce (once per round)',
+        hint: 'Once per round, send 2 Crows here to reproduce a new Crow, to be used in the next round.',
+        type: 'action',
+        rows: 2,
+    },
+    {
+        name: 'Trade with Black Market',
         type: 'action'
     },
     {
-        name: 'Upgrade Building',
-        type: 'action'
-    },
-    {
-        name: 'Reproduce',
-        type: 'action'
-    },
-    {
-        name: 'Buy Crow Action',
-        type: 'action'
-    },
-    {
-        name: 'Take Crow Action',
-        type: 'action'
-    },
-    {
-        name: 'Trade Item', // With Black Market or Player
+        name: 'Hire Animal',
+        hint: 'Lasts 1 round.',
         type: 'action'
     },
     {
         name: 'Hire Human',
         hint: 'Lasts 1 round.',
+        type: 'action'
+    },
+    {
+        name: 'Draw Crow Action',
+        type: 'action'
+    },
+    {
+        name: 'Take Crow Action',
         type: 'action'
     },
 ];

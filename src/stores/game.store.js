@@ -41,7 +41,25 @@ export const takeAction = (index, actionIndex) => {
         let nextPlayers = [...state.players];
         let nextActions = {...state.actions};
 
-        console.log(actions[index].actions[Math.min(actionIndex, actions[index].actions.length)]);
+        let action = actions[index].actions[Math.min(actionIndex, actions[index].actions.length)];
+        if (action.rewards) {
+            let storageIsMax = false;
+            const maxStorage = nextPlayers[nextState.turn].storageLevel * storageCapacityPerLevel;
+            for (let a=0; a<action.rewards.length; ++a) {
+                if (storageIsMax) {
+                    break;
+                }
+
+                for (let b=0; b<action.rewards[a].quantity; b++) {
+                    if (nextPlayers[nextState.turn].storedItems.length >= maxStorage) {
+                        storageIsMax = true;
+                        break;
+                    }
+
+                    nextPlayers[nextState.turn].storedItems.push(action.rewards[a].key);
+                }
+            }
+        }
 
         if (!nextPlayers[nextState.turn].hasTakenAction) {
             // Store action log
@@ -59,7 +77,7 @@ export const takeAction = (index, actionIndex) => {
     });
 }
 
-export const nextTurn = (passed = false) => {
+export const endTurn = (passed = false) => {
     game.update(state => {
         let nextState = {...state};
         let nextPlayers = [...state.players];
