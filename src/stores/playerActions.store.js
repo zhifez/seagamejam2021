@@ -1,4 +1,13 @@
-import { readable } from "svelte/store";
+import { readable } from 'svelte/store';
+import GiImperialCrown from 'svelte-icons/gi/GiImperialCrown.svelte';
+import GiRuneStone from 'svelte-icons/gi/GiRuneStone.svelte';
+import GiMantrap from 'svelte-icons/gi/GiMantrap.svelte';
+import GiGuards from 'svelte-icons/gi/GiGuards.svelte';
+import GiGuardedTower from 'svelte-icons/gi/GiGuardedTower.svelte';
+import GiClosedDoors from 'svelte-icons/gi/GiClosedDoors.svelte';
+import GiWoodenDoor from 'svelte-icons/gi/GiWoodenDoor.svelte';
+import GiDefensiveWall from 'svelte-icons/gi/GiDefensiveWall.svelte';
+import GiStoneWall from 'svelte-icons/gi/GiStoneWall.svelte';
 
 export const actions = readable([
     {
@@ -50,34 +59,65 @@ export const actions = readable([
         type: 'action'
     },
     {
-        name: 'Hire (Last 2 Rounds)',
+        name: 'Hire',
+        hint: 'Lasts 3 rounds.',
         type: 'action'
     },
 ]);
 
-export const crownActions = readable([
-    {
-        name: "Steal Crown",
+export const crownActions = readable({
+    'crown': {
+        name: "Steal the Crown",
+        vp: 50,
+        icon: GiImperialCrown,
     },
-    {
+    'rune': {
         name: "Destroy Rune",
+        vp: 20,
+        icon: GiRuneStone,
     },
-    {
+    'trap': {
         name: "Disable Trap", // With thief or magician
+        vp: 20,
+        icon: GiMantrap,
     },
-    {
+    'crown-guard': {
         name: "Crown Guard", // Bribe or kill
+        vp: 10,
+        icon: GiGuards,
     },
-    {
+    'guard': {
         name: "Guard", // With mercenary
+        vp: 2,
+        icon: GiGuardedTower,
     },
-    {
-        name: "Unlock Treasure Room", // With key
+    'room': {
+        name: "Unlock Treasure Room", // With treasure key
+        vp: 5,
+        icon: GiClosedDoors,
     },
-    {
-        name: "Break Wall", // With mercenary
+    'door': {
+        name: "Unlock Door", // With normal key
+        vp: 3,
+        icon: GiWoodenDoor,
     },
-    {
-        name: "Unlock Door", // With mercenary
+    'wall-str': {
+        name: "Break Strong Wall", // With mercenary
+        vp: 5,
+        icon: GiDefensiveWall,
     },
+    'wall': {
+        name: "Break  Wall", // With mercenary
+        vp: 3,
+        icon: GiStoneWall,
+    },
+});
+
+export const dungeonSize = 7;
+
+export const dungeonLayers = readable([
+    ['wall', 'door', 'guard'],
+    ['wall-str', 'room', 'crown-guard'],
+    ['rune', 'trap'],
+    ['crown']
 ]);

@@ -1,3 +1,3 @@
-<div class="w-full h-screen bg-red-500">
+<div class="w-full h-screen bg-yellow-300">
     
 </div>

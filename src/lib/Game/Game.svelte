@@ -8,7 +8,7 @@
     <div class="col-span-1">
         <PlayersSidebar />
     </div>
-    <div class="col-span-4">
+    <div class="col-span-4 bg-yellow-600">
         <div class="grid grid-cols-4 gap-3 h-screen p-3">
             {#each $actions as action}
             <ActionCard action={action} />
