@@ -103,7 +103,7 @@ export const crownActions = readable({
     },
     'trap': {
         name: "Disable Trap", // With thief or magician
-        vp: 20,
+        vp: 18,
         icon: GiMantrap,
     },
     'crown-guard': {
@@ -113,7 +113,7 @@ export const crownActions = readable({
     },
     'guard': {
         name: "Guard", // With mercenary
-        vp: 2,
+        vp: 3,
         icon: GiGuardedTower,
     },
     'room': {
@@ -123,7 +123,7 @@ export const crownActions = readable({
     },
     'door': {
         name: "Unlock Door", // With normal key
-        vp: 3,
+        vp: 2,
         icon: GiWoodenDoor,
     },
     'wall-str': {
@@ -132,8 +132,8 @@ export const crownActions = readable({
         icon: GiDefensiveWall,
     },
     'wall': {
-        name: "Break  Wall", // With mercenary
-        vp: 3,
+        name: "Break Wall", // With mercenary
+        vp: 2,
         icon: GiStoneWall,
     },
 });

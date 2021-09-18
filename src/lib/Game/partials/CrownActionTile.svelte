@@ -1,8 +1,8 @@
 <script>
-import { createEventDispatcher } from 'svelte';
-
+    import { createEventDispatcher } from 'svelte';
     import { game } from '../../../stores/game.store';
     import { crownActions, dungeonSize, dungeonLayers } from '../../../stores/playerActions.store';
+    import Tooltip from '../../../components/Tooltip.svelte';
     
     export let x = 0;
     export let y = 0;
@@ -39,11 +39,17 @@ import { createEventDispatcher } from 'svelte';
     }
 </script>
 
-<div 
-    class={`w-9 h-9 2xl:w-10 2xl:h-10 p-1 rounded-md shadow 
-    ${disabled ? 'opacity-20' : 'cursor-pointer hover:bg-yellow-200'}
-    `}
-    on:click={onClick}
+<Tooltip
+    title={tile.name}
+    subtitle={`VP: ${tile.vp}`}
+    disabled={disabled}
 >
-    <svelte:component this={tile.icon} />
-</div>
+    <div 
+        class={`w-9 h-9 2xl:w-10 2xl:h-10 p-1 rounded-md shadow bg-yellow-300
+        ${disabled ? 'opacity-20' : 'cursor-pointer hover:bg-yellow-200'}
+        `}
+        on:click={onClick}
+    >
+        <svelte:component this={tile.icon} />
+    </div>
+</Tooltip>
