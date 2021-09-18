@@ -109,9 +109,13 @@
                 title={action.name}
             >
                 <div 
-                    class="w-full h-12 rounded-md bg-gray-100 p-1 cursor-pointer relative"
+                    class={`w-full h-12 rounded-md bg-white p-1 cursor-pointer relative
+                    ${(action.conditions && action.conditions.length > 0
+                    && (!action.rewards || action.rewards.length <= 0)) ? 'rounded-full' : ''}
+                    `}
                     on:click={() => onTakeAction(a + s)}
                 >
+                    {#if action.rewards}
                     <div class="grid grid-cols-2 gap-1">
                         {#each action.rewards as reward, r}
                         {#if reward.key in itemIconMap}
@@ -123,6 +127,7 @@
                         {/if}
                         {/each}
                     </div>
+                    {/if}
 
                     {#if index in $game.actions && (a + s) in $game.actions[index]}
                     <div class={`absolute top-4 w-full h-full text-${$game.actions[index][a + s]}`}>

@@ -130,9 +130,6 @@ export const actions = [
                     { key: 'stick', quantity: 3, additionPerLevel: 1 },
                     { key: 'stone', quantity: 3, additionPerLevel: 2 }
                 ],
-                rewards: [
-                    { key: 'nest', quantity: 1 }
-                ],
                 space: 0,
             },
         ]
@@ -147,9 +144,6 @@ export const actions = [
                     { key: 'stick', quantity: 3, additionPerLevel: 1 },
                     { key: 'stone', quantity: 0, additionPerLevel: 3 }
                 ],
-                rewards: [
-                    { key: 'storage', quantity: 1 }
-                ],
                 space: 0,
             },
         ]
@@ -160,15 +154,15 @@ export const actions = [
         type: 'action',
         rows: 2,
     },
-    {
-        name: 'Trade with Black Market',
-        type: 'action'
-    },
-    {
-        name: 'Hire Animal',
-        hint: 'Lasts 1 round.',
-        type: 'action'
-    },
+    // {
+    //     name: 'Trade with Black Market',
+    //     type: 'action'
+    // },
+    // {
+    //     name: 'Hire Animal',
+    //     hint: 'Lasts 1 round.',
+    //     type: 'action'
+    // },
     {
         name: 'Hire Human',
         hint: 'Lasts 1 round.',
