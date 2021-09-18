@@ -1,5 +1,5 @@
 <script>
-    import { game, nextTurn } from '../../../stores/game.store';
+    import { endRound, game, nextTurn } from '../../../stores/game.store';
     import { itemIconMap } from '../../../stores/gameData.store';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import Tooltip from '../../../components/Tooltip.svelte';
@@ -8,8 +8,8 @@
     let activePlayer;
     let hasTakenAction = false;
     $: {
+        activePlayer = $game.players[$game.turn];
         if (activePlayer !== $game.players[$game.turn]) {
-            activePlayer = $game.players[$game.turn];
             hasTakenAction = false;
         }
     }
@@ -18,8 +18,12 @@
         nextTurn(true);
     }
 
-    const onBtnNext = () => {
+    const onBtnNextTurn = () => {
         nextTurn();
+    }
+
+    const onBtnEndRound = () => {
+        endRound();
     }
 </script>
 
@@ -79,6 +83,14 @@
                 {/each}
             </div>
         </div>
+        {#if $game.canEndRound}
+        <Button 
+            label="End Round"
+            textClass={'text-lg'}
+            color={'yellow-800'}
+            on:click={onBtnEndRound}
+        />
+        {:else}
         <div class="flex flex-col gap-3">
             <Button 
                 label="Pass"
@@ -89,9 +101,10 @@
             <Button 
                 label="Next Turn"
                 textClass={'text-lg'}
-                on:click={onBtnNext}
+                on:click={onBtnNextTurn}
                 disabled={!hasTakenAction}
             />
         </div>
+        {/if}
     </div>
 </div>

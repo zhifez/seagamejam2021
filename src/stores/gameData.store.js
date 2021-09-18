@@ -62,7 +62,7 @@ export const actions = readable([
     },
     {
         name: 'Crown',
-        hint: 'You can take this action any time',
+        hint: 'You can take this action any time during your turn.',
         type: 'crown-action'
     },
     {
@@ -91,7 +91,7 @@ export const actions = readable([
     },
     {
         name: 'Hire Human',
-        hint: 'Lasts 1 round',
+        hint: 'Lasts 1 round.',
         type: 'action'
     },
 ]);
