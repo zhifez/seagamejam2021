@@ -11,19 +11,43 @@ import GiStoneWall from 'svelte-icons/gi/GiStoneWall.svelte';
 
 export const actions = readable([
     {
-        name: 'Steal Food',
+        name: 'Collect Stick',
         type: 'action'
+    },
+    {
+        name: 'Steal Food',
+        type: 'action',
+        actions: [
+            {
+                name: 'Take 2 food',
+                rewards: ['food', 'food'],
+                space: 1,
+            },
+            {
+                name: 'Take 1 food',
+                rewards: ['food'],
+                space: -1,
+            }
+        ]
     },
     {
         name: 'Steal Gem',
-        type: 'action'
+        type: 'action',
+        actions: [
+            {
+                name: 'Take 2 gems',
+                rewards: ['gem', 'gem'],
+                space: 1,
+            },
+            {
+                name: 'Take 1 gem',
+                rewards: ['gem'],
+                space: -1,
+            }
+        ]
     },
     {
         name: 'Steal Ring',
-        type: 'action'
-    },
-    {
-        name: 'Collect Stick',
         type: 'action'
     },
     {
@@ -32,6 +56,7 @@ export const actions = readable([
     },
     {
         name: 'Crown',
+        hint: 'You can take this action any time.',
         type: 'crown-action'
     },
     {

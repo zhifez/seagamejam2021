@@ -1,4 +1,7 @@
 <script>
+import { createEventDispatcher } from 'svelte';
+
+    import { game } from '../../../stores/game.store';
     import { crownActions, dungeonSize, dungeonLayers } from '../../../stores/playerActions.store';
     
     export let x = 0;
@@ -6,6 +9,7 @@
     
     let layerIndex;
     let tile;
+    let disabled = false;
     $: {
         if (y === 0 || y === dungeonSize - 1 || x === 0 || x === dungeonSize - 1) {
             layerIndex = 0;
@@ -21,10 +25,25 @@
         }
         let layer = $dungeonLayers[layerIndex];
         tile = $crownActions[layer[(x + y) % layer.length]];
+        disabled = $game.layer < layerIndex;
+    }
+
+    const dispatch = createEventDispatcher();
+
+    const onClick = () => {
+        if (disabled) {
+            return;
+        }
+        console.log(tile.name);
+        dispatch('click');
     }
 </script>
 
-<!-- <svelte:component this={icon} /> -->
-<div class={`w-12 h-12 p-1 rounded-md shadow cursor-pointer hover:bg-yellow-200`}>
+<div 
+    class={`w-9 h-9 2xl:w-10 2xl:h-10 p-1 rounded-md shadow 
+    ${disabled ? 'opacity-20' : 'cursor-pointer hover:bg-yellow-200'}
+    `}
+    on:click={onClick}
+>
     <svelte:component this={tile.icon} />
 </div>

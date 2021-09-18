@@ -6,7 +6,7 @@
 
 <div class="col-span-1 row-span-1">
     <div 
-        class={`rounded-md bg-yellow-300 shadow-md h-full p-3 
+        class={`rounded-md bg-yellow-300 shadow-md h-full px-2 py-1 
         border-4 border-yellow-300 hover:border-yellow-800 cursor-pointer
         flex flex-col justify-between
         `}
