@@ -14,6 +14,29 @@
     let activePlayer;
     $: {
         activePlayer = $game.players[$game.turn];
+        if (type.includes('upgrade')) {
+            if (actions[0].conditions
+                && actions[0].conditions.length > 0) {
+                hint = 'Requires';
+                actions[0].conditions.forEach((cond, index) => {
+                    let quantity = cond.quantity;
+                    if (type.includes('nest')) {
+                        quantity += cond.additionPerLevel * (activePlayer.nestLevel - 1);
+                    }
+                    else if (type.includes('storage')) {
+                        quantity += cond.additionPerLevel * (activePlayer.storageLevel - 1);
+                    }
+                    if (quantity > 0) {
+                        if (index > 0) {
+                            hint += ' and';
+                        }
+                        
+                        hint += ` ${quantity} ${cond.key}${quantity > 1 ? 's' : ''}`;
+                    }
+                });
+                hint += '.';
+            }
+        }
     }
 
     const onTakeAction = (actionIndex) => {
@@ -29,9 +52,36 @@
             }
         }
 
-        if (type === 'take-action') {
+        if (type.includes('take')) {
             if (activePlayer.storedItems.length >= activePlayer.storageLevel * storageCapacityPerLevel) {
                 alert('Your Storage is full.');
+                return;
+            }
+        }
+        else if (type.includes('upgrade')) {
+            if (activePlayer.storedItems.length > 0) {
+                let action = actions[Math.min(actions.length - 1, actionIndex)];
+                if (action.conditions && action.conditions.length > 0) {
+                    let conds = action.conditions.reduce((results, item, index) => {
+                        for (let a=0; a<item.quantity; ++a) {
+                            results.push(item.key);
+                        }
+                        return results;
+                    }, []);
+                    activePlayer.storedItems.forEach(item => {
+                        let index = conds.indexOf(item);
+                        if (index >= 0) {
+                            conds.splice(index, 1);
+                        }
+                    });
+                    if (conds.length > 0) {
+                        alert(`Your don't have enough resources to take this action.`);
+                        return;
+                    }
+                }
+            }
+            else {
+                alert(`Your don't have enough resources to take this action.`);
                 return;
             }
         }
@@ -60,7 +110,7 @@
             >
                 <div 
                     class="w-full h-12 rounded-md bg-gray-100 p-1 cursor-pointer relative"
-                    on:click={() => onTakeAction(a)}
+                    on:click={() => onTakeAction(a + s)}
                 >
                     <div class="grid grid-cols-2 gap-1">
                         {#each action.rewards as reward, r}
@@ -74,8 +124,8 @@
                         {/each}
                     </div>
 
-                    {#if index in $game.actions && a in $game.actions[index]}
-                    <div class={`absolute w-full h-full text-${$game.actions[index][a]}`}>
+                    {#if index in $game.actions && (a + s) in $game.actions[index]}
+                    <div class={`absolute top-4 w-full h-full text-${$game.actions[index][a + s]}`}>
                         <FaCrow />
                     </div>
                     {/if}

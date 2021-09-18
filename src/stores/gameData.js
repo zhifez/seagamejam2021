@@ -122,13 +122,13 @@ export const actions = [
     },
     {
         name: 'Upgrade Nest',
-        hint: 'Requires 10 Sticks.',
-        type: 'upgrade-action',
+        type: 'upgrade-nest-action',
         actions: [
             {
                 name: 'Upgrade your Nest',
                 conditions: [
-                    { key: 'stick', quantity: 10 }
+                    { key: 'stick', quantity: 3, additionPerLevel: 1 },
+                    { key: 'stone', quantity: 3, additionPerLevel: 2 }
                 ],
                 rewards: [
                     { key: 'nest', quantity: 1 }
@@ -139,14 +139,13 @@ export const actions = [
     },
     {
         name: 'Upgrade Storage',
-        hint: 'Requires 5 Sticks and 10 Stones.',
-        type: 'upgrade-action',
+        type: 'upgrade-storage-action',
         actions: [
             {
                 name: 'Upgrade your Storage',
                 conditions: [
-                    { key: 'stick', quantity: 5 },
-                    { key: 'stone', quantity: 10 }
+                    { key: 'stick', quantity: 3, additionPerLevel: 1 },
+                    { key: 'stone', quantity: 0, additionPerLevel: 3 }
                 ],
                 rewards: [
                     { key: 'storage', quantity: 1 }

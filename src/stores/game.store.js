@@ -23,7 +23,7 @@ const createPlayer = (name, color, crows) => {
 }
 
 export const nestCapacityPerLevel = 2;
-export const storageCapacityPerLevel = 3;
+export const storageCapacityPerLevel = 4;
 
 export const game = writable({
     players: [
@@ -41,23 +41,40 @@ export const takeAction = (index, actionIndex) => {
         let nextPlayers = [...state.players];
         let nextActions = {...state.actions};
 
-        let action = actions[index].actions[Math.min(actionIndex, actions[index].actions.length)];
-        if (action.rewards) {
-            let storageIsMax = false;
-            const maxStorage = nextPlayers[nextState.turn].storageLevel * storageCapacityPerLevel;
-            for (let a=0; a<action.rewards.length; ++a) {
-                if (storageIsMax) {
-                    break;
-                }
-
-                for (let b=0; b<action.rewards[a].quantity; b++) {
-                    if (nextPlayers[nextState.turn].storedItems.length >= maxStorage) {
-                        storageIsMax = true;
+        let action = actions[index];
+        let activeAction = action.actions[Math.min(actionIndex, actions[index].actions.length)];
+        
+        if (action.type.includes('take')) {
+            if (activeAction.rewards) {
+                let storageIsMax = false;
+                const maxStorage = nextPlayers[nextState.turn].storageLevel * storageCapacityPerLevel;
+                for (let a=0; a<activeAction.rewards.length; ++a) {
+                    if (storageIsMax) {
                         break;
                     }
 
-                    nextPlayers[nextState.turn].storedItems.push(action.rewards[a].key);
+                    for (let b=0; b<activeAction.rewards[a].quantity; b++) {
+                        if (nextPlayers[nextState.turn].storedItems.length >= maxStorage) {
+                            storageIsMax = true;
+                            break;
+                        }
+
+                        nextPlayers[nextState.turn].storedItems.push(activeAction.rewards[a].key);
+                    }
                 }
+            }
+        }
+        else if (action.type.includes('upgrade')) {
+            activeAction.conditions.forEach(item => {
+                for (let a=0; a<item.quantity; ++a) {
+                    nextPlayers[nextState.turn].storedItems.splice(item.key, 1);
+                }
+            });
+            if (action.type.includes('nest')) {
+                ++nextPlayers[nextState.turn].nestLevel;
+            }
+            else if (action.type.includes('storage')) {
+                ++nextPlayers[nextState.turn].storageLevel;
             }
         }
 
@@ -65,7 +82,6 @@ export const takeAction = (index, actionIndex) => {
             // Store action log
             nextActions[index] = {...nextActions[index]};
             nextActions[index][actionIndex] = nextPlayers[nextState.turn].color;
-
             // Update current player's status
             ++nextPlayers[nextState.turn].utilizedCrows;
             nextPlayers[nextState.turn].hasTakenAction = true;
