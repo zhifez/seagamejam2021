@@ -1,5 +1,4 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
     import { game } from '../../../stores/game.store';
     import { crownActions, dungeonSize, dungeonLayers } from '../../../stores/gameData';
     import Tooltip from '../../../components/Tooltip.svelte';
@@ -28,14 +27,15 @@
         disabled = $game.layer < layerIndex;
     }
 
-    const dispatch = createEventDispatcher();
-
     const onClick = () => {
         if (disabled) {
             return;
         }
-        console.log(tile.name);
-        dispatch('click');
+        
+        let key = `${x}, ${y}`;
+        // if (key in $game.crownActions) {
+
+        // }
     }
 </script>
 

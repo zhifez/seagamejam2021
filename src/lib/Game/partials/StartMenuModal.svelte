@@ -1,7 +1,12 @@
 <script>
-    import { setHasStarted } from '../../../stores/game.store';
+    import { setHasStarted, setupPlayers } from '../../../stores/game.store';
     import Button from '../../../components/Button.svelte';
     import Modal from '../../../components/Modal.svelte';
+
+    const onPlayerAmount = (amount) => {
+        setupPlayers(amount);
+        setHasStarted();
+    }
 </script>
 
 <Modal
@@ -38,10 +43,18 @@
 
         <br class="my-5" />
 
-        <Button
-            label="Start"
-            on:click={setHasStarted}
-        />
+        <div>
+            <p class="font-semibold mb-2">Select number of players:</p>
+            <div class="grid grid-cols-4 gap-2">
+                {#each Array(4) as _, i}
+                <Button
+                    label={`${i + 1} Player${i > 0 ? 's' : ''}`}
+                    block={true}
+                    on:click={() => onPlayerAmount(i + 1)}
+                />
+                {/each}
+            </div>
+        </div>
     </div>
 </Modal>
 

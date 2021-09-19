@@ -19,7 +19,10 @@
                 {#each Array(dungeonSize) as _, y}
                     {#each Array(dungeonSize) as _, x}
                     <div class="col-span-1">
-                        <CrownActionTile x={x} y={y} />
+                        <CrownActionTile 
+                            x={x} 
+                            y={y}
+                        />
                     </div>
                     {/each}
                 {/each}

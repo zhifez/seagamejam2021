@@ -35,7 +35,25 @@ export const game = writable({
     endRoundResults: null,
     layer: 0,
     actions: {},
+    crownAction: {},
 });
+
+export const setupPlayers = (playerCount) => {
+    game.update(state => {
+        let nextState = {...state};
+        nextState.players = [];
+        for (let a=0; a<playerCount; ++a) {
+            nextState.players.push(
+                createPlayer(
+                    `Player ${a + 1}`, 
+                    colors[a], 
+                    2
+                )
+            );
+        }
+        return nextState;
+    });
+}
 
 export const system = writable({
     hasStarted: false,
