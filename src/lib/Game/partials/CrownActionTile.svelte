@@ -45,7 +45,7 @@
     disabled={disabled}
 >
     <div 
-        class={`w-9 h-9 2xl:w-10 2xl:h-10 p-1 rounded-md shadow bg-yellow-300
+        class={`w-12 h-12 2xl:w-10 2xl:h-10 p-1 rounded-md shadow bg-yellow-300
         ${disabled ? 'opacity-20' : 'cursor-pointer hover:bg-yellow-200'}
         `}
         on:click={onClick}

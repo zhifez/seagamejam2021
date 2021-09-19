@@ -3,6 +3,7 @@
     import IoIosClose from 'svelte-icons/io/IoIosClose.svelte';
     import { createEventDispatcher } from 'svelte';
     
+    export let modalClass = null;
     export let canClose = true;
 
     const dispatch = createEventDispatcher();
@@ -21,10 +22,10 @@
     <!-- Content -->
     <div class="absolute top-0 left-0 w-screen h-screen flex flex-col justify-center">
         <div class="mx-auto">
-            <div class="modal-inner relative p-3 rounded-md bg-white min-h-20">
+            <div class={`relative ${modalClass ?? 'modal-inner p-3 rounded-md bg-white'}`}>
                 {#if canClose}
                 <button 
-                    class="absolute top-0 right-0 w-10 h-10"
+                    class="modal-close-btn w-10 h-10 text-white"
                     on:click={onClose}
                 >
                     <IoIosClose />
@@ -38,6 +39,13 @@
 
 <style>
     .modal-inner {
-        min-width: 25vw;
+        min-width: 10vw;
+        min-height: 10vh;
+    }
+
+    .modal-close-btn {
+        position: absolute;
+        top: 0;
+        right: -35px;
     }
 </style>

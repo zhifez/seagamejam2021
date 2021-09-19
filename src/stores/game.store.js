@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { actions } from "./gameData";
+import { actions, humanHires, nestCapacityPerLevel, storageCapacityPerLevel } from "./gameData";
 
 const colors = [
     'red-500',
@@ -20,11 +20,9 @@ const createPlayer = (name, color, crows) => {
         vp: 0,
         hasTakenAction: false,
         isReproducing: false,
+        humanHires: [],
     };
 }
-
-export const nestCapacityPerLevel = 2;
-export const storageCapacityPerLevel = 6;
 
 export const game = writable({
     players: [
@@ -39,14 +37,105 @@ export const game = writable({
     actions: {},
 });
 
-export const takeAction = (index, actionIndex) => {
+export const system = writable({
+    showActiveHumanHire: false,
+    activeHumanHire: null,
+});
+
+export const setActiveHumanHire = (data) => {
+    system.update(state => {
+        let nextState = {...state};
+        if (data) {
+            nextState.showActiveHumanHire = true;
+            nextState.activeHumanHire = data;
+        }
+        else {
+            nextState.showActiveHumanHire = false;
+        }
+        return nextState;
+    });
+}
+
+export const playerCanTakeAction = (player, coreActionIndex, selectedActionIndex) => {
+    let coreAction = actions[coreActionIndex];
+    let activeAction = null;
+    if (coreAction.actions) {
+        activeAction = coreAction.actions[Math.min(selectedActionIndex, coreAction.actions.length - 1)];
+    }
+
+    let conditionsAreMet = false;
+    if (player.storedItems.length > 0) {
+        if (activeAction.conditions
+            && activeAction.conditions.length > 0) {
+            let conds = activeAction.conditions.reduce((results, item, index) => {
+                for (let a=0; a<item.quantity; ++a) {
+                    results.push(item.key);
+                }
+                return results;
+            }, []);
+            player.storedItems.forEach(item => {
+                let index = conds.indexOf(item);
+                if (index >= 0) {
+                    conds.splice(index, 1);
+                }
+            });
+            conditionsAreMet = (conds.length <= 0);
+        }
+    }
+    
+    if (coreAction.type.includes('take')) {
+        if (player.storedItems.length >= player.storageLevel * storageCapacityPerLevel) {
+            return 'Your Storage is full.';
+        }
+    }
+    else if (coreAction.type.includes('upgrade')) {
+        if (!conditionsAreMet) {
+            return `Your don't have enough resource to take this action.`;
+        }
+    }
+    else if (coreAction.type.includes('reproduce')) {
+        if (player.isReproducing) {
+            return `You can only take this action once per round.`;
+        }
+        if (player.crows >= player.nestLevel * nestCapacityPerLevel) {
+            return `Your Nest cannot occupy anymore Crow.`;
+        }
+        if (player.crows - player.utilizedCrows < 2) {
+            return 'You do not have enough Crow for this action.';
+        }
+    }
+    else if (coreAction.type.includes('human')) {
+        if (!conditionsAreMet) {
+            return `Your don't have enough resource to take hire this human.`;
+        }
+    }
+    return null;
+}
+
+export const takeAction = (coreActionIndex, selectedActionIndex) => {
     game.update(state => {
         let nextState = {...state};
         let nextPlayers = [...state.players];
         let nextActions = {...state.actions};
 
-        let coreAction = actions[index];
-        let activeAction = coreAction.actions[Math.min(actionIndex, actions[index].actions.length - 1)];
+        let coreAction = actions[coreActionIndex];
+        let activeAction = null;
+        if (coreAction.actions) {
+            activeAction = coreAction.actions[Math.min(selectedActionIndex, coreAction.actions.length - 1)];
+        }
+
+        if (coreAction.type.includes('human')) {
+            let key = Object.keys(humanHires)[selectedActionIndex];
+            activeAction = humanHires[key];
+        }
+
+        if (activeAction.conditions && activeAction.conditions.length > 0) {
+            activeAction.conditions.forEach(item => {
+                for (let a=0; a<item.quantity; ++a) {
+                    nextPlayers[nextState.turn].storedItems.splice(item.key, 1);
+                }
+            });
+        }
         
         if (coreAction.type.includes('take')) {
             if (activeAction.rewards) {
@@ -58,22 +147,26 @@ export const takeAction = (index, actionIndex) => {
                     }
 
                     for (let b=0; b<activeAction.rewards[a].quantity; b++) {
-                        if (nextPlayers[nextState.turn].storedItems.length >= maxStorage) {
-                            storageIsMax = true;
+                        switch (activeAction.rewards[a].key) {
+                        case 'nest':
+                        case 'storage':
+                        case 'crow':
+                            break;
+
+                        default:
+                            if (nextPlayers[nextState.turn].storedItems.length >= maxStorage) {
+                                storageIsMax = true;
+                                break;
+                            }
+    
+                            nextPlayers[nextState.turn].storedItems.push(activeAction.rewards[a].key);
                             break;
                         }
-
-                        nextPlayers[nextState.turn].storedItems.push(activeAction.rewards[a].key);
                     }
                 }
             }
         }
         else if (coreAction.type.includes('upgrade')) {
-            activeAction.conditions.forEach(item => {
-                for (let a=0; a<item.quantity; ++a) {
-                    nextPlayers[nextState.turn].storedItems.splice(item.key, 1);
-                }
-            });
             if (coreAction.type.includes('nest')) {
                 ++nextPlayers[nextState.turn].nestLevel;
             }
@@ -85,11 +178,21 @@ export const takeAction = (index, actionIndex) => {
             nextPlayers[nextState.turn].utilizedCrows += 2;
             nextPlayers[nextState.turn].isReproducing = true;
         }
+        else if (coreAction.type.includes('human')) {
+            let key = Object.keys(humanHires)[selectedActionIndex];
+            nextPlayers[nextState.turn].humanHires.push(
+                {
+                    ...humanHires[key],
+                    hiredLifespan: 0,
+                }
+            );
+            console.log(nextPlayers[nextState.turn].humanHires);
+        }
 
         if (!nextPlayers[nextState.turn].hasTakenAction) {
             // Store action log
-            nextActions[index] = {...nextActions[index]};
-            nextActions[index][actionIndex] = nextPlayers[nextState.turn].color;
+            nextActions[coreActionIndex] = {...nextActions[coreActionIndex]};
+            nextActions[coreActionIndex][selectedActionIndex] = nextPlayers[nextState.turn].color;
             // Update current player's status
             ++nextPlayers[nextState.turn].utilizedCrows;
             nextPlayers[nextState.turn].hasTakenAction = true;
@@ -163,6 +266,16 @@ export const endRound = () => {
                 ++nextPlayers[a].crows;
                 nextPlayers[a].isReproducing = false;
             }
+
+            // Make human hire leaves after lifespan reached max
+            let nextHumanHires = [];
+            for (let h=0; h<nextPlayers[a].humanHires.length; h++) {
+                ++nextPlayers[a].humanHires[h].hiredLifespan;
+                if (nextPlayers[a].humanHires[h].hiredLifespan < nextPlayers[a].humanHires[h].lifespan) {
+                    nextHumanHires.push(nextPlayers[a].humanHires[h]);
+                }
+            }
+            nextPlayers[a].humanHires = nextHumanHires;
         }
 
         nextState.players = nextPlayers;

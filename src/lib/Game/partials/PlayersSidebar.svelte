@@ -1,10 +1,11 @@
 <script>
-    import { endRound, endTurn, game, nestCapacityPerLevel, storageCapacityPerLevel } from '../../../stores/game.store';
-    import { itemIconMap } from '../../../stores/gameData';
+    import { endRound, endTurn, game } from '../../../stores/game.store';
+    import { itemIconMap, nestCapacityPerLevel, storageCapacityPerLevel } from '../../../stores/gameData';
     import FaRegCircle from 'svelte-icons/fa/FaRegCircle.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import Tooltip from '../../../components/Tooltip.svelte';
     import Button from '../../../components/Button.svelte';
+import HumanHireCard from './HumanHireCard.svelte';
 
     let activePlayer;
     $: {
@@ -50,6 +51,7 @@
                 <h5 class="font-semibold">VP:</h5>
                 <p class="ml-2">{activePlayer.vp}</p>
             </div>
+            <!-- NEST -->
             <div class="flex justify-between items-center mb-1">
                 <h5 class="font-semibold">Nest</h5>
                 <p class="text-sm">Lvl. {activePlayer.nestLevel}</p>
@@ -70,8 +72,9 @@
                 {/each}
             </div>
             <br />
+            <!-- STORAGE -->
             <div class="flex justify-between items-center mb-1">
-                <h5 class="font-semibold mb-1">Storage</h5>
+                <h5 class="font-semibold">Storage</h5>
                 <p class="text-sm">Lvl. {activePlayer.storageLevel}</p>
             </div>
             <div class="flex flex-wrap gap-1">
@@ -94,6 +97,26 @@
                 </div>
                 {/each}
             </div>
+            <br />
+            <!-- HUMAN -->
+            <div class="flex justify-between items-center mb-1">
+                <h5 class="font-semibold">Human Hire</h5>
+            </div>
+            <div class="grid grid-cols-3 gap-1 ">
+                {#each activePlayer.humanHires as human, h}
+                <Tooltip
+                    title={human.name}
+                    subtitle={human.hiredLifespan + 1 >= human.lifespan ? 
+                        'Will leave after this round.' : 
+                        `Will be staying for another ${human.lifespan - human.hiredLifespan} round${human.lifespan - human.hiredLifespan > 1 ? 's' : ''}.`}
+                >
+                    <HumanHireCard 
+                        actionIndex={-1}
+                        data={human}
+                    />
+                </Tooltip>
+                {/each}
+            </div>            
         </div>
         <div class="flex flex-col gap-3">
             <Button 

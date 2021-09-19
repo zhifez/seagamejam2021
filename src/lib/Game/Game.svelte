@@ -1,16 +1,20 @@
 <script>
     import { actions } from '../../stores/gameData';
-    import { endRound, game } from '../../stores/game.store';
+    import { game, system } from '../../stores/game.store';
     import PlayersSidebar from './partials/PlayersSidebar.svelte';
     import ActionCard from './partials/ActionCard.svelte';
     import EndRoundModal from './partials/EndRoundModal.svelte';
+    import HumanHireModal from './partials/HumanHireModal.svelte';
 
 </script>
 
 {#if $game.canEndRound}
 <EndRoundModal />
 {/if}
-<div class="grid grid-cols-5">
+{#if $system.showActiveHumanHire}
+<HumanHireModal />
+{/if}
+<div class="grid grid-cols-5 overflow-hidden">
     <div class="col-span-1">
         <PlayersSidebar />
     </div>

@@ -13,6 +13,13 @@ import FaDrumstickBite from 'svelte-icons/fa/FaDrumstickBite.svelte';
 import FaGem from 'svelte-icons/fa/FaGem.svelte';
 import GiRing from 'svelte-icons/gi/GiRing.svelte';
 import GiCrownCoin from 'svelte-icons/gi/GiCrownCoin.svelte';
+import GiNinjaMask from 'svelte-icons/gi/GiNinjaMask.svelte';
+import GiCarnivalMask from 'svelte-icons/gi/GiCarnivalMask.svelte';
+import GiSkullMask from 'svelte-icons/gi/GiSkullMask.svelte';
+import GiDualityMask from 'svelte-icons/gi/GiDualityMask.svelte';
+
+export const nestCapacityPerLevel = 2;
+export const storageCapacityPerLevel = 5;
 
 export const actions = [
     {
@@ -95,31 +102,26 @@ export const actions = [
             }
         ]
     },
-    {
-        name: 'Steal Coin',
-        type: 'take-action',
-        actions: [
-            {
-                name: 'Take 2 Coins',
-                rewards: [
-                    { key: 'coin', quantity: 2 }
-                ],
-                space: 1,
-            },
-            {
-                name: 'Take 1 Coin',
-                rewards: [
-                    { key: 'coin', quantity: 1 }
-                ],
-                space: -1,
-            }
-        ]
-    },
-    {
-        name: 'Crown Action',
-        hint: 'You can take any one of these actions any time during your turn.',
-        type: 'crown-action'
-    },
+    // {
+    //     name: 'Steal Coin',
+    //     type: 'take-action',
+    //     actions: [
+    //         {
+    //             name: 'Take 2 Coins',
+    //             rewards: [
+    //                 { key: 'coin', quantity: 2 }
+    //             ],
+    //             space: 1,
+    //         },
+    //         {
+    //             name: 'Take 1 Coin',
+    //             rewards: [
+    //                 { key: 'coin', quantity: 1 }
+    //             ],
+    //             space: -1,
+    //         }
+    //     ]
+    // },
     {
         name: 'Upgrade Nest',
         type: 'upgrade-nest-action',
@@ -129,6 +131,27 @@ export const actions = [
                 conditions: [
                     { key: 'stick', quantity: 3, additionPerLevel: 1 },
                     { key: 'stone', quantity: 3, additionPerLevel: 2 }
+                ],
+                space: 0,
+            },
+        ]
+    },
+    {
+        name: 'Crown Action',
+        hint: 'You can take any one of these actions any time during your turn.',
+        type: 'crown-action'
+    },
+    {
+        name: 'Reproduce (once per round)',
+        hint: 'Once per round, send 2 Crows here to reproduce a new Crow, to be used in the next round.',
+        type: 'reproduce-action',
+        rows: 2,
+        actions: [
+            {
+                name: 'Try for baby',
+                hint: 'Success rate: 100%',
+                conditions: [
+                    { key: 'crow', quantity: 2 },
                 ],
                 space: 0,
             },
@@ -149,23 +172,9 @@ export const actions = [
         ]
     },
     {
-        name: 'Reproduce (once per round)',
-        hint: 'Once per round, send 2 Crows here to reproduce a new Crow, to be used in the next round.',
-        type: 'reproduce-action',
-        rows: 2,
-        actions: [
-            {
-                name: 'Try for baby (with success)',
-                conditions: [
-                    { key: 'crow', quantity: 2 },
-                ],
-                space: 0,
-            },
-        ]
-    },
-    {
         name: 'Trade with Black Market',
-        type: 'action'
+        type: 'trade-action',
+        rows: 2,
     },
     // {
     //     name: 'Hire Animal',
@@ -175,16 +184,17 @@ export const actions = [
     {
         name: 'Hire Human',
         hint: 'Lasts 1 round.',
-        type: 'action'
+        type: 'human-action',
+        rows: 2
     },
-    {
-        name: 'Draw Crow Action',
-        type: 'action'
-    },
-    {
-        name: 'Take Crow Action',
-        type: 'action'
-    },
+    // {
+    //     name: 'Draw Crow Action',
+    //     type: 'action'
+    // },
+    // {
+    //     name: 'Take Crow Action',
+    //     type: 'action'
+    // },
 ];
 
 export const crownActions = {
@@ -281,4 +291,214 @@ export const itemIconMap = {
         icon: GiCrownCoin,
         iconColor: 'text-yellow-500',
     },
+};
+
+export const tradeActions = [
+    {
+        name: 'Food',
+        hint: 'Receive 1 food.',
+        type: 'food',
+        conditions: [
+            { key: 'gem', quantity: 3 },
+        ],
+        rewards: [
+            { key: 'food', quantity: 1 },
+        ],
+        space: 1,
+    },
+    {
+        name: 'Double Food',
+        hint: 'Receive 2 food.',
+        type: 'food',
+        conditions: [
+            { key: 'gem', quantity: 5 },
+        ],
+        rewards: [
+            { key: 'food', quantity: 2 },
+        ],
+        space: 1,
+    },
+    {
+        name: 'Upgrade Nest',
+        hint: 'Instantly upgrade your nest.',
+        type: 'nest',
+        conditions: [
+            { key: 'gem', quantity: 8 },
+        ],
+        rewards: [
+            { key: 'nest', quantity: 1 },
+        ],
+        space: 1,
+    },
+    {
+        name: 'Upgrade Storage',
+        hint: 'Instantly upgrade your storage.',
+        type: 'storage',
+        conditions: [
+            { key: 'gem', quantity: 10 },
+        ],
+        rewards: [
+            { key: 'storage', quantity: 1 },
+        ],
+        space: 1,
+    },
+    {
+        name: 'Illegal Crow Trafficking',
+        hint: 'Instantly get a crow, as long as you have the nest space.',
+        type: 'crow',
+        conditions: [
+            { key: 'gem', quantity: 10 },
+        ],
+        rewards: [
+            { key: 'crow', quantity: 1 },
+        ],
+        space: 1,
+    },
+    {
+        name: 'Skeleton Key',
+        hint: 'Unlock certain door.',
+        type: 'crown',
+        conditions: [
+            { key: 'gem', quantity: 5 },
+        ],
+        rewards: [
+            { key: 'key-skeleton', quantity: 1 },
+        ],
+        space: 1,
+    },
+    {
+        name: 'Treasure Key',
+        hint: 'Unlock a very important door.',
+        type: 'crown',
+        conditions: [
+            { key: 'gem', quantity: 10 },
+        ],
+        rewards: [
+            { key: 'key-treasure', quantity: 1 },
+        ],
+        space: 1,
+    },
+    {
+        name: 'Sword',
+        hint: 'Can kill a regular guard, when wielded by a human.',
+        type: 'weapon',
+        conditions: [
+            { key: 'gem', quantity: 7 },
+        ],
+        rewards: [
+            { key: 'sword-normal', quantity: 1 },
+        ],
+        space: 1,
+    },
+    {
+        name: 'Heavy Sword',
+        hint: 'Can kill a tougher guard, when wielded by a human.',
+        type: 'weapon',
+        conditions: [
+            { key: 'gem', quantity: 14 },
+        ],
+        rewards: [
+            { key: 'sword-heavy', quantity: 1 },
+        ],
+        space: 1,
+    },
+    {
+        name: 'Sledge Hammer',
+        hint: 'For crushing and breaking hard object, as well as killing living things.',
+        type: 'weapon',
+        conditions: [
+            { key: 'gem', quantity: 10 },
+        ],
+        rewards: [
+            { key: 'hammer-sledge', quantity: 1 },
+        ],
+        space: 1,
+    },
+    {
+        name: 'Magic Tablet',
+        hint: 'For casting magic use.',
+        type: 'weapon',
+        conditions: [
+            { key: 'gem', quantity: 8 },
+        ],
+        rewards: [
+            { key: 'magic-tablet', quantity: 1 },
+        ],
+        space: 1,
+    },
+    {
+        name: 'Magic Sphere',
+        hint: 'For casting magic use.',
+        type: 'weapon',
+        conditions: [
+            { key: 'gem', quantity: 7 },
+        ],
+        rewards: [
+            { key: 'magic-sphere', quantity: 1 },
+        ],
+        space: 1,
+    },
+];
+
+export const humanHires = {
+    'thief': {
+        name: 'Thief',
+        icon: GiNinjaMask,
+        hint: 'Can open doors, unlock traps, bomb stuff.',
+        type: 'human',
+        conditions: [
+            { key: 'gem', quantity: 3 },
+            { key: 'food', quantity: 4 },
+        ],
+        rewards: [
+            { key: 'thief', quantity: 1 },
+        ],
+        lifespan: 2,
+        space: 0,
+    },
+    'magician': {
+        name: 'Magician',
+        icon: GiCarnivalMask,
+        hint: 'Can cast useful magic.',
+        type: 'human',
+        conditions: [
+            { key: 'gem', quantity: 7 },
+            { key: 'food', quantity: 3 },
+        ],
+        rewards: [
+            { key: 'magician', quantity: 1 },
+        ],
+        lifespan: 1,
+        space: 0,
+    },
+    'mercenary': {
+        name: 'Mercenary',
+        icon: GiSkullMask,
+        hint: 'Does all the killings, and nothing else.',
+        type: 'human',
+        conditions: [
+            { key: 'gem', quantity: 5 },
+            { key: 'food', quantity: 5 },
+        ],
+        rewards: [
+            { key: 'mercenary', quantity: 1 },
+        ],
+        lifespan: 1,
+        space: 0,
+    },
+    'spy': {
+        name: 'Spy',
+        icon: GiDualityMask,
+        hint: 'Bribe people, get things moving, with the right amount of gems.',
+        type: 'human',
+        conditions: [
+            { key: 'gem', quantity: 8 },
+            { key: 'food', quantity: 2 },
+        ],
+        rewards: [
+            { key: 'spy', quantity: 1 },
+        ],
+        lifespan: 1,
+        space: 0,
+    }
 };

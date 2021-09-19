@@ -8,9 +8,9 @@
     export let type = 'action';
 </script>
 
-<div class="col-span-2 row-span-3">
+<div class="col-span-2 row-span-4">
     <div class="rounded-md bg-yellow-400 shadow-md h-full px-3 py-2 flex flex-col justify-between">
-        <section>
+        <section class="text-center">
             <h1 class="font-semibold">{name}</h1>
             {#if hint}<p class="text-xs 2xl:text-sm">{hint}</p>{/if}
         </section>

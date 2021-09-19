@@ -1,8 +1,11 @@
 <script>
-    import { itemIconMap } from '../../../stores/gameData';
-    import { game, nestCapacityPerLevel, storageCapacityPerLevel, takeAction } from '../../../stores/game.store';
+    import { onMount } from 'svelte';
+    import { humanHires, itemIconMap, nestCapacityPerLevel, storageCapacityPerLevel } from '../../../stores/gameData';
+    import { game, playerCanTakeAction, takeAction } from '../../../stores/game.store';
     import Tooltip from '../../../components/Tooltip.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
+    import IoMdRefresh from 'svelte-icons/io/IoMdRefresh.svelte';
+    import HumanHireCard from './HumanHireCard.svelte';
 
     export let index = -1;
     export let name = '';
@@ -39,7 +42,16 @@
         }
     }
 
-    const onTakeAction = (actionIndex) => {
+    onMount(() => {
+        onRefreshTradeActions();
+    });
+
+    let tradeActions = [];
+    const onRefreshTradeActions = () => {
+        tradeActions = [];
+    }
+
+    const onTakeAction = (selectedActionIndex) => {
         if ($game.canEndRound) {
             alert('The round has ended.');
             return;
@@ -51,61 +63,19 @@
         }
 
         if (index in $game.actions) {
-            if (actionIndex in $game.actions[index]) {
+            if (selectedActionIndex in $game.actions[index]) {
                 alert('Action has already been taken.');
                 return;
             }
         }
-
-        if (type.includes('take')) {
-            if (activePlayer.storedItems.length >= activePlayer.storageLevel * storageCapacityPerLevel) {
-                alert('Your Storage is full.');
-                return;
-            }
-        }
-        else if (type.includes('upgrade')) {
-            if (activePlayer.storedItems.length > 0) {
-                let action = actions[Math.min(actions.length - 1, actionIndex)];
-                if (action.conditions && action.conditions.length > 0) {
-                    let conds = action.conditions.reduce((results, item, index) => {
-                        for (let a=0; a<item.quantity; ++a) {
-                            results.push(item.key);
-                        }
-                        return results;
-                    }, []);
-                    activePlayer.storedItems.forEach(item => {
-                        let index = conds.indexOf(item);
-                        if (index >= 0) {
-                            conds.splice(index, 1);
-                        }
-                    });
-                    if (conds.length > 0) {
-                        alert(`Your don't have enough resources to take this action.`);
-                        return;
-                    }
-                }
-            }
-            else {
-                alert(`Your don't have enough resources to take this action.`);
-                return;
-            }
-        }
-        else if (type.includes('reproduce')) {
-            if (activePlayer.isReproducing) {
-                alert(`You can only take this action once per round.`);
-                return;
-            }
-            if (activePlayer.crows >= activePlayer.nestLevel * nestCapacityPerLevel) {
-                alert(`Your Nest cannot occupy anymore Crow.`);
-                return;
-            }
-            if (activePlayer.crows - activePlayer.utilizedCrows < 2) {
-                alert('You do not have enough Crow for this action.');
-                return;
-            }
+        
+        const error = playerCanTakeAction(activePlayer, index, selectedActionIndex);
+        if (error) {
+            alert(error);
+            return;
         }
 
-        takeAction(index, actionIndex);
+        takeAction(index, selectedActionIndex);
     }
 </script>
 
@@ -115,7 +85,7 @@
         flex flex-col
         `}
     >
-        <section class="mb-2">
+        <section class="mb-2 text-center">
             <h1 class="font-semibold">{name}</h1>
             {#if hint}<p class="text-xs 2xl:text-sm">{hint}</p>{/if}
         </section>
@@ -126,6 +96,7 @@
             {#each Array(action.space <= 0 ? ($game.players.length + action.space) : action.space) as _, s}
             <Tooltip
                 title={action.name}
+                subtitle={action.hint}
             >
                 <div 
                     class={`w-full h-12 rounded-md bg-white p-1 cursor-pointer relative
@@ -139,9 +110,15 @@
                         {#each action.rewards as reward, r}
                         {#if reward.key in itemIconMap}
                         {#each Array(reward.quantity) as _, i}
+                        {#if reward.key in itemIconMap}
                         <div class={`col-span-1 ${itemIconMap[reward.key].iconColor}`}>
                             <svelte:component this={itemIconMap[reward.key].icon} />
                         </div>
+                        {:else}
+                        <div class="col-span-1">
+                            <p>reward.key</p>
+                        </div>
+                        {/if}
                         {/each}
                         {/if}
                         {/each}
@@ -165,6 +142,42 @@
                 </div>
             </Tooltip>
             {/each}
+            {/each}
+        </div>
+        {/if}
+
+        <!-- TRADE -->
+        {#if type.includes('trade')}
+        {#each tradeActions as action}
+
+        {/each}
+
+        <button 
+            class="text-sm mt-2"
+            on:click={onRefreshTradeActions}
+        >
+            <div class="flex item-center justify-center">
+                <div class="h-5 mr-2">
+                    <IoMdRefresh />
+                </div>
+                <span>Refresh Items</span>
+            </div>
+        </button>
+        {/if}
+
+        <!-- HUMAN HIRE -->
+        {#if type.includes('human')}
+        <div class="grid grid-cols-3 gap-2">
+            {#each Object.keys(humanHires) as key, k}
+            <Tooltip
+                title={humanHires[key].name}
+                subtitle="Click to learn more."
+            >
+                <HumanHireCard 
+                    actionIndex={k}
+                    data={humanHires[key]} 
+                />
+            </Tooltip>
             {/each}
         </div>
         {/if}
