@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "yarn tw:build && vite build",
+    "tw:build": "tailwindcss build ./src/css/tailwind.css -o ./public/css/tailwind.css",
     "serve": "vite preview"
   },
   "devDependencies": {
