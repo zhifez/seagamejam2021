@@ -1,15 +1,26 @@
 <script>
-    import { game } from '../../../stores/game.store';
+    import { game, setActiveCrownAction } from '../../../stores/game.store';
     import { crownActions, dungeonSize, dungeonLayers } from '../../../stores/gameData';
     import Tooltip from '../../../components/Tooltip.svelte';
+    import GiSkullCrossedBones from 'svelte-icons/gi/GiSkullCrossedBones.svelte';
     
     export let x = 0;
     export let y = 0;
     
+    let crownActionKey;
+    let completedRecord;
     let layerIndex;
-    let tile;
+    let action;
     let disabled = false;
     $: {
+        crownActionKey = `${x}-${y}`;
+        if (crownActionKey in $game.completedCrownActions) {
+            completedRecord = $game.completedCrownActions[crownActionKey];
+        }
+        else {
+            completedRecord = null;
+        }
+
         if (y === 0 || y === dungeonSize - 1 || x === 0 || x === dungeonSize - 1) {
             layerIndex = 0;
         }
@@ -23,7 +34,7 @@
             layerIndex = 3;
         }
         let layer = dungeonLayers[layerIndex];
-        tile = crownActions[layer[(x + y) % layer.length]];
+        action = crownActions[layer[(x + y) % layer.length]];
         disabled = $game.layer < layerIndex;
     }
 
@@ -32,24 +43,30 @@
             return;
         }
         
-        let key = `${x}, ${y}`;
-        // if (key in $game.crownActions) {
-
-        // }
+        setActiveCrownAction({
+            ...action,
+            x, y
+        });
     }
 </script>
 
 <Tooltip
-    title={tile.name}
-    subtitle={`VP: ${tile.vp}`}
+    title={action.name}
+    subtitle={completedRecord ? `Completed by ${completedRecord.playerName}` : ''}
     disabled={disabled}
 >
+    {#if completedRecord}
+    <div class="w-12 h-12 2xl:w-16 2xl:h-16 p-2 text-yellow-200">
+        <GiSkullCrossedBones />
+    </div>
+    {:else}
     <div 
-        class={`w-12 h-12 2xl:w-10 2xl:h-10 p-1 rounded-md shadow bg-yellow-300
+        class={`w-12 h-12 2xl:w-16 2xl:h-16 p-1 rounded-md shadow bg-yellow-300
         ${disabled ? 'opacity-20' : 'cursor-pointer hover:bg-yellow-200'}
         `}
         on:click={onClick}
     >
-        <svelte:component this={tile.icon} />
+        <svelte:component this={action.icon} />
     </div>
+    {/if}
 </Tooltip>

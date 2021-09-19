@@ -17,6 +17,7 @@ import GiNinjaMask from 'svelte-icons/gi/GiNinjaMask.svelte';
 import GiCarnivalMask from 'svelte-icons/gi/GiCarnivalMask.svelte';
 import GiSkullMask from 'svelte-icons/gi/GiSkullMask.svelte';
 import GiDualityMask from 'svelte-icons/gi/GiDualityMask.svelte';
+import GiUnlitBomb from 'svelte-icons/gi/GiUnlitBomb.svelte';
 
 export const nestCapacityPerLevel = 2;
 export const storageCapacityPerLevel = 5;
@@ -142,7 +143,7 @@ export const actions = [
         type: 'crown-action'
     },
     {
-        name: 'Reproduce (once per round)',
+        name: 'Reproduce',
         hint: 'Once per round, send 2 Crows here to reproduce a new Crow, to be used in the next round.',
         type: 'reproduce-action',
         rows: 2,
@@ -201,48 +202,89 @@ export const actions = [
 export const crownActions = {
     'crown': {
         name: "Steal the Crown",
-        vp: 50,
         icon: GiImperialCrown,
+        conditions: [
+            { key: 'crow', quantity: 6 },
+        ],
+        rewards: [
+            { key: 'vp', quantity: 50 },
+        ],
     },
     'rune': {
         name: "Destroy Rune",
-        vp: 20,
         icon: GiRuneStone,
+        conditions: [
+            { key: 'magician', quantity: 1 },
+            { key: 'magic-tablet', quantity: 1 },
+            { key: 'magic-sphere', quantity: 1 },
+        ],
+        rewards: [
+            { key: 'vp', quantity: 20 },
+        ],
     },
     'trap': {
         name: "Disable Trap", // With thief or magician
-        vp: 18,
         icon: GiMantrap,
+        conditions: [
+            { 
+                key: 'human', 
+                orKeys: [ 'thief', 'magician', 'mercenary', 'spy' ], 
+                quantity: 1 
+            },
+        ],
+        rewards: [
+            { key: 'vp', quantity: 18 },
+        ],
     },
     'crown-guard': {
         name: "Crown Guard", // Bribe or kill
-        vp: 10,
         icon: GiGuards,
+        rewards: [
+            { key: 'vp', quantity: 10 },
+        ],
     },
     'guard': {
         name: "Guard", // With mercenary
-        vp: 3,
         icon: GiGuardedTower,
+        rewards: [
+            { key: 'vp', quantity: 3 },
+        ],
     },
     'room': {
         name: "Unlock Treasure Room", // With treasure key
-        vp: 5,
         icon: GiClosedDoors,
+        rewards: [
+            { key: 'vp', quantity: 5 },
+        ],
     },
     'door': {
         name: "Unlock Door", // With normal key
-        vp: 2,
         icon: GiWoodenDoor,
+        rewards: [
+            { key: 'vp', quantity: 2 },
+        ],
     },
     'wall-str': {
         name: "Break Strong Wall", // With mercenary
-        vp: 5,
         icon: GiDefensiveWall,
+        conditions: [
+            { key: 'thief', quantity: 1 },
+            { key: 'bomb', quantity: 2 },
+        ],
+        rewards: [
+            { key: 'vp', quantity: 5 },
+        ],
     },
     'wall': {
         name: "Break Wall", // With mercenary
-        vp: 2,
         icon: GiStoneWall,
+        conditions: [
+            { key: 'thief', quantity: 1 },
+            { key: 'bomb', quantity: 1 },
+        ],
+        rewards: [
+            { key: 'vp', quantity: 2 },
+        ],
     },
 };
 
@@ -290,6 +332,12 @@ export const itemIconMap = {
         name: 'Stolen Coin',
         hint: 'Stolen; For trading use',
         icon: GiCrownCoin,
+        iconColor: 'text-yellow-500',
+    },
+    'bomb': {
+        name: 'Bomb',
+        hint: 'For destruction use.',
+        icon: GiUnlitBomb,
         iconColor: 'text-yellow-500',
     },
 };

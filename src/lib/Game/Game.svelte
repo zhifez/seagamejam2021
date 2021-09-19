@@ -6,7 +6,7 @@
     import StartMenuModal from './partials/StartMenuModal.svelte';
     import EndRoundModal from './partials/EndRoundModal.svelte';
     import HumanHireModal from './partials/HumanHireModal.svelte';
-
+    import CrownActionModal from './partials/CrownActionModal.svelte';
 </script>
 
 {#if !$system.hasStarted}
@@ -17,6 +17,9 @@
 {/if}
 {#if $system.showActiveHumanHire}
 <HumanHireModal />
+{/if}
+{#if $system.showActiveCrownAction}
+<CrownActionModal />
 {/if}
 <div class="grid grid-cols-5 overflow-hidden">
     <div class="col-span-1">

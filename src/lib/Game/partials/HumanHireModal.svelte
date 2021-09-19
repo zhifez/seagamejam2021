@@ -3,6 +3,7 @@
     import { actions, itemIconMap } from '../../../stores/gameData';
     import Modal from '../../../components/Modal.svelte';
     import Button from '../../../components/Button.svelte';
+import ConditionBox from './ConditionBox.svelte';
 
     let activePlayer;
     let lifespan = 0;
@@ -64,11 +65,8 @@
             <h1 class="font-semibold mb-1 text-black">Costs</h1>
             <div class="grid grid-cols-2 gap-2">
                 {#each $system.activeHumanHire.conditions as cond}
-                <div class="col-span-1 p-2 flex justify-between items-center bg-white rounded-md">
-                    <div class={`w-6 h-5 ${itemIconMap[cond.key].iconColor}`}>
-                        <svelte:component this={itemIconMap[cond.key].icon} />
-                    </div>
-                    <p class="text-black">x {cond.quantity}</p>
+                <div class="col-span-1">
+                    <ConditionBox {...cond} />
                 </div>
                 {/each}
             </div>

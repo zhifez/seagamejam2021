@@ -148,9 +148,9 @@
 
         <!-- TRADE -->
         {#if type.includes('trade')}
-        {#each tradeActions as action}
+        <!-- {#each tradeActions as action}
 
-        {/each}
+        {/each} -->
 
         <button 
             class="text-sm mt-2"

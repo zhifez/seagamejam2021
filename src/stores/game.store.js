@@ -35,7 +35,7 @@ export const game = writable({
     endRoundResults: null,
     layer: 0,
     actions: {},
-    crownAction: {},
+    completedCrownActions: {},
 });
 
 export const setupPlayers = (playerCount) => {
@@ -106,6 +106,11 @@ export const playerCanTakeAction = (player, coreActionIndex, selectedActionIndex
         activeAction = coreAction.actions[Math.min(selectedActionIndex, coreAction.actions.length - 1)];
     }
 
+    if (coreAction.type.includes('human')) {
+        let key = Object.keys(humanHires)[selectedActionIndex];
+        activeAction = humanHires[key];
+    }
+
     let conditionsAreMet = false;
     if (player.storedItems.length > 0) {
         if (activeAction.conditions
@@ -133,7 +138,7 @@ export const playerCanTakeAction = (player, coreActionIndex, selectedActionIndex
     }
     else if (coreAction.type.includes('upgrade')) {
         if (!conditionsAreMet) {
-            return `Your don't have enough resource to take this action.`;
+            return `Your do not have enough resource to take this action.`;
         }
     }
     else if (coreAction.type.includes('reproduce')) {
@@ -149,7 +154,7 @@ export const playerCanTakeAction = (player, coreActionIndex, selectedActionIndex
     }
     else if (coreAction.type.includes('human')) {
         if (!conditionsAreMet) {
-            return `Your don't have enough resource to take hire this human.`;
+            return `Your do not have enough resource to take hire this human.`;
         }
     }
     return null;
