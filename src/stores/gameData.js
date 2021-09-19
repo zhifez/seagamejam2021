@@ -173,6 +173,7 @@ export const actions = [
     },
     {
         name: 'Trade with Black Market',
+        hint: 'Not available yett.',
         type: 'trade-action',
         rows: 2,
     },

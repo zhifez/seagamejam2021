@@ -13,13 +13,15 @@
             <div>
                 <p class="uppercase text-sm">SEA Game Jam 2021</p>
                 <h1 class="text-4xl font-semibold">A Crown for Crows</h1>
-                <p>A worket placement about crows and crown.</p>
+                <p>A worker placement game about managing crows to steal a crown, in the long run.</p>
             </div>
 
             <p class="text-sm">
                 Developed by: <a class="underline" target="_blank" href="https://zhifez.com/">zhifez</a>
             </p>
         </div>
+        
+        <br class="my-5" />
 
         <div class="text-sm">
             <p class="font-semibold">Instructions:</p>
@@ -34,6 +36,8 @@
             </ul>
         </div>
 
+        <br class="my-5" />
+
         <Button
             label="Start"
             on:click={setHasStarted}
@@ -43,7 +47,8 @@
 
 <style>
     .modal-start-menu {
-        min-width: 50vw;
+        min-width: 60vw;
+        max-width: 60vw;
         min-height: 50vh;
     }
 </style>
