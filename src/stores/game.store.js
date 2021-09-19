@@ -24,7 +24,7 @@ const createPlayer = (name, color, crows) => {
 }
 
 export const nestCapacityPerLevel = 2;
-export const storageCapacityPerLevel = 4;
+export const storageCapacityPerLevel = 6;
 
 export const game = writable({
     players: [

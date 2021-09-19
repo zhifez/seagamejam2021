@@ -54,9 +54,9 @@
                 <h5 class="font-semibold">Nest</h5>
                 <p class="text-sm">Lvl. {activePlayer.nestLevel}</p>
             </div>
-            <div class="flex flex-wrap gap-2 ">
+            <div class="flex flex-wrap gap-1">
                 {#each Array(activePlayer.nestLevel * nestCapacityPerLevel) as _, i}
-                <div class="w-8 h-8 border-b-2 border-black">
+                <div class="w-6 h-6 border-b-2 border-black">
                     {#if i < activePlayer.crows}
                     <div 
                         class={`h-full
@@ -74,10 +74,10 @@
                 <h5 class="font-semibold mb-1">Storage</h5>
                 <p class="text-sm">Lvl. {activePlayer.storageLevel}</p>
             </div>
-            <div class="flex flex-wrap gap-2">
+            <div class="flex flex-wrap gap-1">
                 {#each Array(activePlayer.storageLevel * storageCapacityPerLevel) as _, i}
                 <div 
-                    class={`w-8 h-8 border-b-2 border-black
+                    class={`w-6 h-6 border-b-2 border-black
                     ${i < activePlayer.storedItems.length ? 'bg-white' : ''}
                     `}
                 >
