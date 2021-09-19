@@ -5,7 +5,7 @@
 </script>
 
 <Modal
-    modalBgColor={'bg-yellow-500'}
+    modalBgColor={'bg-yellow-400'}
     canClose={false}
 >
     <div class="modal-start-menu flex flex-col justify-between p-3">

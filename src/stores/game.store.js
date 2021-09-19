@@ -41,6 +41,8 @@ export const system = writable({
     hasStarted: false,
     showActiveHumanHire: false,
     activeHumanHire: null,
+    showActiveCrownAction: false,
+    activeCrownAction: null,
 });
 
 export const setHasStarted = () => {
@@ -60,6 +62,20 @@ export const setActiveHumanHire = (data) => {
         }
         else {
             nextState.showActiveHumanHire = false;
+        }
+        return nextState;
+    });
+}
+
+export const setActiveCrownAction = (data) => {
+    system.update(state => {
+        let nextState = {...state};
+        if (data) {
+            nextState.showActiveCrownAction = true;
+            nextState.activeCrownAction = data;
+        }
+        else {
+            nextState.showActiveCrownAction = false;
         }
         return nextState;
     });
