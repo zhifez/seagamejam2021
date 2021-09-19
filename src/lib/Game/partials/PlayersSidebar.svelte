@@ -95,21 +95,12 @@
                 {/each}
             </div>
         </div>
-        {#if $game.canEndRound}
-        <Button 
-            label="End Round"
-            textClass={'text-lg'}
-            color={'yellow-800'}
-            hoverColor={'yellow-700'}
-            on:click={onBtnEndRound}
-        />
-        {:else}
         <div class="flex flex-col gap-3">
             <Button 
                 label="End Turn"
                 textClass={'text-lg'}
                 on:click={onBtnEndTurn}
-                disabled={!activePlayer.hasTakenAction}
+                disabled={!activePlayer.hasTakenAction || $game.canEndRound}
             />
             {#if !activePlayer.hasTakenAction}
             <Button 
@@ -119,9 +110,9 @@
                 textClass={'text-lg'}
                 hint="Will utilizes a Crow"
                 on:click={onBtnPass}
+                disabled={$game.canEndRound}
             />
             {/if}
         </div>
-        {/if}
     </div>
 </div>

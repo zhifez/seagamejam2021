@@ -41,7 +41,7 @@
 
     const onTakeAction = (actionIndex) => {
         if ($game.canEndRound) {
-            alert('The round has ended. Press "End Round" to start a new round.');
+            alert('The round has ended.');
             return;
         }
 

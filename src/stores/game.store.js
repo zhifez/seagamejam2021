@@ -30,9 +30,11 @@ export const game = writable({
     players: [
         createPlayer('Player 1', colors[0], 2),
         createPlayer('Player 2', colors[1], 2),
-        createPlayer('Player 3', colors[2], 2),
+        // createPlayer('Player 3', colors[2], 2),
     ],
-    round: 0, turn: 0, canEndRound: false,
+    round: 0, turn: 0, 
+    canEndRound: false,
+    endRoundResults: null,
     layer: 0,
     actions: {},
 });
@@ -127,8 +129,16 @@ export const endTurn = (passed = false) => {
             nextState.turn = turn % nextPlayers.length;
         }
         else {
-            // Go to next Round
             nextState.canEndRound = true;
+            nextState.endRoundResults = {};
+            nextPlayers.forEach((player, p) => {
+                let food = player.storedItems.filter(item => item === 'food').length;
+                let minusVP = player.crows - food;
+                nextState.endRoundResults[p] = {
+                    food,
+                    minusVP,
+                };
+            });
         }
         nextState.players = nextPlayers;
         return nextState;
@@ -147,6 +157,8 @@ export const endRound = () => {
         let nextPlayers = [...state.players];
         for (let a=0; a<nextPlayers.length; ++a) {
             nextPlayers[a].utilizedCrows = 0;
+            nextPlayers[a].vp -= nextState.endRoundResults[a].minusVP;
+
             if (nextPlayers[a].isReproducing) {
                 ++nextPlayers[a].crows;
                 nextPlayers[a].isReproducing = false;

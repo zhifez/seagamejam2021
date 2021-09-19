@@ -1,9 +1,15 @@
 <script>
     import { actions } from '../../stores/gameData';
+    import { endRound, game } from '../../stores/game.store';
     import PlayersSidebar from './partials/PlayersSidebar.svelte';
     import ActionCard from './partials/ActionCard.svelte';
+    import EndRoundModal from './partials/EndRoundModal.svelte';
 
 </script>
+
+{#if $game.canEndRound}
+<EndRoundModal />
+{/if}
 <div class="grid grid-cols-5">
     <div class="col-span-1">
         <PlayersSidebar />

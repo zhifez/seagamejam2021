@@ -163,10 +163,10 @@ export const actions = [
             },
         ]
     },
-    // {
-    //     name: 'Trade with Black Market',
-    //     type: 'action'
-    // },
+    {
+        name: 'Trade with Black Market',
+        type: 'action'
+    },
     // {
     //     name: 'Hire Animal',
     //     hint: 'Lasts 1 round.',
