@@ -16,7 +16,9 @@
                 <p>A worket placement about crows and crown.</p>
             </div>
 
-            <p class="text-sm">Developed by: zhifez</p>
+            <p class="text-sm">
+                Developed by: <a class="underline" target="_blank" href="https://zhifez.com/">zhifez</a>
+            </p>
         </div>
 
         <div class="text-sm">
