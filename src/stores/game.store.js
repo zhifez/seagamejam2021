@@ -38,9 +38,18 @@ export const game = writable({
 });
 
 export const system = writable({
+    hasStarted: false,
     showActiveHumanHire: false,
     activeHumanHire: null,
 });
+
+export const setHasStarted = () => {
+    system.update(state => {
+        let nextState = {...state};
+        nextState.hasStarted = true;
+        return nextState;
+    });
+}
 
 export const setActiveHumanHire = (data) => {
     system.update(state => {

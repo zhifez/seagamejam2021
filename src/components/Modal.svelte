@@ -4,6 +4,7 @@
     import { createEventDispatcher } from 'svelte';
     
     export let modalClass = null;
+    export let modalBgColor = 'bg-white';
     export let canClose = true;
 
     const dispatch = createEventDispatcher();
@@ -22,7 +23,7 @@
     <!-- Content -->
     <div class="absolute top-0 left-0 w-screen h-screen flex flex-col justify-center">
         <div class="mx-auto">
-            <div class={`relative ${modalClass ?? 'modal-inner p-3 rounded-md bg-white'}`}>
+            <div class={`relative ${modalClass ?? `modal-inner p-3 rounded-md ${modalBgColor}`}`}>
                 {#if canClose}
                 <button 
                     class="modal-close-btn w-10 h-10 text-white"
