@@ -30,6 +30,7 @@ export const game = writable({
     players: [
         createPlayer('Player 1', colors[0], 2),
         createPlayer('Player 2', colors[1], 2),
+        createPlayer('Player 3', colors[2], 2),
     ],
     round: 0, turn: 0, canEndRound: false,
     layer: 0,
@@ -42,10 +43,10 @@ export const takeAction = (index, actionIndex) => {
         let nextPlayers = [...state.players];
         let nextActions = {...state.actions};
 
-        let action = actions[index];
-        let activeAction = action.actions[Math.min(actionIndex, actions[index].actions.length)];
+        let coreAction = actions[index];
+        let activeAction = coreAction.actions[Math.min(actionIndex, actions[index].actions.length - 1)];
         
-        if (action.type.includes('take')) {
+        if (coreAction.type.includes('take')) {
             if (activeAction.rewards) {
                 let storageIsMax = false;
                 const maxStorage = nextPlayers[nextState.turn].storageLevel * storageCapacityPerLevel;
@@ -65,20 +66,20 @@ export const takeAction = (index, actionIndex) => {
                 }
             }
         }
-        else if (action.type.includes('upgrade')) {
+        else if (coreAction.type.includes('upgrade')) {
             activeAction.conditions.forEach(item => {
                 for (let a=0; a<item.quantity; ++a) {
                     nextPlayers[nextState.turn].storedItems.splice(item.key, 1);
                 }
             });
-            if (action.type.includes('nest')) {
+            if (coreAction.type.includes('nest')) {
                 ++nextPlayers[nextState.turn].nestLevel;
             }
-            else if (action.type.includes('storage')) {
+            else if (coreAction.type.includes('storage')) {
                 ++nextPlayers[nextState.turn].storageLevel;
             }
         }
-        else if (action.type.includes('reproduce')) {
+        else if (coreAction.type.includes('reproduce')) {
             nextPlayers[nextState.turn].utilizedCrows += 2;
             nextPlayers[nextState.turn].isReproducing = true;
         }
