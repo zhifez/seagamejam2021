@@ -9,13 +9,13 @@ A worker placement game about managing crows to steal a crown, in the long run.
 
 # To run the game
 
-1. Install the dependencies:
+Install the dependencies:
 
-  ```yarn```
+```yarn```
 
-2. Then run:
+Then run:
 
-  ```yarn dev```
+```yarn dev```
 
 # Making changes to the design
 
