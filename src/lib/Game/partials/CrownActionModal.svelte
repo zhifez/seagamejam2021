@@ -2,6 +2,7 @@
     import { canTakeCrownAction, setActiveCrownAction, system, takeCrownAction } from '../../../stores/game.store';
     import Button from '../../../components/Button.svelte';
     import Modal from '../../../components/Modal.svelte';
+    import { success } from '../../../common/toastTheme';
     import ConditionBox from './ConditionBox.svelte';
 
     let action;
@@ -22,6 +23,7 @@
 
         takeCrownAction(action);
         setActiveCrownAction(null);
+        success(`Crown Action: "${action.name}" completed!`);
     }
 </script>
 

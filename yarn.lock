@@ -69,6 +69,11 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
+"@zerodevx/svelte-toast@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@zerodevx/svelte-toast/-/svelte-toast-0.6.1.tgz#5dbabcd272743a4e5becdd35ba4235bde060708b"
+  integrity sha512-zQiAWXX1586NY4YrYUi1kRmBdQ8Sk4HLxv7XGGjbVU57sq5j1uJ9U0D23kd1DTGb/NfO60qgIRQjt1ZWAk9IQg==
+
 acorn-node@^1.6.1:
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/acorn-node/-/acorn-node-1.8.2.tgz#114c95d64539e53dede23de8b9d96df7c7ae2af8"

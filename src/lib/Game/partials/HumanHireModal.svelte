@@ -22,11 +22,11 @@
                 break;
             }
         }
-        // const error = canTakeAction(hireCoreActionIndex, $system.activeHumanHire.actionIndex);
-        // if (error) {
-        //     alert(error);
-        //     return;
-        // }
+        const error = canTakeAction(hireCoreActionIndex, $system.activeHumanHire.actionIndex);
+        if (error) {
+            alert(error);
+            return;
+        }
 
         takeAction(hireCoreActionIndex, $system.activeHumanHire.actionIndex);
         onCloseModal();

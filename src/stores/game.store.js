@@ -1,3 +1,4 @@
+import { warning } from "../common/toastTheme";
 import { get, writable } from "svelte/store";
 import { actions, getNestCapacity, getStorageCapacity, humanHires } from "./gameData";
 
@@ -206,6 +207,9 @@ const fulfilActionConditions = (player, conditions) => {
     player.humanHires.forEach(hire => {
         if (hire.hiredLifespan < hire.lifespan) {
             nextHumanHires.push(hire);
+        }
+        else {
+            warning(`${hire.name} has left.`);
         }
     });
     player.humanHires = nextHumanHires;
