@@ -1,5 +1,5 @@
 import { get, writable } from "svelte/store";
-import { actions, humanHires, nestCapacityPerLevel, storageCapacityPerLevel } from "./gameData";
+import { actions, getNestCapacity, getStorageCapacity, humanHires } from "./gameData";
 
 const colors = [
     'red-500',
@@ -147,7 +147,7 @@ export const canTakeAction = (player, coreActionIndex, selectedActionIndex) => {
     }
     
     if (coreAction.type.includes('take')) {
-        if (player.storedItems.length >= player.storageLevel * storageCapacityPerLevel) {
+        if (player.storedItems.length >= getStorageCapacity(player.storageLevel)) {
             return 'Your Storage is full.';
         }
     }
@@ -160,7 +160,7 @@ export const canTakeAction = (player, coreActionIndex, selectedActionIndex) => {
         if (player.isReproducing) {
             return `You can only take this action once per round.`;
         }
-        if (player.crows >= player.nestLevel * nestCapacityPerLevel) {
+        if (player.crows >= getNestCapacity(player.nestLevel)) {
             return `Your Nest cannot occupy anymore Crow.`;
         }
         if (player.crows - player.utilizedCrows < 2) {
@@ -203,7 +203,7 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
         if (coreAction.type.includes('take')) {
             if (activeAction.rewards) {
                 let storageIsMax = false;
-                const maxStorage = nextPlayers[nextState.turn].storageLevel * storageCapacityPerLevel;
+                const maxStorage = getStorageCapacity(nextPlayers[nextState.turn].storageLevel);
                 for (let a=0; a<activeAction.rewards.length; ++a) {
                     if (storageIsMax) {
                         break;

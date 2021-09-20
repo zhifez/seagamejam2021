@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { humanHires, itemIconMap, nestCapacityPerLevel, storageCapacityPerLevel } from '../../../stores/gameData';
+    import { humanHires, itemIconMap } from '../../../stores/gameData';
     import { game, canTakeAction, takeAction } from '../../../stores/game.store';
     import Tooltip from '../../../components/Tooltip.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';

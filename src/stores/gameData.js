@@ -29,8 +29,18 @@ import Gi3DHammer from 'svelte-icons/gi/Gi3DHammer.svelte';
 import GiStoneTablet from 'svelte-icons/gi/GiStoneTablet.svelte';
 import GiStoneSphere from 'svelte-icons/gi/GiStoneSphere.svelte';
 
-export const nestCapacityPerLevel = 2;
-export const storageCapacityPerLevel = 5;
+const nestCapacityDefault = 2;
+const nestCapacityPerLevel = 2;
+const storageCapacityDefault = 5;
+const storageCapacityPerLevel = 3;
+
+export const getNestCapacity = (level) => {
+    return nestCapacityDefault + nestCapacityPerLevel * (level - 1);
+}
+
+export const getStorageCapacity = (level) => {
+    return storageCapacityDefault + storageCapacityPerLevel * (level - 1);
+}
 
 export const actions = [
     {

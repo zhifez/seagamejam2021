@@ -1,11 +1,10 @@
 <script>
     import { endRound, endTurn, game } from '../../../stores/game.store';
-    import { itemIconMap, nestCapacityPerLevel, storageCapacityPerLevel } from '../../../stores/gameData';
-    import FaRegCircle from 'svelte-icons/fa/FaRegCircle.svelte';
+    import { getNestCapacity, getStorageCapacity, itemIconMap } from '../../../stores/gameData';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import Tooltip from '../../../components/Tooltip.svelte';
     import Button from '../../../components/Button.svelte';
-import HumanHireCard from './HumanHireCard.svelte';
+    import HumanHireCard from './HumanHireCard.svelte';
 
     let activePlayer;
     $: {
@@ -57,7 +56,7 @@ import HumanHireCard from './HumanHireCard.svelte';
                 <p class="text-sm">Lvl. {activePlayer.nestLevel}</p>
             </div>
             <div class="flex flex-wrap gap-1">
-                {#each Array(activePlayer.nestLevel * nestCapacityPerLevel) as _, i}
+                {#each Array(getNestCapacity(activePlayer.nestLevel)) as _, i}
                 <div class="w-6 h-6 border-b-2 border-black">
                     {#if i < activePlayer.crows}
                     <div 
@@ -78,7 +77,7 @@ import HumanHireCard from './HumanHireCard.svelte';
                 <p class="text-sm">Lvl. {activePlayer.storageLevel}</p>
             </div>
             <div class="flex flex-wrap gap-1">
-                {#each Array(activePlayer.storageLevel * storageCapacityPerLevel) as _, i}
+                {#each Array(getStorageCapacity(activePlayer.storageLevel)) as _, i}
                 <div 
                     class={`w-6 h-6 border-b-2 border-black
                     ${i < activePlayer.storedItems.length ? 'bg-white' : ''}
