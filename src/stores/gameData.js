@@ -18,6 +18,16 @@ import GiCarnivalMask from 'svelte-icons/gi/GiCarnivalMask.svelte';
 import GiSkullMask from 'svelte-icons/gi/GiSkullMask.svelte';
 import GiDualityMask from 'svelte-icons/gi/GiDualityMask.svelte';
 import GiUnlitBomb from 'svelte-icons/gi/GiUnlitBomb.svelte';
+import GiMeat from 'svelte-icons/gi/GiMeat.svelte';
+import GiUpgrade from 'svelte-icons/gi/GiUpgrade.svelte';
+import GiNewBorn from 'svelte-icons/gi/GiNewBorn.svelte';
+import GiSkeletonKey from 'svelte-icons/gi/GiSkeletonKey.svelte';
+import GiBossKey from 'svelte-icons/gi/GiBossKey.svelte';
+import GiPiercingSword from 'svelte-icons/gi/GiPiercingSword.svelte';
+import GiPointySword from 'svelte-icons/gi/GiPointySword.svelte';
+import Gi3DHammer from 'svelte-icons/gi/Gi3DHammer.svelte';
+import GiStoneTablet from 'svelte-icons/gi/GiStoneTablet.svelte';
+import GiStoneSphere from 'svelte-icons/gi/GiStoneSphere.svelte';
 
 export const nestCapacityPerLevel = 2;
 export const storageCapacityPerLevel = 5;
@@ -260,6 +270,10 @@ export const crownActions = {
     'door': {
         name: "Unlock Door", // With normal key
         icon: GiWoodenDoor,
+        conditions: [
+            { key: 'thief', quantity: 1 },
+            { key: 'key-skeleton', quantity: 1 },
+        ],
         rewards: [
             { key: 'vp', quantity: 2 },
         ],
@@ -316,6 +330,12 @@ export const itemIconMap = {
         icon: FaDrumstickBite,
         iconColor: 'text-yellow-600',
     },
+    'food-double': {
+        name: 'Food',
+        hint: 'Not trash; For consumption/trading use',
+        icon: GiMeat,
+        iconColor: 'text-yellow-600',
+    },
     'gem': {
         name: `Someone's Gem`,
         hint: 'Stolen; For trading use',
@@ -342,8 +362,8 @@ export const itemIconMap = {
     },
 };
 
-export const tradeActions = [
-    {
+export const tradeItems = {
+    'food': {
         name: 'Food',
         hint: 'Receive 1 food.',
         type: 'food',
@@ -355,7 +375,7 @@ export const tradeActions = [
         ],
         space: 1,
     },
-    {
+    'food-double': {
         name: 'Double Food',
         hint: 'Receive 2 food.',
         type: 'food',
@@ -367,8 +387,9 @@ export const tradeActions = [
         ],
         space: 1,
     },
-    {
+    'upgrade-nest': {
         name: 'Upgrade Nest',
+        icon: GiUpgrade,
         hint: 'Instantly upgrade your nest.',
         type: 'nest',
         conditions: [
@@ -379,8 +400,9 @@ export const tradeActions = [
         ],
         space: 1,
     },
-    {
+    'upgrade-storage': {
         name: 'Upgrade Storage',
+        icon: GiUpgrade,
         hint: 'Instantly upgrade your storage.',
         type: 'storage',
         conditions: [
@@ -391,8 +413,9 @@ export const tradeActions = [
         ],
         space: 1,
     },
-    {
+    'crow-reproduce-instant': {
         name: 'Illegal Crow Trafficking',
+        icon: GiNewBorn,
         hint: 'Instantly get a crow, as long as you have the nest space.',
         type: 'crow',
         conditions: [
@@ -403,8 +426,9 @@ export const tradeActions = [
         ],
         space: 1,
     },
-    {
+    'key-skeleton': {
         name: 'Skeleton Key',
+        icon: GiSkeletonKey,
         hint: 'Unlock certain door.',
         type: 'crown',
         conditions: [
@@ -415,8 +439,9 @@ export const tradeActions = [
         ],
         space: 1,
     },
-    {
+    'key-treasure': {
         name: 'Treasure Key',
+        icon: GiBossKey,
         hint: 'Unlock a very important door.',
         type: 'crown',
         conditions: [
@@ -427,8 +452,9 @@ export const tradeActions = [
         ],
         space: 1,
     },
-    {
+    'sword-normal': {
         name: 'Sword',
+        icon: GiPiercingSword,
         hint: 'Can kill a regular guard, when wielded by a human.',
         type: 'weapon',
         conditions: [
@@ -439,8 +465,9 @@ export const tradeActions = [
         ],
         space: 1,
     },
-    {
+    'sword-heavy': {
         name: 'Heavy Sword',
+        icon: GiPointySword,
         hint: 'Can kill a tougher guard, when wielded by a human.',
         type: 'weapon',
         conditions: [
@@ -451,8 +478,9 @@ export const tradeActions = [
         ],
         space: 1,
     },
-    {
+    'hammer-sledge': {
         name: 'Sledge Hammer',
+        icon: Gi3DHammer,
         hint: 'For crushing and breaking hard object, as well as killing living things.',
         type: 'weapon',
         conditions: [
@@ -463,8 +491,9 @@ export const tradeActions = [
         ],
         space: 1,
     },
-    {
+    'magic-tablet': {
         name: 'Magic Tablet',
+        icon: GiStoneTablet,
         hint: 'For casting magic use.',
         type: 'weapon',
         conditions: [
@@ -475,8 +504,9 @@ export const tradeActions = [
         ],
         space: 1,
     },
-    {
+    'magic-sphere': {
         name: 'Magic Sphere',
+        icon: GiStoneSphere,
         hint: 'For casting magic use.',
         type: 'weapon',
         conditions: [
@@ -487,7 +517,7 @@ export const tradeActions = [
         ],
         space: 1,
     },
-];
+};
 
 export const humanHires = {
     'thief': {

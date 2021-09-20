@@ -50,19 +50,19 @@ import ConditionBox from './ConditionBox.svelte';
     canClose={$system.activeHumanHire.actionIndex < 0}
     on:close={onCloseModal}
 >
-    <div class="modal-human-hire bg-yellow-700 rounded-md text-white flex flex-col justify-between items-center text-center px-3 py-3">
-        <div class="flex flex-col items-center">
-            <div class="w-16 mb-3">
+    <div class="modal-human-hire bg-yellow-700 rounded-md text-white flex flex-col justify-between items-center text-center">
+        <div class="flex flex-col items-center p-5 pb-2">
+            <div class="w-16 mb-2">
                 <svelte:component this={$system.activeHumanHire.icon} />
             </div>
-            <h1 class="text-2xl font-semibold">{$system.activeHumanHire.name}</h1>
-            <p class="text-sm">{$system.activeHumanHire.hint}</p>
-            <p class="text-sm bg-red-500 text-white px-2 py-1 rounded-md mt-1">
+            <h1 class="text-xl font-semibold">{$system.activeHumanHire.name}</h1>
+            <p class="text-xs">{$system.activeHumanHire.hint}</p>
+            <p class="text-xs bg-red-500 text-white px-2 py-1 rounded-md mt-1">
                 Lasts {$system.activeHumanHire.lifespan} round{$system.activeHumanHire.lifespan > 1 ? 's' : ''}
             </p>
         </div>
-        <div class="h-2/5 rounded-md px-3 py-2 bg-yellow-300 w-full">
-            <h1 class="font-semibold mb-1 text-black">Costs</h1>
+        <div class="h-1/2 px-3 py-2 w-full">
+            <h1 class="font-semibold mb-1">Costs</h1>
             <div class="grid grid-cols-2 gap-2">
                 {#each $system.activeHumanHire.conditions as cond}
                 <div class="col-span-1">
