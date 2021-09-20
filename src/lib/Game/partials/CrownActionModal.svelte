@@ -31,7 +31,7 @@
     on:close={onCloseModal}
     canClose={false}
 >
-    <div class="modal-crown-action bg-yellow-300 rounded-md text-black flex flex-col justify-between items-center text-center p-5">
+    <div class="modal-crown-action bg-yellow-300 rounded-md text-black p-5 flex flex-col justify-between items-center text-center">
         <div class="flex flex-col items-center">
             <div class="w-16 mb-3">
                 <svelte:component this={action.icon} />

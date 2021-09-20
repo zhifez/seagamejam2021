@@ -5,12 +5,15 @@
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
 </script>
 
-<Modal canClose={false}>
-    <div class="modal-end-round">
+<Modal 
+    modalClass="relative flex flex-col items-center"
+    canClose={false}
+>
+    <div class="modal-end-round bg-yellow-300 rounded-md text-black p-5">
         <h1 class="text-2xl font-semibold">
             End of Round - Feeding Phase
         </h1>
-        <hr class="my-3" />
+        <hr class="my-3 border-black" />
         {#each $game.players as player, p}
         {#if p > 0}<hr class="my-3" />{/if}
         <div class="flex items-center justify-between font-semibold mb-2">
@@ -44,7 +47,7 @@
             </div>
         </div>
         {/each}
-        <hr class="my-3" />
+        <hr class="my-3 border-black" />
         <div class="flex justify-end gap-2">
             <Button 
                 label="End Round"
