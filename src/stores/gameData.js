@@ -229,6 +229,7 @@ export const crownActions = {
         rewards: [
             { key: 'vp', quantity: 50 },
         ],
+        isEndGame: true,
     },
     'rune': {
         name: "Destroy Rune",
@@ -313,6 +314,12 @@ export const crownActions = {
 };
 
 export const dungeonSize = 7;
+export const dungeonLayerIsComplete = (layer, completedCount) => {
+    let actualSize = dungeonSize - (layer * 2);
+    const totalChallenges = (actualSize - layer + actualSize - layer - 1) * 2;
+    // return (completedCount / totalChallenges >= 1/10); // testing
+    return (completedCount / totalChallenges >= 2/3);
+};
 
 export const dungeonLayers = [
     ['wall', 'door', 'guard'],

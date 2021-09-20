@@ -6,7 +6,7 @@
     import About from './lib/About.svelte';
 
     const options = {
-        duration: 4000,
+        duration: 2000,
         initial: 1,
         next: 0,
         pausable: false,
@@ -15,7 +15,7 @@
         intro: { x: 256 },
         theme: {
             'green': 'text-green-500',
-            'yellow': 'text-yellow-600',
+            'yellow': 'text-yellow-800',
             'red': 'text-red-600'
         }
     };

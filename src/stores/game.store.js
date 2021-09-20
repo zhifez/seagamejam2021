@@ -1,6 +1,6 @@
-import { warning } from "../common/toastTheme";
+import { success, warning } from "../common/toastTheme";
 import { get, writable } from "svelte/store";
-import { actions, getNestCapacity, getStorageCapacity, humanHires } from "./gameData";
+import { actions, dungeonLayerIsComplete, getNestCapacity, getStorageCapacity, humanHires } from "./gameData";
 
 const colors = [
     'red-500',
@@ -35,6 +35,7 @@ export const game = writable({
     roundActions: {},
     crownActionLayer: 0,
     completedCrownActions: {},
+    isEndGame: false,
 });
 
 export const initGame = (playerCount) => {
@@ -360,21 +361,44 @@ export const takeCrownAction = (crownAction) => {
         activePlayer = fulfilActionConditions(activePlayer, crownAction.conditions);
 
         // Fulfil rewards
+        let successMessage = `Crown Challenge: "${crownAction.name}" completed!`;
+        let prevVP = activePlayer.vp;
         activePlayer = fulfilActionRewards(activePlayer, crownAction.rewards);
+        if (activePlayer.vp !== prevVP) {
+            const vpAdd = (activePlayer.vp - prevVP);
+            successMessage += `<br /><br />${activePlayer.name} received ${vpAdd} VP${vpAdd > 1 ? 's' : ''}.`;
+        }
+        warning(successMessage);
 
         // Store a record of completion
-        if (!(nextState.crownActionLayer in nextState.completedCrownActions)) {
-            nextState.completedCrownActions[nextState.crownActionLayer] = {};
+        if (!(crownAction.layer in nextState.completedCrownActions)) {
+            nextState.completedCrownActions[crownAction.layer] = {};
         }
 
-        let nextCrownActions = {...nextState.completedCrownActions[nextState.crownActionLayer]};
+        let nextCrownActions = {...nextState.completedCrownActions[crownAction.layer]};
         let crownActionKey = `${crownAction.x}-${crownAction.y}`;
         nextCrownActions[crownActionKey] = {
             playerName: activePlayer.name,
             playerColor: activePlayer.color,
         };
+        nextState.completedCrownActions[crownAction.layer] = nextCrownActions;
 
-        nextState.completedCrownActions[nextState.crownActionLayer] = nextCrownActions;
+        if (crownAction.isEndGame) {
+            nextState.isEndGame = true;
+            warning(`${activePlayer.name} stole the crown!`.toUpperCase());
+        }
+        else {
+            if (dungeonLayerIsComplete(
+                    crownAction.layer, 
+                    Object.keys(nextCrownActions).length
+                )) {
+                if (nextState.crownActionLayer < crownAction.layer + 1) {
+                    ++nextState.crownActionLayer;
+                    warning(`Crown Challenges Layer ${nextState.crownActionLayer + 1} Unlocked!`);
+                }
+            }
+        }
+
         nextState.players[nextState.turn] = activePlayer;
         return nextState;
     });

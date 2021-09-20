@@ -46,7 +46,8 @@
         
         setActiveCrownAction({
             ...action,
-            x, y
+            x, y,
+            layer: layerIndex
         });
     }
 </script>
