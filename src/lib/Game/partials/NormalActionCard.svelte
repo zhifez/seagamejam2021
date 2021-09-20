@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { humanHires, itemIconMap, nestCapacityPerLevel, storageCapacityPerLevel } from '../../../stores/gameData';
-    import { game, playerCanTakeAction, takeAction } from '../../../stores/game.store';
+    import { game, canTakeAction, takeAction } from '../../../stores/game.store';
     import Tooltip from '../../../components/Tooltip.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import IoMdRefresh from 'svelte-icons/io/IoMdRefresh.svelte';
@@ -52,24 +52,7 @@
     }
 
     const onTakeAction = (selectedActionIndex) => {
-        if ($game.canEndRound) {
-            alert('The round has ended.');
-            return;
-        }
-
-        if (activePlayer.hasTakenAction) {
-            alert('You have already taken an action!\nTake a Crown Action or end your turn.');
-            return;
-        }
-
-        if (index in $game.actions) {
-            if (selectedActionIndex in $game.actions[index]) {
-                alert('Action has already been taken.');
-                return;
-            }
-        }
-        
-        const error = playerCanTakeAction(activePlayer, index, selectedActionIndex);
+        const error = canTakeAction(activePlayer, index, selectedActionIndex);
         if (error) {
             alert(error);
             return;
@@ -125,16 +108,16 @@
                     </div>
                     {/if}
 
-                    {#if index in $game.actions && (a + s) in $game.actions[index]}
+                    {#if index in $game.roundActions && (a + s) in $game.roundActions[index]}
                     <div 
-                        class={`absolute top-4 w-full h-full text-${$game.actions[index][a + s]}
+                        class={`absolute top-4 w-full h-full text-${$game.roundActions[index][a + s]}
                         ${type.includes('reproduce') ? 'opacity-80' : ''}
                         `}
                     >
                         <FaCrow />
                     </div>
                     {#if type.includes('reproduce')}
-                    <div class={`absolute top-6 left-4 z-10 w-full h-full text-${$game.actions[index][a + s]}`}>
+                    <div class={`absolute top-6 left-4 z-10 w-full h-full text-${$game.roundActions[index][a + s]}`}>
                         <FaCrow />
                     </div>
                     {/if}

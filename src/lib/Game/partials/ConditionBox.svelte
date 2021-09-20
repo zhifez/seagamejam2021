@@ -6,7 +6,7 @@
     export let orKeys = [];
     export let quantity = 0;
 
-    let title = key;
+    let title = key.toUpperCase();
     let icon;
     let iconColor = 'text-black';
     $: {
@@ -15,9 +15,12 @@
             icon = itemIconMap[key].icon;
             iconColor = itemIconMap[key].iconColor;
         }
-        if (key in humanHires) {
+        else if (key in humanHires) {
             title = humanHires[key].name;
             icon = humanHires[key].icon;
+        }
+        else if (key === 'vp') {
+            title = 'Victory Points'
         }
     }
 </script>
@@ -35,7 +38,9 @@
             <svelte:component this={icon} />
         </div>
         {:else}
-        <p>{key}</p>
+        <p class="p-1 rounded-md text-xs text-white bg-black uppercase cursor-default">
+            {key}
+        </p>
         {/if}
         <p class="text-black">x {quantity}</p>
     </div>

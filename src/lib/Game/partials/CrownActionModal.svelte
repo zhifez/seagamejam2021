@@ -1,9 +1,8 @@
 <script>
-    import { setActiveCrownAction, system } from '../../../stores/game.store';
-    import { humanHires, itemIconMap } from '../../../stores/gameData';
+    import { canTakeCrownAction, setActiveCrownAction, system, takeCrownAction } from '../../../stores/game.store';
     import Button from '../../../components/Button.svelte';
     import Modal from '../../../components/Modal.svelte';
-import ConditionBox from './ConditionBox.svelte';
+    import ConditionBox from './ConditionBox.svelte';
 
     let action;
     $: {
@@ -15,7 +14,13 @@ import ConditionBox from './ConditionBox.svelte';
     }
 
     const onTakeCrownAction = () => {
+        const error = canTakeCrownAction();
+        if (error) {
+            alert(error);
+            return;
+        }
 
+        takeCrownAction();
     }
 </script>
 
@@ -32,17 +37,32 @@ import ConditionBox from './ConditionBox.svelte';
             <h1 class="text-2xl font-semibold">{action.name}</h1>
         </div>
         <div class="border-t-2 border-black w-full"></div>
-        <div class="h-1/2 bg-yellow-300 w-full">
-            <h1 class="font-semibold mb-1 text-black">Conditions</h1>
-            {#if action.conditions}
-            <div class="grid grid-cols-2 gap-2">
-                {#each action.conditions as cond}
-                <div class="col-span-1">
-                    <ConditionBox {...cond} />
+        <div class="h-1/2 w-full flex flex-col justify-between">
+            <div>
+                <h1 class="font-semibold mb-1 text-black">Conditions</h1>
+                {#if action.conditions}
+                <div class="grid grid-cols-2 gap-2">
+                    {#each action.conditions as cond}
+                    <div class="col-span-1">
+                        <ConditionBox {...cond} />
+                    </div>
+                    {/each}
                 </div>
-                {/each}
+                {/if}
             </div>
-            {/if}
+
+            <div>
+                <h1 class="font-semibold mb-1 text-black">Rewards</h1>
+                {#if action.rewards}
+                <div class="grid grid-cols-2 gap-2">
+                    {#each action.rewards as reward}
+                    <div class="col-span-1">
+                        <ConditionBox {...reward} />
+                    </div>
+                    {/each}
+                </div>
+                {/if}
+            </div>
         </div>
     </div>
 

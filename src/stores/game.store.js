@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
 import { actions, humanHires, nestCapacityPerLevel, storageCapacityPerLevel } from "./gameData";
 
 const colors = [
@@ -34,7 +34,7 @@ export const game = writable({
     canEndRound: false,
     endRoundResults: null,
     layer: 0,
-    actions: {},
+    roundActions: {},
     completedCrownActions: {},
 });
 
@@ -99,13 +99,28 @@ export const setActiveCrownAction = (data) => {
     });
 }
 
-export const playerCanTakeAction = (player, coreActionIndex, selectedActionIndex) => {
+export const canTakeAction = (player, coreActionIndex, selectedActionIndex) => {
+    let gameState = get(game);
+    if (gameState.canEndRound) {
+        return 'The round has ended.';
+    }
+
+    if (player.hasTakenAction) {
+        return 'You have already taken an action!\nTake a Crown Action or end your turn.';
+    }
+    
+    if (coreActionIndex in gameState.roundActions) {
+        if (selectedActionIndex in gameState.roundActions[coreActionIndex]) {
+            return 'Action has already been taken.';
+        }
+    }
+    
     let coreAction = actions[coreActionIndex];
     let activeAction = null;
     if (coreAction.actions) {
         activeAction = coreAction.actions[Math.min(selectedActionIndex, coreAction.actions.length - 1)];
     }
-
+    
     if (coreAction.type.includes('human')) {
         let key = Object.keys(humanHires)[selectedActionIndex];
         activeAction = humanHires[key];
@@ -154,7 +169,7 @@ export const playerCanTakeAction = (player, coreActionIndex, selectedActionIndex
     }
     else if (coreAction.type.includes('human')) {
         if (!conditionsAreMet) {
-            return `Your do not have enough resource to take hire this human.`;
+            return `Your do not have enough resource to hire this human.`;
         }
     }
     return null;
@@ -164,7 +179,7 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
     game.update(state => {
         let nextState = {...state};
         let nextPlayers = [...state.players];
-        let nextActions = {...state.actions};
+        let nextRoundActions = {...state.roundActions};
 
         let coreAction = actions[coreActionIndex];
         let activeAction = null;
@@ -239,17 +254,25 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
 
         if (!nextPlayers[nextState.turn].hasTakenAction) {
             // Store action log
-            nextActions[coreActionIndex] = {...nextActions[coreActionIndex]};
-            nextActions[coreActionIndex][selectedActionIndex] = nextPlayers[nextState.turn].color;
+            nextRoundActions[coreActionIndex] = {...nextRoundActions[coreActionIndex]};
+            nextRoundActions[coreActionIndex][selectedActionIndex] = nextPlayers[nextState.turn].color;
             // Update current player's status
             ++nextPlayers[nextState.turn].utilizedCrows;
             nextPlayers[nextState.turn].hasTakenAction = true;
         }
 
         nextState.players = nextPlayers;
-        nextState.actions = nextActions;
+        nextState.roundActions = nextRoundActions;
         return nextState;
     });
+}
+
+export const canTakeCrownAction = (crownAction) => {
+    return null;
+}
+
+export const takeCrownAction = (crownAction) => {
+
 }
 
 export const endTurn = (passed = false) => {
@@ -327,7 +350,7 @@ export const endRound = () => {
         }
 
         nextState.players = nextPlayers;
-        nextState.actions = {};
+        nextState.roundActions = {};
         return nextState;
     });
 }

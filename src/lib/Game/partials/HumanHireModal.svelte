@@ -1,5 +1,5 @@
 <script>
-    import { setActiveHumanHire, game, system, takeAction, playerCanTakeAction } from '../../../stores/game.store';
+    import { setActiveHumanHire, game, system, takeAction, canTakeAction } from '../../../stores/game.store';
     import { actions, itemIconMap } from '../../../stores/gameData';
     import Modal from '../../../components/Modal.svelte';
     import Button from '../../../components/Button.svelte';
@@ -34,7 +34,7 @@ import ConditionBox from './ConditionBox.svelte';
                 break;
             }
         }
-        const error = playerCanTakeAction(activePlayer, hireCoreActionIndex, $system.activeHumanHire.actionIndex);
+        const error = canTakeAction(activePlayer, hireCoreActionIndex, $system.activeHumanHire.actionIndex);
         if (error) {
             alert(error);
             return;
