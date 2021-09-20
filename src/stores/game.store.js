@@ -480,7 +480,16 @@ export const endRound = () => {
         for (let a=0; a<nextPlayers.length; ++a) {
             nextPlayers[a].utilizedCrows = 0;
             nextPlayers[a].vp -= nextState.endRoundResults[a].minusVP;
+            
+            // Consume one food per crow
+            for (let c=0; c<nextPlayers[a].crows; ++c) {
+                let itemIndex = nextPlayers[a].storedItems.indexOf('food');
+                if (itemIndex >= 0) {
+                    nextPlayers[a].storedItems.splice(itemIndex, 1);
+                }
+            }
 
+            // Add one more crow if reproducing
             if (nextPlayers[a].isReproducing) {
                 ++nextPlayers[a].crows;
                 nextPlayers[a].isReproducing = false;
