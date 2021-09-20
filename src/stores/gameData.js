@@ -158,8 +158,8 @@ export const actions = [
         ]
     },
     {
-        name: 'Crown Action',
-        hint: 'You can take any one of these actions any time during your turn.',
+        name: 'Crown Challenges',
+        hint: 'You can take any one of these challenges any time during your turn.',
         type: 'crown-action'
     },
     {

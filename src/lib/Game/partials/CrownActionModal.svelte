@@ -23,7 +23,7 @@
 
         takeCrownAction(action);
         setActiveCrownAction(null);
-        success(`Crown Action: "${action.name}" completed!`);
+        success(`Crown Challenge: "${action.name}" completed!`);
     }
 </script>
 
@@ -80,7 +80,7 @@
             on:click={onCloseModal}
         />
         <Button 
-            label={`Take Crown Action`}
+            label={`Take Challenge`}
             on:click={onTakeCrownAction}
         />
     </div>

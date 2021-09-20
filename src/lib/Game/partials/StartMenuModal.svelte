@@ -33,7 +33,7 @@
             <ul class="list-outside">
                 <li>1. Click on an action slot to take the action.</li>
                 <li>2. Remember to click "End Turn" once you've taken an action.</li>
-                <li>3. The game ends when a player has retrieve the Crown (center of Crown Action).</li>
+                <li>3. The game ends when a player has retrieve the Crown (center of "Crown Challenges").</li>
             </ul>
             <br />
             <p class="font-semibold">Version 0.0.1</p>

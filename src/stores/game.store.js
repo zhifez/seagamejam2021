@@ -130,7 +130,7 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
 
     let activePlayer = gameState.players[gameState.turn];
     if (activePlayer.hasTakenAction) {
-        return 'You have already taken an action!\nTake a Crown Action or end your turn.';
+        return 'You have already taken an action!<br />Take a Crown Challenge or end your turn.';
     }
     
     if (coreActionIndex in gameState.roundActions) {
