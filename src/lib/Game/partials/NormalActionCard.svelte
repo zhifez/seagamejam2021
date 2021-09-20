@@ -52,7 +52,7 @@
     }
 
     const onTakeAction = (selectedActionIndex) => {
-        const error = canTakeAction(activePlayer, index, selectedActionIndex);
+        const error = canTakeAction(index, selectedActionIndex);
         if (error) {
             alert(error);
             return;

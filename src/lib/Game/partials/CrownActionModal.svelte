@@ -14,13 +14,14 @@
     }
 
     const onTakeCrownAction = () => {
-        const error = canTakeCrownAction();
+        const error = canTakeCrownAction(action);
         if (error) {
             alert(error);
             return;
         }
 
-        takeCrownAction();
+        takeCrownAction(action);
+        setActiveCrownAction(null);
     }
 </script>
 

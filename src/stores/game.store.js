@@ -27,18 +27,16 @@ const createPlayer = (name, color, crows) => {
 export const game = writable({
     players: [
         createPlayer('Player 1', colors[0], 2),
-        createPlayer('Player 2', colors[1], 2),
-        // createPlayer('Player 3', colors[2], 2),
     ],
     round: 0, turn: 0, 
     canEndRound: false,
     endRoundResults: null,
-    layer: 0,
     roundActions: {},
+    crownActionLayer: 0,
     completedCrownActions: {},
 });
 
-export const setupPlayers = (playerCount) => {
+export const initGame = (playerCount) => {
     game.update(state => {
         let nextState = {...state};
         nextState.players = [];
@@ -99,13 +97,38 @@ export const setActiveCrownAction = (data) => {
     });
 }
 
-export const canTakeAction = (player, coreActionIndex, selectedActionIndex) => {
+export const playerHasMetConditions = (player, conditions) => {
+    let conds = (conditions ?? []).reduce((results, item, index) => {
+        for (let a=0; a<item.quantity; ++a) {
+            results.push(item.key);
+        }
+        return results;
+    }, []);
+    // Check from storage
+    player.storedItems.forEach(item => {
+        let index = conds.indexOf(item);
+        if (index >= 0) {
+            conds.splice(index, 1);
+        }
+    });
+    // Check from human hires
+    player.humanHires.forEach(hire => {
+        let index = conds.indexOf(hire.type);
+        if (index >= 0) {
+            conds.splice(index, 1);
+        }
+    });
+    return (conds.length <= 0);
+}
+
+export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
     let gameState = get(game);
     if (gameState.canEndRound) {
         return 'The round has ended.';
     }
 
-    if (player.hasTakenAction) {
+    let activePlayer = gameState.players[gameState.turn];
+    if (activePlayer.hasTakenAction) {
         return 'You have already taken an action!\nTake a Crown Action or end your turn.';
     }
     
@@ -126,53 +149,87 @@ export const canTakeAction = (player, coreActionIndex, selectedActionIndex) => {
         activeAction = humanHires[key];
     }
 
-    let conditionsAreMet = false;
-    if (player.storedItems.length > 0) {
-        if (activeAction.conditions
-            && activeAction.conditions.length > 0) {
-            let conds = activeAction.conditions.reduce((results, item, index) => {
-                for (let a=0; a<item.quantity; ++a) {
-                    results.push(item.key);
-                }
-                return results;
-            }, []);
-            player.storedItems.forEach(item => {
-                let index = conds.indexOf(item);
-                if (index >= 0) {
-                    conds.splice(index, 1);
-                }
-            });
-            conditionsAreMet = (conds.length <= 0);
-        }
-    }
+    let conditionsAreMet = playerHasMetConditions(
+        activePlayer, 
+        activeAction ? activeAction.conditions : []
+    );
     
     if (coreAction.type.includes('take')) {
-        if (player.storedItems.length >= getStorageCapacity(player.storageLevel)) {
+        if (activePlayer.storedItems.length >= getStorageCapacity(activePlayer.storageLevel)) {
             return 'Your Storage is full.';
         }
     }
     else if (coreAction.type.includes('upgrade')) {
         if (!conditionsAreMet) {
-            return `Your do not have enough resource to take this action.`;
+            return `Your do not have the resources to take this action.`;
         }
     }
     else if (coreAction.type.includes('reproduce')) {
-        if (player.isReproducing) {
+        if (activePlayer.isReproducing) {
             return `You can only take this action once per round.`;
         }
-        if (player.crows >= getNestCapacity(player.nestLevel)) {
+        if (activePlayer.crows >= getNestCapacity(activePlayer.nestLevel)) {
             return `Your Nest cannot occupy anymore Crow.`;
         }
-        if (player.crows - player.utilizedCrows < 2) {
+        if (activePlayer.crows - activePlayer.utilizedCrows < 2) {
             return 'You do not have enough Crow for this action.';
         }
     }
     else if (coreAction.type.includes('human')) {
         if (!conditionsAreMet) {
-            return `Your do not have enough resource to hire this human.`;
+            return `Your do not have the resources to hire this human.`;
         }
     }
     return null;
+}
+
+const fulfilActionConditions = (player, conditions) => {
+    if (conditions && conditions.length > 0) {
+        conditions.forEach(item => {
+            for (let a=0; a<item.quantity; ++a) {
+                let index = player.storedItems.indexOf(item.key);
+                if (index >= 0) {
+                    player.storedItems.splice(item.key, 1);
+                }
+                else {
+                    for (let h=0; h<player.humanHires.length; ++h) {
+                        if (player.humanHires[h].type === item.key) {
+                            ++player.humanHires[h].hiredLifespan;
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    let nextHumanHires = [];
+    player.humanHires.forEach(hire => {
+        if (hire.hiredLifespan < hire.lifespan) {
+            nextHumanHires.push(hire);
+        }
+    });
+    player.humanHires = nextHumanHires;
+
+    return player;
+}
+
+const fulfilActionRewards = (player, rewards) => {
+    if (rewards && rewards.length > 0) {
+        rewards.forEach(reward => {
+            switch (reward.key) {
+            case 'vp':
+                player.vp += reward.quantity;
+                break;
+
+            default:
+                Array(reward.quantity).forEach(_ => {
+                    player.storedItems.push(reward.key);
+                });
+                break;
+            }
+        });
+    }
+    return player;
 }
 
 export const takeAction = (coreActionIndex, selectedActionIndex) => {
@@ -191,14 +248,18 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
             let key = Object.keys(humanHires)[selectedActionIndex];
             activeAction = humanHires[key];
         }
+        
+        // Fulfil conditions
+        nextPlayers[nextState.turn] = fulfilActionConditions(
+            nextPlayers[nextState.turn],
+            activeAction.conditions
+        );
 
-        if (activeAction.conditions && activeAction.conditions.length > 0) {
-            activeAction.conditions.forEach(item => {
-                for (let a=0; a<item.quantity; ++a) {
-                    nextPlayers[nextState.turn].storedItems.splice(item.key, 1);
-                }
-            });
-        }
+        // Fulfil rewards
+        nextPlayers[nextState.turn] = fulfilActionRewards(
+            nextPlayers[nextState.turn],
+            activeAction.rewards
+        );
         
         if (coreAction.type.includes('take')) {
             if (activeAction.rewards) {
@@ -238,7 +299,6 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
             }
         }
         else if (coreAction.type.includes('reproduce')) {
-            nextPlayers[nextState.turn].utilizedCrows += 2;
             nextPlayers[nextState.turn].isReproducing = true;
         }
         else if (coreAction.type.includes('human')) {
@@ -249,15 +309,21 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
                     hiredLifespan: 0,
                 }
             );
-            console.log(nextPlayers[nextState.turn].humanHires);
         }
 
         if (!nextPlayers[nextState.turn].hasTakenAction) {
             // Store action log
-            nextRoundActions[coreActionIndex] = {...nextRoundActions[coreActionIndex]};
-            nextRoundActions[coreActionIndex][selectedActionIndex] = nextPlayers[nextState.turn].color;
+            if (!coreAction.type.includes('human')) { // Don't take action if it's Human Hire
+                nextRoundActions[coreActionIndex] = {...nextRoundActions[coreActionIndex]};
+                nextRoundActions[coreActionIndex][selectedActionIndex] = nextPlayers[nextState.turn].color;
+            }
             // Update current player's status
-            ++nextPlayers[nextState.turn].utilizedCrows;
+            if (nextPlayers[nextState.turn].isReproducing) {
+                nextPlayers[nextState.turn].utilizedCrows += 2;
+            }
+            else {
+                ++nextPlayers[nextState.turn].utilizedCrows;
+            }
             nextPlayers[nextState.turn].hasTakenAction = true;
         }
 
@@ -268,11 +334,46 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
 }
 
 export const canTakeCrownAction = (crownAction) => {
+    let gameState = get(game);
+    if (gameState.canEndRound) {
+        return 'The round has ended.';
+    }
+
+    let activePlayer = gameState.players[gameState.turn];
+    if (!playerHasMetConditions(activePlayer, crownAction.conditions)) {
+        return 'You do not have the resources to take this action';
+    }
     return null;
 }
 
 export const takeCrownAction = (crownAction) => {
+    game.update(state => {
+        let nextState = {...state};
 
+        let activePlayer = {...nextState.players[nextState.turn]};
+
+        // Fulfil conditions
+        activePlayer = fulfilActionConditions(activePlayer, crownAction.conditions);
+
+        // Fulfil rewards
+        activePlayer = fulfilActionRewards(activePlayer, crownAction.rewards);
+
+        // Store a record of completion
+        if (!(nextState.crownActionLayer in nextState.completedCrownActions)) {
+            nextState.completedCrownActions[nextState.crownActionLayer] = {};
+        }
+
+        let nextCrownActions = {...nextState.completedCrownActions[nextState.crownActionLayer]};
+        let crownActionKey = `${crownAction.x}-${crownAction.y}`;
+        nextCrownActions[crownActionKey] = {
+            playerName: activePlayer.name,
+            playerColor: activePlayer.color,
+        };
+
+        nextState.completedCrownActions[nextState.crownActionLayer] = nextCrownActions;
+        nextState.players[nextState.turn] = activePlayer;
+        return nextState;
+    });
 }
 
 export const endTurn = (passed = false) => {

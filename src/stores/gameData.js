@@ -368,7 +368,7 @@ export const itemIconMap = {
         name: 'Bomb',
         hint: 'For destruction use.',
         icon: GiUnlitBomb,
-        iconColor: 'text-yellow-500',
+        iconColor: 'text-black',
     },
 };
 
@@ -534,7 +534,7 @@ export const humanHires = {
         name: 'Thief',
         icon: GiNinjaMask,
         hint: 'Can open doors, unlock traps, bomb stuff.',
-        type: 'human',
+        type: 'thief',
         conditions: [
             { key: 'gem', quantity: 3 },
             { key: 'food', quantity: 4 },
@@ -549,7 +549,7 @@ export const humanHires = {
         name: 'Magician',
         icon: GiCarnivalMask,
         hint: 'Can cast useful magic.',
-        type: 'human',
+        type: 'magician',
         conditions: [
             { key: 'gem', quantity: 7 },
             { key: 'food', quantity: 3 },
@@ -564,7 +564,7 @@ export const humanHires = {
         name: 'Mercenary',
         icon: GiSkullMask,
         hint: 'Does all the killings, and nothing else.',
-        type: 'human',
+        type: 'mercenary',
         conditions: [
             { key: 'gem', quantity: 5 },
             { key: 'food', quantity: 5 },
@@ -579,7 +579,7 @@ export const humanHires = {
         name: 'Spy',
         icon: GiDualityMask,
         hint: 'Bribe people, get things moving, with the right amount of gems.',
-        type: 'human',
+        type: 'spy',
         conditions: [
             { key: 'gem', quantity: 8 },
             { key: 'food', quantity: 2 },

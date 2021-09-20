@@ -1,10 +1,10 @@
 <script>
-    import { setHasStarted, setupPlayers } from '../../../stores/game.store';
+    import { setHasStarted, initGame } from '../../../stores/game.store';
     import Button from '../../../components/Button.svelte';
     import Modal from '../../../components/Modal.svelte';
 
     const onPlayerAmount = (amount) => {
-        setupPlayers(amount);
+        initGame(amount);
         setHasStarted();
     }
 </script>

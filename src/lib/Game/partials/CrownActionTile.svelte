@@ -13,14 +13,6 @@
     let action;
     let disabled = false;
     $: {
-        crownActionKey = `${x}-${y}`;
-        if (crownActionKey in $game.completedCrownActions) {
-            completedRecord = $game.completedCrownActions[crownActionKey];
-        }
-        else {
-            completedRecord = null;
-        }
-
         if (y === 0 || y === dungeonSize - 1 || x === 0 || x === dungeonSize - 1) {
             layerIndex = 0;
         }
@@ -35,7 +27,16 @@
         }
         let layer = dungeonLayers[layerIndex];
         action = crownActions[layer[(x + y) % layer.length]];
-        disabled = $game.layer < layerIndex;
+        disabled = $game.crownActionLayer < layerIndex;
+
+        crownActionKey = `${x}-${y}`;
+        if (layerIndex in $game.completedCrownActions
+            && crownActionKey in $game.completedCrownActions[layerIndex]) {
+            completedRecord = $game.completedCrownActions[layerIndex][crownActionKey];
+        }
+        else {
+            completedRecord = null;
+        }
     }
 
     const onClick = () => {
@@ -52,11 +53,11 @@
 
 <Tooltip
     title={action.name}
-    subtitle={completedRecord ? `Completed by ${completedRecord.playerName}` : ''}
+    subtitle={completedRecord ? `Completed by: ${completedRecord.playerName}` : ''}
     disabled={disabled}
 >
     {#if completedRecord}
-    <div class="w-12 h-12 2xl:w-16 2xl:h-16 p-2 text-yellow-200">
+    <div class={`w-12 h-12 2xl:w-16 2xl:h-16 p-2 text-${completedRecord.playerColor}`}>
         <GiSkullCrossedBones />
     </div>
     {:else}

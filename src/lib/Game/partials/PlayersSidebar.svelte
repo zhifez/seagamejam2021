@@ -25,7 +25,7 @@
 </script>
 
 <div class="w-full h-screen bg-yellow-300 flex flex-col border-r-2 border-yellow-800">
-    <div class="flex items-center p-3 text-lg">
+    <div class="flex items-center p-4 text-lg">
         <h1 class="font-semibold">Round {$game.round + 1}:</h1>
         <p class="ml-2">{activePlayer.name}</p>
     </div>
@@ -44,7 +44,7 @@
         </div>
         {/each}
     </div>
-    <div class="h-full p-3 flex flex-col justify-between">
+    <div class="h-full p-4 flex flex-col justify-between">
         <div>
             <div class="flex items-center mb-1">
                 <h5 class="font-semibold">VP:</h5>
@@ -101,7 +101,7 @@
             <div class="flex justify-between items-center mb-1">
                 <h5 class="font-semibold">Human Hire</h5>
             </div>
-            <div class="grid grid-cols-3 gap-1 ">
+            <div class="grid grid-cols-3 gap-2">
                 {#each activePlayer.humanHires as human, h}
                 <Tooltip
                     title={human.name}
@@ -110,7 +110,6 @@
                         `Will be staying for another ${human.lifespan - human.hiredLifespan} round${human.lifespan - human.hiredLifespan > 1 ? 's' : ''}.`}
                 >
                     <HumanHireCard 
-                        actionIndex={-1}
                         data={human}
                     />
                 </Tooltip>
