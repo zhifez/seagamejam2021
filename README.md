@@ -4,28 +4,32 @@ A worker placement game about managing crows to steal a crown, in the long run.
 
 # Stacks
 
-Svelte
-TailwindCSS
+- Svelte
+- TailwindCSS
 
 # To run the game
 
-1. First install the dependencies:
+1. Install the dependencies:
 
-```yarn```
+  ```yarn```
 
 2. Then run:
 
-```yarn dev```
+  ```yarn dev```
 
 # Making changes to the design
 
 1. Fork this project.
-2. If game design changes is all you want to make, you can navigate to /src/stores/gameData.js.
+2. If game design changes is all you want to make, you can navigate to: **/src/stores/gameData.js**.
 
-## What each data means
+## What each gameData means
 
 | Variables | Definitions |
 |---|---|
+| **nestCapacityDefault** | Default capacity for crows before levelling up. |
+| **nestCapacityPerLevel** | Additional capacity for crows per level after level 1. |;
+| **storageCapacityDefault** | Default capacity for items before levelling up. |
+| **storageCapacityPerLevel** | Additional capacity for items per level after level 1. |;
 | **actions** | Define all the actions player can take. |
 | **crownActions** | Define all the Crown actions player can take. |
 | **dungeonSize** | Define the size of dungeon. (Note: Would advice against changing this one unless you know what you're doing.) |
