@@ -7,6 +7,7 @@
     import EndRoundModal from './partials/EndRoundModal.svelte';
     import HumanHireModal from './partials/HumanHireModal.svelte';
     import CrownActionModal from './partials/CrownActionModal.svelte';
+    import EndGameModal from './partials/EndGameModal.svelte';
 </script>
 
 {#if !$system.hasStarted}
@@ -21,6 +22,10 @@
 {#if $system.showActiveCrownAction}
 <CrownActionModal />
 {/if}
+{#if $system.canEndGame}
+<EndGameModal />
+{/if}
+
 <div class="grid grid-cols-5 overflow-hidden">
     <div class="col-span-1">
         <PlayersSidebar />

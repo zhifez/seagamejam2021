@@ -22,6 +22,7 @@ const createPlayer = (name, color, crows) => {
         hasTakenAction: false,
         isReproducing: false,
         humanHires: [],
+        crownChallenges: 0,
     };
 }
 
@@ -36,6 +37,12 @@ export const game = writable({
     crownActionLayer: 0,
     completedCrownActions: {},
     isEndGame: false,
+    endGameResults: {
+        'Player 1': {
+            total: 100,
+            winner: false
+        }
+    },
 });
 
 export const initGame = (playerCount) => {
@@ -61,6 +68,7 @@ export const system = writable({
     activeHumanHire: null,
     showActiveCrownAction: false,
     activeCrownAction: null,
+    canEndGame: false,
 });
 
 export const setHasStarted = () => {
@@ -370,6 +378,8 @@ export const takeCrownAction = (crownAction) => {
         }
         warning(successMessage);
 
+        ++activePlayer.crownChallenges;
+
         // Store a record of completion
         if (!(crownAction.layer in nextState.completedCrownActions)) {
             nextState.completedCrownActions[crownAction.layer] = {};
@@ -448,6 +458,14 @@ export const endTurn = (passed = false) => {
     });
 }
 
+const calcPlayerTotalVP = (player) => {
+    return player.vp 
+    + player.crows
+    + player.nestLevel
+    + player.storageLevel
+    + player.crownChallenges;
+}
+
 export const endRound = () => {
     game.update(state => {
         let nextState = {...state};
@@ -458,6 +476,7 @@ export const endRound = () => {
     
         // Reset players stats
         let nextPlayers = [...state.players];
+        let vps = [];
         for (let a=0; a<nextPlayers.length; ++a) {
             nextPlayers[a].utilizedCrows = 0;
             nextPlayers[a].vp -= nextState.endRoundResults[a].minusVP;
@@ -466,6 +485,7 @@ export const endRound = () => {
                 ++nextPlayers[a].crows;
                 nextPlayers[a].isReproducing = false;
             }
+            vps.push(calcPlayerTotalVP(nextPlayers[a]));
 
             // Make human hire leaves after lifespan reached max
             let nextHumanHires = [];
@@ -478,8 +498,27 @@ export const endRound = () => {
             nextPlayers[a].humanHires = nextHumanHires;
         }
 
+        // Calculate end game results
+        let max = Math.max(...vps);
+        nextPlayers.forEach(player => {
+            let total = calcPlayerTotalVP(player);
+            nextState.endGameResults[player.name] = {
+                total,
+                winner: (total > 2 && total == max),
+            };
+        });
+        
         nextState.players = nextPlayers;
         nextState.roundActions = {};
         return nextState;
     });
+
+    let gameState = get(game);
+    if (gameState.isEndGame) {
+        system.update(state => {
+            let nextState = {...state};
+            nextState.canEndGame = true;
+            return nextState;
+        });
+    }
 }
