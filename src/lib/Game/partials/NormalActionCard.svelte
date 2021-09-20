@@ -6,6 +6,7 @@
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import IoMdRefresh from 'svelte-icons/io/IoMdRefresh.svelte';
     import HumanHireCard from './HumanHireCard.svelte';
+    import { failure } from '../../../common/toastTheme';
 
     export let index = -1;
     export let name = '';
@@ -54,7 +55,7 @@
     const onTakeAction = (selectedActionIndex) => {
         const error = canTakeAction(index, selectedActionIndex);
         if (error) {
-            alert(error);
+            failure(error);
             return;
         }
 

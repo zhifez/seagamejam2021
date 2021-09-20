@@ -1,6 +1,7 @@
 <script>
     import { setActiveHumanHire, system, takeAction, canTakeAction } from '../../../stores/game.store';
     import { actions } from '../../../stores/gameData';
+    import { failure } from '../../../common/toastTheme';
     import Modal from '../../../components/Modal.svelte';
     import Button from '../../../components/Button.svelte';
     import ConditionBox from './ConditionBox.svelte';
@@ -24,7 +25,7 @@
         }
         const error = canTakeAction(hireCoreActionIndex, $system.activeHumanHire.actionIndex);
         if (error) {
-            alert(error);
+            failure(error);
             return;
         }
 

@@ -101,7 +101,7 @@
             <div class="flex justify-between items-center mb-1">
                 <h5 class="font-semibold">Human Hire</h5>
             </div>
-            <div class="grid grid-cols-3 gap-2">
+            <div class="grid grid-cols-4 gap-2">
                 {#each activePlayer.humanHires as human, h}
                 <Tooltip
                     title={human.name}
