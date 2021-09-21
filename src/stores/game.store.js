@@ -1,6 +1,6 @@
 import { success, warning } from "../common/toastTheme";
 import { get, writable } from "svelte/store";
-import { actions, dungeonLayerIsComplete, getNestCapacity, getStorageCapacity, humanHires } from "./gameData";
+import { actions, dungeonLayerIsComplete, getNestCapacity, getRandomTradableItems, getStorageCapacity, humanHires } from "./gameData";
 
 const colors = [
     'red-500',
@@ -26,7 +26,7 @@ const createPlayer = (name, color, crows) => {
     };
 }
 
-export const game = writable({
+const initGameState = {
     players: [
         createPlayer('Player 1', colors[0], 2),
     ],
@@ -43,21 +43,31 @@ export const game = writable({
             winner: false
         }
     },
-});
+    tradableItems: [],
+};
+
+export const game = writable({...initGameState});
 
 export const initGame = (playerCount) => {
+    let gameState = {...initGameState};
+    gameState.players = [];
+    for (let a=0; a<playerCount; ++a) {
+        gameState.players.push(
+            createPlayer(
+                `Player ${a + 1}`, 
+                colors[a], 
+                2
+            )
+        );
+    }
+    gameState.tradableItems = getRandomTradableItems(4);
+    game.set(gameState);
+}
+
+export const refreshTradableItems = () => {
     game.update(state => {
         let nextState = {...state};
-        nextState.players = [];
-        for (let a=0; a<playerCount; ++a) {
-            nextState.players.push(
-                createPlayer(
-                    `Player ${a + 1}`, 
-                    colors[a], 
-                    2
-                )
-            );
-        }
+        nextState.tradableItems = getRandomTradableItems(4);
         return nextState;
     });
 }

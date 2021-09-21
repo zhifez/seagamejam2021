@@ -1,16 +1,17 @@
 <script>
-    import { onMount } from 'svelte';
     import { humanHires, itemIconMap } from '../../../stores/gameData';
-    import { game, canTakeAction, takeAction } from '../../../stores/game.store';
+    import { game, canTakeAction, takeAction, refreshTradableItems } from '../../../stores/game.store';
     import Tooltip from '../../../components/Tooltip.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import IoMdRefresh from 'svelte-icons/io/IoMdRefresh.svelte';
     import HumanHireCard from './HumanHireCard.svelte';
     import { failure } from '../../../common/toastTheme';
+    import TradeItemCard from './TradeItemCard.svelte';
 
     export let index = -1;
     export let name = '';
     export let hint = '';
+    export let note = '';
     export let type = 'action';
     export let actions = [];
     export let rows = 1;
@@ -43,15 +44,6 @@
         }
     }
 
-    onMount(() => {
-        onRefreshTradeActions();
-    });
-
-    let tradeActions = [];
-    const onRefreshTradeActions = () => {
-        tradeActions = [];
-    }
-
     const onTakeAction = (selectedActionIndex) => {
         const error = canTakeAction(index, selectedActionIndex);
         if (error) {
@@ -66,7 +58,7 @@
 <div class={`col-span-1 row-span-${rows}`}>
     <div 
         class={`rounded-md bg-yellow-300 shadow-md h-full p-2 pb-3
-        flex flex-col
+        flex flex-col justify-between
         `}
     >
         <section class="mb-2 text-center">
@@ -130,28 +122,33 @@
         </div>
         {/if}
 
-        <!-- TRADE -->
-        {#if type.includes('trade')}
-        <!-- {#each tradeActions as action}
-
-        {/each} -->
-
-        <button 
-            class="text-sm mt-2"
-            on:click={onRefreshTradeActions}
-        >
-            <div class="flex item-center justify-center">
-                <div class="h-5 mr-2">
-                    <IoMdRefresh />
-                </div>
-                <span>Refresh Items</span>
-            </div>
-        </button>
-        {/if}
-
-        <!-- HUMAN HIRE -->
-        {#if type.includes('human')}
+        {#if type.includes('trade') || type.includes('human')}
         <div class="flex flex-col justify-between h-full">
+            <!-- TRADE -->
+            {#if type.includes('trade')}
+            <div class="grid grid-cols-4 gap-2">
+                {#each $game.tradableItems as item}
+                <div class="col-span-1">
+                    <TradeItemCard data={item} />
+                </div>
+                {/each}
+            </div>
+
+            <button 
+                class="text-sm mt-2"
+                on:click={refreshTradableItems}
+            >
+                <div class="flex item-center justify-center">
+                    <div class="h-5 mr-2">
+                        <IoMdRefresh />
+                    </div>
+                    <span>Refresh Items</span>
+                </div>
+            </button>
+            {/if}
+
+            <!-- HUMAN HIRE -->
+            {#if type.includes('human')}
             <div class="grid grid-cols-4 xl:grid-cols-4 gap-2">
                 {#each Object.keys(humanHires) as key, k}
                 <Tooltip
@@ -165,6 +162,7 @@
                 </Tooltip>
                 {/each}
             </div>
+            {/if}
 
             <div class="relative h-10 bg-yellow-500 rounded-md">
                 {#if index in $game.roundActions}
@@ -183,6 +181,14 @@
                 {/if}
             </div>
         </div>
+        {/if}
+
+        {#if note}
+        <p class="text-xs xl:text-base mt-2">
+            <b>Note:</b> {note}
+        </p>
+        {:else}
+        <span></span>
         {/if}
     </div>
 </div>

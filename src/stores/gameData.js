@@ -166,6 +166,7 @@ export const actions = [
     {
         name: 'Reproduce',
         hint: 'Once per round, send 2 Crows here to reproduce a new Crow, to be used in the next round.',
+        note: 'You can only take this action once per round.',
         type: 'reproduce-action',
         rows: 2,
         actions: [
@@ -195,7 +196,6 @@ export const actions = [
     },
     {
         name: 'Trade with Black Market',
-        hint: 'Not available yett.',
         type: 'trade-action',
         rows: 2,
     },
@@ -386,29 +386,33 @@ export const itemIconMap = {
 };
 
 export const tradeItems = {
-    'food': {
+    'ticket-food': {
         name: 'Food',
-        hint: 'Receive 1 food.',
+        icon: FaDrumstickBite,
+        hint: 'This ticket represents 1 food.',
         type: 'food',
         conditions: [
             { key: 'gem', quantity: 3 },
         ],
         rewards: [
-            { key: 'food', quantity: 1 },
+            { key: 'ticket-food', quantity: 1 },
         ],
         space: 1,
+        rarity: 2,
     },
-    'food-double': {
+    'ticket-food-double': {
         name: 'Double Food',
-        hint: 'Receive 2 food.',
+        icon: GiMeat,
+        hint: 'This ticket represents 2 food.',
         type: 'food',
         conditions: [
             { key: 'gem', quantity: 5 },
         ],
         rewards: [
-            { key: 'food', quantity: 2 },
+            { key: 'ticket-food-double', quantity: 1 },
         ],
         space: 1,
+        rarity: 4,
     },
     'upgrade-nest': {
         name: 'Upgrade Nest',
@@ -422,6 +426,7 @@ export const tradeItems = {
             { key: 'nest', quantity: 1 },
         ],
         space: 1,
+        rarity: 7,
     },
     'upgrade-storage': {
         name: 'Upgrade Storage',
@@ -435,9 +440,10 @@ export const tradeItems = {
             { key: 'storage', quantity: 1 },
         ],
         space: 1,
+        rarity: 7,
     },
-    'crow-reproduce-instant': {
-        name: 'Illegal Crow Trafficking',
+    'crow-adopt': {
+        name: 'Adopt a Crow',
         icon: GiNewBorn,
         hint: 'Instantly get a crow, as long as you have the nest space.',
         type: 'crow',
@@ -448,6 +454,7 @@ export const tradeItems = {
             { key: 'crow', quantity: 1 },
         ],
         space: 1,
+        rarity: 8,
     },
     'key-skeleton': {
         name: 'Skeleton Key',
@@ -461,6 +468,7 @@ export const tradeItems = {
             { key: 'key-skeleton', quantity: 1 },
         ],
         space: 1,
+        rarity: 6,
     },
     'key-treasure': {
         name: 'Treasure Key',
@@ -474,6 +482,7 @@ export const tradeItems = {
             { key: 'key-treasure', quantity: 1 },
         ],
         space: 1,
+        rarity: 10,
     },
     'sword-normal': {
         name: 'Sword',
@@ -487,6 +496,7 @@ export const tradeItems = {
             { key: 'sword-normal', quantity: 1 },
         ],
         space: 1,
+        rarity: 5,
     },
     'sword-heavy': {
         name: 'Heavy Sword',
@@ -500,6 +510,7 @@ export const tradeItems = {
             { key: 'sword-heavy', quantity: 1 },
         ],
         space: 1,
+        rarity: 8,
     },
     'hammer-sledge': {
         name: 'Sledge Hammer',
@@ -513,6 +524,7 @@ export const tradeItems = {
             { key: 'hammer-sledge', quantity: 1 },
         ],
         space: 1,
+        rarity: 6,
     },
     'magic-tablet': {
         name: 'Magic Tablet',
@@ -526,6 +538,7 @@ export const tradeItems = {
             { key: 'magic-tablet', quantity: 1 },
         ],
         space: 1,
+        rarity: 10,
     },
     'magic-sphere': {
         name: 'Magic Sphere',
@@ -539,8 +552,36 @@ export const tradeItems = {
             { key: 'magic-sphere', quantity: 1 },
         ],
         space: 1,
+        rarity: 10,
     },
 };
+
+export const getRandomTradableItems = (quantity) => {
+    let tradableItems = [];
+
+    while (tradableItems.length < quantity) {
+        const keys = Object.keys(tradeItems);
+        let rand = Math.random();
+        let randKey = keys[Math.floor(rand * keys.length)];
+        let item = tradeItems[randKey];
+
+        let rarityCondition = 0;
+        for (let r=0; r<12; ++r) {
+            rand = Math.random();
+            if (rand <= 0.4) {
+                ++rarityCondition;
+            }
+        }
+
+        if (rarityCondition >= item.rarity) {
+            tradableItems.push({
+                ...item,
+                key: randKey
+            });
+        }
+    }
+    return tradableItems;
+}
 
 export const humanHires = {
     'thief': {
