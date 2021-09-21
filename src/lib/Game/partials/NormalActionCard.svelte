@@ -174,7 +174,7 @@
                     class={`absolute bottom-${6 - a * 2} w-10 h-10
                     text-${action}
                     `}
-                    style={`left: ${parseInt(key) * 25 + a * 5}%;`}
+                    style={`left: ${parseInt(key) * 25 + (a % 2) * 5}%;`}
                 >
                     <FaCrow />
                 </div>
