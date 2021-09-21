@@ -53,6 +53,12 @@
 
         takeAction(index, selectedActionIndex);
     }
+
+    const onRefreshItems = () => {
+        // TODO: Check whether can refresh items
+
+        refreshTradableItems();
+    }
 </script>
 
 <div class={`col-span-1 row-span-${rows}`}>
@@ -133,18 +139,24 @@
                 </div>
                 {/each}
             </div>
-
-            <button 
-                class="text-sm mt-2"
-                on:click={refreshTradableItems}
-            >
-                <div class="flex item-center justify-center">
-                    <div class="h-5 mr-2">
-                        <IoMdRefresh />
-                    </div>
-                    <span>Refresh Items</span>
-                </div>
-            </button>
+            
+            <div class="flex justify-center">
+                <Tooltip
+                    title="Costs 2 Gems"
+                >
+                    <button 
+                        class="text-sm mt-2"
+                        on:click={onRefreshItems}
+                    >
+                        <div class="flex item-center justify-center">
+                            <div class="h-5 mr-2">
+                                <IoMdRefresh />
+                            </div>
+                            <span>Refresh Items</span>
+                        </div>
+                    </button>
+                </Tooltip>
+            </div>
             {/if}
 
             <!-- HUMAN HIRE -->
@@ -153,7 +165,7 @@
                 {#each Object.keys(humanHires) as key, k}
                 <Tooltip
                     title={humanHires[key].name}
-                    subtitle="Click to learn more."
+                    subtitle="Click to view card details."
                 >
                     <HumanHireCard 
                         actionIndex={k}

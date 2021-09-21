@@ -196,6 +196,7 @@ export const actions = [
     },
     {
         name: 'Trade with Black Market',
+        hint: 'Only them would trade with crows.',
         type: 'trade-action',
         rows: 2,
     },

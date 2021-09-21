@@ -7,7 +7,7 @@
 
 <Tooltip
     title={data.name}
-    subtitle="Click to learn more."
+    subtitle="Click to view card details."
 >
     <div class="h-16 xl:h-24 rounded-md bg-yellow-700 text-white flex item-center p-2 cursor-pointer">
         {#if data.icon}

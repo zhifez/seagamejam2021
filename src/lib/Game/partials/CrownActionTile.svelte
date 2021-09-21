@@ -54,7 +54,7 @@
 
 <Tooltip
     title={action.name}
-    subtitle={completedRecord ? `Completed by: ${completedRecord.playerName}` : ''}
+    subtitle={completedRecord ? `Completed by: ${completedRecord.playerName}` : 'Click to view card details.'}
     disabled={disabled}
 >
     {#if completedRecord}
