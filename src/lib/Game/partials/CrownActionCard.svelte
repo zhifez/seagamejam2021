@@ -11,8 +11,8 @@
 <div class="col-span-2 row-span-4">
     <div class="rounded-md bg-yellow-400 shadow-md h-full px-3 py-2 flex flex-col justify-between">
         <section class="text-center">
-            <h1 class="font-semibold">{name}</h1>
-            {#if hint}<p class="text-xs 2xl:text-sm">{hint}</p>{/if}
+            <h1 class="font-semibold text-md xl:text-2xl">{name}</h1>
+            {#if hint}<p class="text-xs xl:text-base">{hint}</p>{/if}
         </section>
         <div class="m-auto">
             <div class={`grid grid-cols-${dungeonSize} gap-2`}>
@@ -28,5 +28,8 @@
                 {/each}
             </div>
         </div>
+        <p class="text-xs xl:text-base">
+            <b>Rule:</b> The next layer of Crown challenges will be unlocked after two third of the current layer's challenges are solved.
+        </p>
     </div>
 </div>

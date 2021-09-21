@@ -39,7 +39,7 @@
     canClose={$system.activeHumanHire.actionIndex < 0}
     on:close={onCloseModal}
 >
-    <div class="modal-human-hire bg-yellow-700 rounded-md text-white flex flex-col justify-between items-center text-center">
+    <div class="modal-human-hire bg-yellow-700 rounded-lg text-white flex flex-col justify-between items-center text-center">
         <div class="flex flex-col items-center p-5 pb-2">
             <div class="w-16 mb-2">
                 <svelte:component this={$system.activeHumanHire.icon} />
@@ -89,8 +89,8 @@
 
 <style>
     .modal-human-hire {
-        width: 20vw;
-        height: 30vw;
+        width: 250px;
+        height: 400px;
     }
 
     .modal-hired-label {
