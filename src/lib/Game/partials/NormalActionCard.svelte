@@ -111,14 +111,14 @@
 
                     {#if index in $game.roundActions && (a + s) in $game.roundActions[index]}
                     <div 
-                        class={`absolute top-4 w-full h-full text-${$game.roundActions[index][a + s]}
+                        class={`absolute top-4 w-full h-full text-${$game.roundActions[index][a + s][0]}
                         ${type.includes('reproduce') ? 'opacity-80' : ''}
                         `}
                     >
                         <FaCrow />
                     </div>
                     {#if type.includes('reproduce')}
-                    <div class={`absolute top-6 left-4 z-10 w-full h-full text-${$game.roundActions[index][a + s]}`}>
+                    <div class={`absolute top-6 left-4 z-10 w-full h-full text-${$game.roundActions[index][a + s][0]}`}>
                         <FaCrow />
                     </div>
                     {/if}
@@ -151,18 +151,37 @@
 
         <!-- HUMAN HIRE -->
         {#if type.includes('human')}
-        <div class="grid grid-cols-3 xl:grid-cols-4 gap-2">
-            {#each Object.keys(humanHires) as key, k}
-            <Tooltip
-                title={humanHires[key].name}
-                subtitle="Click to learn more."
-            >
-                <HumanHireCard 
-                    actionIndex={k}
-                    data={humanHires[key]} 
-                />
-            </Tooltip>
-            {/each}
+        <div class="flex flex-col justify-between h-full">
+            <div class="grid grid-cols-4 xl:grid-cols-4 gap-2">
+                {#each Object.keys(humanHires) as key, k}
+                <Tooltip
+                    title={humanHires[key].name}
+                    subtitle="Click to learn more."
+                >
+                    <HumanHireCard 
+                        actionIndex={k}
+                        data={humanHires[key]} 
+                    />
+                </Tooltip>
+                {/each}
+            </div>
+
+            <div class="relative h-10 bg-yellow-500 rounded-md">
+                {#if index in $game.roundActions}
+                {#each Object.keys($game.roundActions[index]) as key, k}
+                {#each $game.roundActions[index][key] as action, a}
+                <div 
+                    class={`absolute bottom-${6 - a * 2} w-10 h-10
+                    text-${action}
+                    `}
+                    style={`left: ${parseInt(key) * 25 + a * 5}%;`}
+                >
+                    <FaCrow />
+                </div>
+                {/each}
+                {/each}
+                {/if}
+            </div>
         </div>
         {/if}
     </div>

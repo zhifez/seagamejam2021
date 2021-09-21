@@ -142,13 +142,15 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
         return 'You have already taken an action!<br />Take a Crown Challenge or end your turn.';
     }
     
-    if (coreActionIndex in gameState.roundActions) {
-        if (selectedActionIndex in gameState.roundActions[coreActionIndex]) {
-            return 'Action has already been taken.';
+    let coreAction = actions[coreActionIndex];
+    if (!coreAction.type.includes('human')) { // Skip for human
+        if (coreActionIndex in gameState.roundActions) {
+            if (selectedActionIndex in gameState.roundActions[coreActionIndex]) {
+                return 'Action has already been taken.';
+            }
         }
     }
     
-    let coreAction = actions[coreActionIndex];
     let activeAction = null;
     if (coreAction.actions) {
         activeAction = coreAction.actions[Math.min(selectedActionIndex, coreAction.actions.length - 1)];
@@ -186,8 +188,10 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
         }
     }
     else if (coreAction.type.includes('human')) {
-        if (!conditionsAreMet) {
-            return `Your do not have the resources to hire this human.`;
+        if (import.meta.env.VITE_BYPASS_HUMAN_HIRE_CONDITIONS !== 'true') {
+            if (!conditionsAreMet) {
+                return `Your do not have the resources to hire this human.`;
+            }
         }
     }
     return null;
@@ -326,10 +330,15 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
 
         if (!nextPlayers[nextState.turn].hasTakenAction) {
             // Store action log
-            if (!coreAction.type.includes('human')) { // Don't take action if it's Human Hire
-                nextRoundActions[coreActionIndex] = {...nextRoundActions[coreActionIndex]};
-                nextRoundActions[coreActionIndex][selectedActionIndex] = nextPlayers[nextState.turn].color;
-            }
+            nextRoundActions[coreActionIndex] = {...nextRoundActions[coreActionIndex]};
+            nextRoundActions[coreActionIndex][selectedActionIndex] = [
+                ...(nextRoundActions[coreActionIndex][selectedActionIndex] ?? [])
+            ];
+
+            nextRoundActions[coreActionIndex][selectedActionIndex].push(
+                nextPlayers[nextState.turn].color
+            );
+
             // Update current player's status
             if (nextPlayers[nextState.turn].isReproducing) {
                 nextPlayers[nextState.turn].utilizedCrows += 2;
