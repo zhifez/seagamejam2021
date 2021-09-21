@@ -16,9 +16,11 @@
 
     const onTakeCrownAction = () => {
         const error = canTakeCrownAction(action);
-        if (error) {
-            failure(error);
-            return;
+        if (import.meta.env.VITE_BYPASS_CROWN_ACTION_CONDITIONS !== 'true') {
+            if (error) {
+                failure(error);
+                return;
+            }
         }
 
         takeCrownAction(action);
@@ -31,7 +33,7 @@
     on:close={onCloseModal}
     canClose={false}
 >
-    <div class="modal-crown-action bg-yellow-300 rounded-md text-black p-5 flex flex-col justify-between items-center text-center">
+    <div class="modal-crown-action bg-yellow-300 rounded-lg text-black p-5 flex flex-col justify-between items-center text-center">
         <div class="flex flex-col items-center">
             <div class="w-16 mb-3">
                 <svelte:component this={action.icon} />
@@ -87,7 +89,7 @@
 
 <style>
     .modal-crown-action {
-        width: 20vw;
-        height: 30vw;
+        width: 250px;
+        height: 400px;
     }
 </style>

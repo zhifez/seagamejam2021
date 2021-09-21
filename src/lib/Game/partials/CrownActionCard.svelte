@@ -5,6 +5,7 @@
     export let index = -1;
     export let name = '';
     export let hint = '';
+    export let note = '';
     export let type = 'action';
 </script>
 
@@ -28,8 +29,10 @@
                 {/each}
             </div>
         </div>
+        {#if note}
         <p class="text-xs xl:text-base">
-            <b>Rule:</b> The next layer of Crown challenges will be unlocked after two third of the current layer's challenges are solved.
+            <b>Note:</b> {note}
         </p>
+        {/if}
     </div>
 </div>

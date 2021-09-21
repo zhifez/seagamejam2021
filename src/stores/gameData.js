@@ -159,7 +159,8 @@ export const actions = [
     },
     {
         name: 'Crown Challenges',
-        hint: 'You can take any one of these challenges any time during your turn.',
+        hint: 'You can take any of these challenges any time during your turn.',
+        note: `The next layer of Crown challenges will be unlocked after two third of the current layer's challenges are solved.`,
         type: 'crown-action'
     },
     {
@@ -314,10 +315,15 @@ export const crownActions = {
 };
 
 export const dungeonSize = 7;
-export const dungeonLayerIsComplete = (layer, completedCount) => {
+export const currentCrownChallengeCount = (layer) => {
     let actualSize = dungeonSize - (layer * 2);
-    const totalChallenges = (actualSize - layer + actualSize - layer - 1) * 2;
-    // return (completedCount / totalChallenges >= 1/10); // testing
+    return (actualSize - layer + actualSize - layer - 1) * 2;
+}
+export const dungeonLayerIsComplete = (layer, completedCount) => {
+    const totalChallenges = currentCrownChallengeCount(layer);
+    if (import.meta.env.VITE_BYPASS_CROWN_ACTION_CONDITIONS === 'true') {
+        return (completedCount / totalChallenges >= 1/10); // testing
+    }
     return (completedCount / totalChallenges >= 2/3);
 };
 

@@ -70,8 +70,8 @@
         `}
     >
         <section class="mb-2 text-center">
-            <h1 class="font-semibold">{name}</h1>
-            {#if hint}<p class="text-xs 2xl:text-sm">{hint}</p>{/if}
+            <h1 class="font-semibold text-md xl:text-2xl">{name}</h1>
+            {#if hint}<p class="text-xs xl:text-base">{hint}</p>{/if}
         </section>
         
         {#if actions}
@@ -83,9 +83,9 @@
                 subtitle={action.hint}
             >
                 <div 
-                    class={`w-full h-12 rounded-md bg-white p-1 cursor-pointer relative
+                    class={`w-full h-12 xl:h-20 rounded-md p-1 cursor-pointer relative
                     ${(action.conditions && action.conditions.length > 0
-                    && (!action.rewards || action.rewards.length <= 0)) ? 'rounded-full' : ''}
+                    && (!action.rewards || action.rewards.length <= 0)) ? 'rounded-full bg-yellow-500' : 'bg-white'}
                     `}
                     on:click={() => onTakeAction(a + s)}
                 >
@@ -151,7 +151,7 @@
 
         <!-- HUMAN HIRE -->
         {#if type.includes('human')}
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-3 xl:grid-cols-4 gap-2">
             {#each Object.keys(humanHires) as key, k}
             <Tooltip
                 title={humanHires[key].name}
