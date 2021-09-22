@@ -184,9 +184,12 @@ export const useItem = (itemKey, quantity) => {
     game.update(state => {
         let nextState = {...state};
         let nextPlayers = [...state.players];
-        
+
         for (let a=0; a<quantity; ++a) {
-            nextPlayers[nextState.turn].storedItems.splice(itemKey, 1);
+            let itemIndex = nextPlayers[nextState.turn].storedItems.indexOf(itemKey);
+            if (itemIndex >= 0) {
+                nextPlayers[nextState.turn].storedItems.splice(itemIndex, 1);
+            }
         }
 
         nextState.players = nextPlayers;

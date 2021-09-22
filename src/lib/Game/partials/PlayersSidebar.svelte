@@ -1,11 +1,14 @@
 <script>
     import { endRound, endTurn, game } from '../../../stores/game.store';
-    import { getNestCapacity, getStorageCapacity, itemIconMap } from '../../../stores/gameData';
+    import { getNestCapacity, getStorageCapacity, itemIconMap, tradeItems } from '../../../stores/gameData';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import Tooltip from '../../../components/Tooltip.svelte';
     import Button from '../../../components/Button.svelte';
     import HumanHireCard from './HumanHireCard.svelte';
     import IoIosClose from 'svelte-icons/io/IoIosClose.svelte';
+    import GoHome from 'svelte-icons/go/GoHome.svelte';
+    import GiLockedChest from 'svelte-icons/gi/GiLockedChest.svelte';
+    import FaUser from 'svelte-icons/fa/FaUser.svelte'
 
     let activePlayer;
     let storedItems = [];
@@ -18,6 +21,11 @@
                 if (key in itemIconMap) {
                     storedItems.push ({
                         ...itemIconMap[key]
+                    });
+                }
+                else if (key in tradeItems) {
+                    storedItems.push({
+                        ...tradeItems[key]
                     });
                 }
                 else {
@@ -69,13 +77,18 @@
                 <p class="ml-2">{activePlayer.vp}</p>
             </div>
             <!-- NEST -->
-            <div class="flex justify-between items-center mb-1">
-                <h5 class="font-semibold">Nest</h5>
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center">
+                    <div class="h-5 mr-2">
+                        <GoHome />
+                    </div>
+                    <h5 class="font-semibold">Nest</h5>
+                </div>
                 <p class="text-sm">Lvl. {activePlayer.nestLevel}</p>
             </div>
             <div class="flex flex-wrap gap-1">
                 {#each Array(getNestCapacity(activePlayer.nestLevel)) as _, i}
-                <div class="w-6 h-6 border-b-2 border-black">
+                <div class="w-6 h-6 border-b-2 border-yellow-800">
                     {#if i < activePlayer.crows}
                     <div 
                         class={`h-full
@@ -88,16 +101,21 @@
                 </div>
                 {/each}
             </div>
-            <br />
+            <hr class="mt-5 my-3 border-t-2 border-black" />
             <!-- STORAGE -->
-            <div class="flex justify-between items-center mb-1">
-                <h5 class="font-semibold">Storage</h5>
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center">
+                    <div class="h-5 mr-2">
+                        <GiLockedChest />
+                    </div>
+                    <h5 class="font-semibold">Storage</h5>
+                </div>
                 <p class="text-sm">Lvl. {activePlayer.storageLevel}</p>
             </div>
             <div class="flex flex-wrap gap-1">
                 {#each Array(getStorageCapacity(activePlayer.storageLevel)) as _, i}
                 <div 
-                    class={`w-6 h-6 border-b-2 border-black
+                    class={`w-8 h-8 border-b-2 border-yellow-800
                     ${i < storedItems.length ? 'bg-white' : ''}
                     `}
                 >
@@ -120,10 +138,15 @@
                 </div>
                 {/each}
             </div>
-            <br />
+            <hr class="mt-5 my-3 border-t-2 border-black" />
             <!-- HUMAN -->
-            <div class="flex justify-between items-center mb-1">
-                <h5 class="font-semibold">Human Hire</h5>
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center">
+                    <div class="h-4 mr-2">
+                        <FaUser />
+                    </div>
+                    <h5 class="font-semibold">Human Hire</h5>
+                </div>
             </div>
             <div class="grid grid-cols-4 gap-2">
                 {#each activePlayer.humanHires as human, h}

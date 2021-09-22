@@ -60,10 +60,12 @@
     }
 
     const onRefreshItems = () => {
-        const error = hasEnoughItem('gem', refreshRequirements);
-        if (error) {
-            failure(error);
-            return;
+        if (import.meta.env.VITE_BYPASS_TRADE_REFRESH_CONDITIONS !== 'true') {
+            const error = hasEnoughItem('gem', refreshRequirements);
+            if (error) {
+                failure(error);
+                return;
+            }
         }
 
         useItem('gem', refreshRequirements);
@@ -154,7 +156,7 @@
                     {/each}
                 </div>
                 
-                <div class="flex justify-center mt-3">
+                <div class="flex justify-center mt-1">
                     <button 
                         class="text-sm mt-2 px-2 py-1 rounded-md bg-yellow-800 hover:bg-yellow-700 text-white"
                         on:click={onRefreshItems}

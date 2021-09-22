@@ -19,7 +19,7 @@ import GiSkullMask from 'svelte-icons/gi/GiSkullMask.svelte';
 import GiDualityMask from 'svelte-icons/gi/GiDualityMask.svelte';
 import GiUnlitBomb from 'svelte-icons/gi/GiUnlitBomb.svelte';
 import GiMeat from 'svelte-icons/gi/GiMeat.svelte';
-import GiUpgrade from 'svelte-icons/gi/GiUpgrade.svelte';
+import GiHotMeal from 'svelte-icons/gi/GiHotMeal.svelte';
 import GiNewBorn from 'svelte-icons/gi/GiNewBorn.svelte';
 import GiSkeletonKey from 'svelte-icons/gi/GiSkeletonKey.svelte';
 import GiBossKey from 'svelte-icons/gi/GiBossKey.svelte';
@@ -28,6 +28,8 @@ import GiPointySword from 'svelte-icons/gi/GiPointySword.svelte';
 import Gi3DHammer from 'svelte-icons/gi/Gi3DHammer.svelte';
 import GiStoneTablet from 'svelte-icons/gi/GiStoneTablet.svelte';
 import GiStoneSphere from 'svelte-icons/gi/GiStoneSphere.svelte';
+import GiLockedChest from 'svelte-icons/gi/GiLockedChest.svelte';
+import GoHome from 'svelte-icons/go/GoHome.svelte';
 
 const nestCapacityDefault = 2;
 const nestCapacityPerLevel = 2;
@@ -384,6 +386,16 @@ export const itemIconMap = {
         icon: GiUnlitBomb,
         iconColor: 'text-black',
     },
+    'nest': {
+        name: 'Nest Upgrade',
+        icon: GoHome,
+        iconColor: 'text-black',
+    },
+    'storage': {
+        name: 'Storage Upgrade',
+        icon: GiLockedChest,
+        iconColor: 'text-black',
+    }
 };
 
 export const tradeItems = {
@@ -417,7 +429,7 @@ export const tradeItems = {
     },
     'ticket-food-3': {
         name: 'Triple Food Ticket',
-        icon: GiMeat,
+        icon: GiHotMeal,
         hint: 'Receive 3 food.',
         type: 'food',
         conditions: [
@@ -431,7 +443,7 @@ export const tradeItems = {
     },
     'upgrade-nest': {
         name: 'Upgrade Nest',
-        icon: GiUpgrade,
+        icon: GoHome,
         hint: 'Instantly upgrade your nest.',
         type: 'nest',
         conditions: [
@@ -445,7 +457,7 @@ export const tradeItems = {
     },
     'upgrade-storage': {
         name: 'Upgrade Storage',
-        icon: GiUpgrade,
+        icon: GiLockedChest,
         hint: 'Instantly upgrade your storage.',
         type: 'storage',
         conditions: [
