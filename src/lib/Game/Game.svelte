@@ -7,6 +7,7 @@
     import EndRoundModal from './partials/EndRoundModal.svelte';
     import HumanHireModal from './partials/HumanHireModal.svelte';
     import CrownActionModal from './partials/CrownActionModal.svelte';
+    import TradeItemModal from './partials/TradeItemModal.svelte';
     import EndGameModal from './partials/EndGameModal.svelte';
 </script>
 
@@ -21,6 +22,9 @@
 {/if}
 {#if $system.showActiveCrownAction}
 <CrownActionModal />
+{/if}
+{#if $system.showActiveTradeItem}
+<TradeItemModal />
 {/if}
 {#if $system.canEndGame}
 <EndGameModal />

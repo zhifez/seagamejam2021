@@ -133,9 +133,12 @@
             <!-- TRADE -->
             {#if type.includes('trade')}
             <div class="grid grid-cols-4 gap-2">
-                {#each $game.tradableItems as item}
+                {#each $game.tradableItems as item, i}
                 <div class="col-span-1">
-                    <TradeItemCard data={item} />
+                    <TradeItemCard 
+                        actionIndex={i}
+                        data={item} 
+                    />
                 </div>
                 {/each}
             </div>

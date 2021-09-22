@@ -78,6 +78,8 @@ export const system = writable({
     activeHumanHire: null,
     showActiveCrownAction: false,
     activeCrownAction: null,
+    showActiveTradeItem: false,
+    activeTradeItem: null,
     canEndGame: false,
 });
 
@@ -112,6 +114,20 @@ export const setActiveCrownAction = (data) => {
         }
         else {
             nextState.showActiveCrownAction = false;
+        }
+        return nextState;
+    });
+}
+
+export const setActiveTradeItem = (data) => {
+    system.update(state => {
+        let nextState = {...state};
+        if (data) {
+            nextState.showActiveTradeItem = true;
+            nextState.activeTradeItem = data;
+        }
+        else {
+            nextState.showActiveTradeItem = false;
         }
         return nextState;
     });
