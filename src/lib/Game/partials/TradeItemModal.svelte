@@ -9,21 +9,22 @@
     }
 
     const onTakeAction = () => {
-        // let hireCoreActionIndex = -1;
-        // for (let a=0; a<actions.length; ++a) {
-        //     if (actions[a].type.includes('human')) {
-        //         hireCoreActionIndex = a;
-        //         break;
-        //     }
-        // }
-        // const error = canTakeAction(hireCoreActionIndex, $system.activeTradeItem.actionIndex);
-        // if (error) {
-        //     failure(error);
-        //     return;
-        // }
+        let coreActionIndex = -1;
+        for (let a=0; a<actions.length; ++a) {
+            if (actions[a].type.includes('trade')) {
+                coreActionIndex = a;
+                break;
+            }
+        }
+        
+        const error = canTakeAction(coreActionIndex, $system.activeTradeItem.actionIndex);
+        if (error) {
+            failure(error);
+            return;
+        }
 
-        // takeAction(hireCoreActionIndex, $system.activeTradeItem.actionIndex);
-        // onCloseModal();
+        takeAction(coreActionIndex, $system.activeTradeItem.actionIndex);
+        onCloseModal();
     }
 </script>
 

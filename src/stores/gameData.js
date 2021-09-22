@@ -196,7 +196,7 @@ export const actions = [
     },
     {
         name: 'Trade with Black Market',
-        hint: 'Only them would trade with crows.',
+        hint: 'Will refresh when all items are sold.',
         type: 'trade-action',
         rows: 2,
     },
@@ -388,32 +388,46 @@ export const itemIconMap = {
 
 export const tradeItems = {
     'ticket-food': {
-        name: 'Food',
+        name: 'Food Ticket',
         icon: FaDrumstickBite,
-        hint: 'This ticket represents 1 food.',
+        hint: 'Receive 1 food.',
         type: 'food',
         conditions: [
             { key: 'gem', quantity: 3 },
         ],
         rewards: [
-            { key: 'ticket-food', quantity: 1 },
+            { key: 'food', quantity: 1 },
         ],
         space: 1,
-        rarity: 2,
+        rarity: 1,
     },
-    'ticket-food-double': {
-        name: 'Double Food',
+    'ticket-food-2': {
+        name: 'Double Food Ticket',
         icon: GiMeat,
-        hint: 'This ticket represents 2 food.',
+        hint: 'Receive 2 food.',
         type: 'food',
         conditions: [
             { key: 'gem', quantity: 5 },
         ],
         rewards: [
-            { key: 'ticket-food-double', quantity: 1 },
+            { key: 'food', quantity: 2 },
         ],
         space: 1,
         rarity: 4,
+    },
+    'ticket-food-3': {
+        name: 'Triple Food Ticket',
+        icon: GiMeat,
+        hint: 'Receive 3 food.',
+        type: 'food',
+        conditions: [
+            { key: 'gem', quantity: 7 },
+        ],
+        rewards: [
+            { key: 'food', quantity: 3 },
+        ],
+        space: 1,
+        rarity: 7,
     },
     'upgrade-nest': {
         name: 'Upgrade Nest',
@@ -577,7 +591,8 @@ export const getRandomTradableItems = (quantity) => {
         if (rarityCondition >= item.rarity) {
             tradableItems.push({
                 ...item,
-                key: randKey
+                key: randKey,
+                sold: false,
             });
         }
     }

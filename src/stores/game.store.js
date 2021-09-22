@@ -1,6 +1,8 @@
-import { success, warning } from "../common/toastTheme";
+import { warning } from "../common/toastTheme";
 import { get, writable } from "svelte/store";
 import { actions, dungeonLayerIsComplete, getNestCapacity, getRandomTradableItems, getStorageCapacity, humanHires } from "./gameData";
+
+const ERROR_NOT_ENOUGH_RESOURCES = 'You do not have the resource to take this action.';
 
 const colors = [
     'red-500',
@@ -48,6 +50,8 @@ const initGameState = {
 
 export const game = writable({...initGameState});
 
+const tradableItemsMax = 4;
+
 export const initGame = (playerCount) => {
     let gameState = {...initGameState};
     gameState.players = [];
@@ -60,14 +64,14 @@ export const initGame = (playerCount) => {
             )
         );
     }
-    gameState.tradableItems = getRandomTradableItems(4);
+    gameState.tradableItems = getRandomTradableItems(tradableItemsMax);
     game.set(gameState);
 }
 
 export const refreshTradableItems = () => {
     game.update(state => {
         let nextState = {...state};
-        nextState.tradableItems = getRandomTradableItems(4);
+        nextState.tradableItems = getRandomTradableItems(tradableItemsMax);
         return nextState;
     });
 }
@@ -157,6 +161,39 @@ export const playerHasMetConditions = (player, conditions) => {
     return (conds.length <= 0);
 }
 
+export const hasEnoughItem = (itemKey, quantity) => {
+    let gameState = get(game);
+    let activePlayer = gameState.players[gameState.turn];
+    if (activePlayer.hasTakenAction) {
+        return 'You have already taken an action!<br />Take a Crown Challenge or end your turn.';
+    }
+
+    let totalInStorage = 0;
+    for (let a=0; a<activePlayer.storedItems.length; ++a) {
+        if (activePlayer.storedItems[a] === itemKey) {
+            ++totalInStorage;
+        }
+    }
+    if (totalInStorage < quantity) {
+        return ERROR_NOT_ENOUGH_RESOURCES;
+    }
+    return null;
+}
+
+export const useItem = (itemKey, quantity) => {
+    game.update(state => {
+        let nextState = {...state};
+        let nextPlayers = [...state.players];
+        
+        for (let a=0; a<quantity; ++a) {
+            nextPlayers[nextState.turn].storedItems.splice(itemKey, 1);
+        }
+
+        nextState.players = nextPlayers;
+        return nextState;
+    });
+}
+
 export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
     let gameState = get(game);
     if (gameState.canEndRound) {
@@ -169,7 +206,8 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
     }
     
     let coreAction = actions[coreActionIndex];
-    if (!coreAction.type.includes('human')) { // Skip for human
+    if (!coreAction.type.includes('trade') // Skip for trade
+        && !coreAction.type.includes('human')) { // Skip for human
         if (coreActionIndex in gameState.roundActions) {
             if (selectedActionIndex in gameState.roundActions[coreActionIndex]) {
                 return 'Action has already been taken.';
@@ -177,15 +215,21 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
         }
     }
     
+    // Select active action
     let activeAction = null;
-    if (coreAction.actions) {
-        activeAction = coreAction.actions[Math.min(selectedActionIndex, coreAction.actions.length - 1)];
+    if (coreAction.type.includes('trade')) {
+        // Select Action directly from Tradable Items list
+        activeAction = gameState.tradableItems[selectedActionIndex];
     }
-    
-    if (coreAction.type.includes('human')) {
+    else if (coreAction.type.includes('human')) {
+        // Select Action directly from Human Hire list
         let key = Object.keys(humanHires)[selectedActionIndex];
         activeAction = humanHires[key];
     }
+    else {
+        activeAction = coreAction.actions[Math.min(selectedActionIndex, coreAction.actions.length - 1)];
+    }
+
 
     let conditionsAreMet = playerHasMetConditions(
         activePlayer, 
@@ -199,7 +243,7 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
     }
     else if (coreAction.type.includes('upgrade')) {
         if (!conditionsAreMet) {
-            return `Your do not have the resources to take this action.`;
+            return `You do not have the resource to take this action.`;
         }
     }
     else if (coreAction.type.includes('reproduce')) {
@@ -213,10 +257,17 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
             return 'You do not have enough Crow for this action.';
         }
     }
+    else if (coreAction.type.includes('trade')) {
+        if (import.meta.env.VITE_BYPASS_TRADE_CONDITIONS !== 'true') {
+            if (!conditionsAreMet) {
+                return `You do not have the resource to trade this item.`;
+            }
+        }
+    }
     else if (coreAction.type.includes('human')) {
         if (import.meta.env.VITE_BYPASS_HUMAN_HIRE_CONDITIONS !== 'true') {
             if (!conditionsAreMet) {
-                return `Your do not have the resources to hire this human.`;
+                return `You do not have the resource to hire this human.`;
             }
         }
     }
@@ -258,19 +309,44 @@ const fulfilActionConditions = (player, conditions) => {
 
 const fulfilActionRewards = (player, rewards) => {
     if (rewards && rewards.length > 0) {
-        rewards.forEach(reward => {
+        let storageIsMax = false;
+        const maxStorage = getStorageCapacity(player.storageLevel);
+        
+        for (let r=0; r<rewards.length; ++r) {
+            if (storageIsMax) {
+                break;
+            }
+
+            let reward = rewards[r];
             switch (reward.key) {
-            case 'vp':
+            case 'vp': // Add VP
                 player.vp += reward.quantity;
                 break;
 
+            case 'nest': // Upgrade nest
+                ++player.nestLevel;
+                break;
+
+            case 'storage': // Upgrade storage
+                ++player.storageLevel;
+                break;
+
+            case 'crow': // Add a crow to Nest (if there's space)
+                ++player.crows;
+                break;
+
             default:
-                Array(reward.quantity).forEach(_ => {
+                for (let a=0; a<reward.quantity; ++a) {
+                    if (player.storedItems.length >= maxStorage) {
+                        storageIsMax = true;
+                        break;
+                    }
+
                     player.storedItems.push(reward.key);
-                });
+                }
                 break;
             }
-        });
+        }
     }
     return player;
 }
@@ -283,13 +359,17 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
 
         let coreAction = actions[coreActionIndex];
         let activeAction = null;
-        if (coreAction.actions) {
-            activeAction = coreAction.actions[Math.min(selectedActionIndex, coreAction.actions.length - 1)];
+        if (coreAction.type.includes('trade')) {
+            // Select Action directly from Tradable Items list
+            activeAction = nextState.tradableItems[selectedActionIndex];
         }
-
-        if (coreAction.type.includes('human')) {
+        else if (coreAction.type.includes('human')) {
+            // Select Action directly from Human Hire list
             let key = Object.keys(humanHires)[selectedActionIndex];
             activeAction = humanHires[key];
+        }
+        else {
+            activeAction = coreAction.actions[Math.min(selectedActionIndex, coreAction.actions.length - 1)];
         }
         
         // Fulfil conditions
@@ -304,36 +384,7 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
             activeAction.rewards
         );
         
-        if (coreAction.type.includes('take')) {
-            if (activeAction.rewards) {
-                let storageIsMax = false;
-                const maxStorage = getStorageCapacity(nextPlayers[nextState.turn].storageLevel);
-                for (let a=0; a<activeAction.rewards.length; ++a) {
-                    if (storageIsMax) {
-                        break;
-                    }
-
-                    for (let b=0; b<activeAction.rewards[a].quantity; b++) {
-                        switch (activeAction.rewards[a].key) {
-                        case 'nest':
-                        case 'storage':
-                        case 'crow':
-                            break;
-
-                        default:
-                            if (nextPlayers[nextState.turn].storedItems.length >= maxStorage) {
-                                storageIsMax = true;
-                                break;
-                            }
-    
-                            nextPlayers[nextState.turn].storedItems.push(activeAction.rewards[a].key);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        else if (coreAction.type.includes('upgrade')) {
+        if (coreAction.type.includes('upgrade')) {
             if (coreAction.type.includes('nest')) {
                 ++nextPlayers[nextState.turn].nestLevel;
             }
@@ -343,6 +394,19 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
         }
         else if (coreAction.type.includes('reproduce')) {
             nextPlayers[nextState.turn].isReproducing = true;
+        }
+        else if (coreAction.type.includes('trade')) {
+            nextState.tradableItems[selectedActionIndex].sold = true;
+            let allSold = true;
+            for (let a=0; a<nextState.tradableItems.length; ++a) {
+                if (!nextState.tradableItems[a].sold) {
+                    allSold = false;
+                    break;
+                }
+            }
+            if (allSold) { // Auto refresh when all tradable items are sold
+                nextState.tradableItems = getRandomTradableItems(tradableItemsMax);
+            }
         }
         else if (coreAction.type.includes('human')) {
             let key = Object.keys(humanHires)[selectedActionIndex];
@@ -389,7 +453,7 @@ export const canTakeCrownAction = (crownAction) => {
 
     let activePlayer = gameState.players[gameState.turn];
     if (!playerHasMetConditions(activePlayer, crownAction.conditions)) {
-        return 'You do not have the resources to take this action';
+        return ERROR_NOT_ENOUGH_RESOURCES;
     }
     return null;
 }

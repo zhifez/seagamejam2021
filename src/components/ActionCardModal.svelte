@@ -21,12 +21,14 @@
             class={`modal-wrapper ${bgColor} rounded-lg text-black p-5
             flex flex-col justify-between items-center text-center`}
         >
-            <div class="flex flex-col items-center p-5 pb-2">
+            <div class="flex flex-col items-center pb-2">
                 <div class="w-16 mb-2">
                     <svelte:component this={activeData.icon} />
                 </div>
                 <h1 class="text-xl font-semibold">{activeData.name}</h1>
+                {#if activeData.hint}
                 <p class="text-xs">{activeData.hint}</p>
+                {/if}
             </div>
             <div class="border-t-2 border-black w-full"></div>
             <div class="h-1/2 w-full flex flex-col justify-between">

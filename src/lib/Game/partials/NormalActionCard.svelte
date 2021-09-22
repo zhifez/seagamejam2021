@@ -1,12 +1,12 @@
 <script>
     import { humanHires, itemIconMap } from '../../../stores/gameData';
-    import { game, canTakeAction, takeAction, refreshTradableItems } from '../../../stores/game.store';
+    import { game, canTakeAction, takeAction, refreshTradableItems, hasEnoughItem, useItem } from '../../../stores/game.store';
     import Tooltip from '../../../components/Tooltip.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
-    import IoMdRefresh from 'svelte-icons/io/IoMdRefresh.svelte';
     import HumanHireCard from './HumanHireCard.svelte';
     import { failure } from '../../../common/toastTheme';
     import TradeItemCard from './TradeItemCard.svelte';
+    import FaGem from 'svelte-icons/fa/FaGem.svelte';
 
     export let index = -1;
     export let name = '';
@@ -17,6 +17,7 @@
     export let rows = 1;
 
     let activePlayer;
+    let refreshRequirements = 2;
     $: {
         activePlayer = $game.players[$game.turn];
         if (type.includes('upgrade')) {
@@ -42,6 +43,10 @@
                 hint += '.';
             }
         }
+
+        if ($game.players.length <= 1) {
+            refreshRequirements = 1;
+        }
     }
 
     const onTakeAction = (selectedActionIndex) => {
@@ -55,8 +60,13 @@
     }
 
     const onRefreshItems = () => {
-        // TODO: Check whether can refresh items
+        const error = hasEnoughItem('gem', refreshRequirements);
+        if (error) {
+            failure(error);
+            return;
+        }
 
+        useItem('gem', refreshRequirements);
         refreshTradableItems();
     }
 </script>
@@ -132,33 +142,31 @@
         <div class="flex flex-col justify-between h-full">
             <!-- TRADE -->
             {#if type.includes('trade')}
-            <div class="grid grid-cols-4 gap-2">
-                {#each $game.tradableItems as item, i}
-                <div class="col-span-1">
-                    <TradeItemCard 
-                        actionIndex={i}
-                        data={item} 
-                    />
+            <div>
+                <div class="grid grid-cols-4 gap-2">
+                    {#each $game.tradableItems as item, i}
+                    <div class="col-span-1">
+                        <TradeItemCard 
+                            actionIndex={i}
+                            data={item} 
+                        />
+                    </div>
+                    {/each}
                 </div>
-                {/each}
-            </div>
-            
-            <div class="flex justify-center">
-                <Tooltip
-                    title="Costs 2 Gems"
-                >
+                
+                <div class="flex justify-center mt-3">
                     <button 
-                        class="text-sm mt-2"
+                        class="text-sm mt-2 px-2 py-1 rounded-md bg-yellow-800 hover:bg-yellow-700 text-white"
                         on:click={onRefreshItems}
                     >
-                        <div class="flex item-center justify-center">
-                            <div class="h-5 mr-2">
-                                <IoMdRefresh />
+                        <div class="flex items-center justify-center">
+                            <p>Refresh items for {refreshRequirements}</p>
+                            <div class={`h-4 ml-1 ${itemIconMap['gem'].iconColor}`}>
+                                <FaGem />
                             </div>
-                            <span>Refresh Items</span>
                         </div>
                     </button>
-                </Tooltip>
+                </div>
             </div>
             {/if}
 

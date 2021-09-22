@@ -5,10 +5,28 @@
     import Tooltip from '../../../components/Tooltip.svelte';
     import Button from '../../../components/Button.svelte';
     import HumanHireCard from './HumanHireCard.svelte';
+    import IoIosClose from 'svelte-icons/io/IoIosClose.svelte';
 
     let activePlayer;
+    let storedItems = [];
     $: {
         activePlayer = $game.players[$game.turn];
+        if (storedItems.length !== activePlayer.storedItems.length) {
+            storedItems = [];
+            for (let a=0; a<activePlayer.storedItems.length; ++a) {
+                let key = activePlayer.storedItems[a];
+                if (key in itemIconMap) {
+                    storedItems.push ({
+                        ...itemIconMap[key]
+                    });
+                }
+                else {
+                    storedItems.push({
+                        name: key
+                    });
+                }
+            }
+        }
     }
 
     const onBtnPass = () => {
@@ -80,17 +98,23 @@
                 {#each Array(getStorageCapacity(activePlayer.storageLevel)) as _, i}
                 <div 
                     class={`w-6 h-6 border-b-2 border-black
-                    ${i < activePlayer.storedItems.length ? 'bg-white' : ''}
+                    ${i < storedItems.length ? 'bg-white' : ''}
                     `}
                 >
-                    {#if i < activePlayer.storedItems.length}
+                    {#if i < storedItems.length}
                     <Tooltip
-                        title={itemIconMap[activePlayer.storedItems[i]].name}
-                        subtitle={itemIconMap[activePlayer.storedItems[i]].hint}
+                        title={storedItems[i].name}
+                        subtitle={storedItems[i].hint}
                     >
-                        <div class={`w-full h-full ${itemIconMap[activePlayer.storedItems[i]].iconColor} p-1`}>
-                            <svelte:component this={itemIconMap[activePlayer.storedItems[i]].icon} />
+                        {#if storedItems[i].icon}
+                        <div class={`w-full h-full ${storedItems[i].iconColor} p-1`}>
+                            <svelte:component this={storedItems[i].icon} />
                         </div>
+                        {:else}
+                        <div class="w-full h-full p-1">
+                            <IoIosClose />
+                        </div>
+                        {/if}
                     </Tooltip>
                     {/if}
                 </div>
