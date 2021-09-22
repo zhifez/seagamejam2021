@@ -1,5 +1,5 @@
 <script>
-    import { setHasStarted, initGame } from '../../../stores/game.store';
+    import { setHasStarted, initGame, roundsPerFeedingPhase } from '../../../stores/game.store';
     import Button from '../../../components/Button.svelte';
     import Modal from '../../../components/Modal.svelte';
 
@@ -21,7 +21,7 @@
                 <p>A worker placement game about managing crows to steal a crown, in the long run.</p>
             </div>
 
-            <p class="text-sm">
+            <p class="text-sm text-right">
                 Developed by: <a class="underline" target="_blank" href="https://zhifez.com/">zhifez</a>
             </p>
         </div>
@@ -32,8 +32,10 @@
             <p class="font-semibold">Instructions:</p>
             <ul class="list-outside">
                 <li>1. Click on an action slot to take the action.</li>
-                <li>2. Remember to click "End Turn" once you've taken an action.</li>
-                <li>3. The game ends when a player has retrieve the Crown (center of "Crown Challenges").</li>
+                <li>2. You are only allowed to take one action per turn, with the exception of the <b>Crown Challenge</b>.</li>
+                <li>3. After every {roundsPerFeedingPhase} rounds, the game will enter a <b>Feeding Phase</b>, where each crow will have to be fed exactly 1 food.</li>
+                <li>4. 1 VP will be deducted per unfed crow.</li>
+                <li>5. The game ends when a player has retrieve the <b>Crown</b> (center of "Crown Challenges").</li>
             </ul>
             <br />
             <p class="font-semibold">Version 0.0.1</p>

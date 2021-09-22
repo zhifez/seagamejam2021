@@ -1,5 +1,5 @@
 <script>
-    import { endRound, game, setShowEndRound } from '../../../stores/game.store';
+    import { endRound, game, roundsPerFeedingPhase, setShowEndRound } from '../../../stores/game.store';
     import Modal from '../../../components/Modal.svelte';
     import Button from '../../../components/Button.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
@@ -9,6 +9,11 @@
         setTimeout(() => {
             endRound();
         }, 500);
+    }
+
+    let roundsLeftToFeedingPhase = 0;
+    $: {
+        roundsLeftToFeedingPhase = (roundsPerFeedingPhase - $game.round % roundsPerFeedingPhase - 1);
     }
 </script>
 
@@ -24,7 +29,7 @@
             {/if}
         </h1>
         {#if !$game.isFeedingPhase}
-        <p>{2 - $game.round % 3} more round{2 - $game.round % 3 > 1 ? 's' : ''} to Feeding Phase.</p>
+        <p>{roundsLeftToFeedingPhase} more round{roundsLeftToFeedingPhase > 1 ? 's' : ''} to Feeding Phase.</p>
         {/if}
         {#if $game.isFeedingPhase}
         <hr class="my-3 border-black" />

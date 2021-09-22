@@ -80,8 +80,8 @@
         `}
     >
         <section class="mb-2 text-center">
-            <h1 class="font-semibold text-md xl:text-2xl">{name}</h1>
-            {#if hint}<p class="text-xs xl:text-base">{hint}</p>{/if}
+            <h1 class="font-semibold text-md 2xl:text-2xl">{name}</h1>
+            {#if hint}<p class="text-xs 2xl:text-base">{hint}</p>{/if}
         </section>
         
         {#if actions}
@@ -93,7 +93,7 @@
                 subtitle={action.hint}
             >
                 <div 
-                    class={`w-full h-12 xl:h-20 rounded-md p-1 cursor-pointer relative
+                    class={`w-full h-12 2xl:h-20 rounded-md p-1 cursor-pointer relative
                     ${(action.conditions && action.conditions.length > 0
                     && (!action.rewards || action.rewards.length <= 0)) ? 'rounded-full bg-yellow-500' : 'bg-white'}
                     `}
@@ -174,7 +174,7 @@
 
             <!-- HUMAN HIRE -->
             {#if type.includes('human')}
-            <div class="grid grid-cols-4 xl:grid-cols-4 gap-2">
+            <div class="grid grid-cols-4 2xl:grid-cols-4 gap-2">
                 {#each Object.keys(humanHires) as key, k}
                 <Tooltip
                     title={humanHires[key].name}
@@ -209,7 +209,7 @@
         {/if}
 
         {#if note}
-        <p class="text-xs xl:text-base mt-2">
+        <p class="text-xs 2xl:text-base mt-2">
             <b>Note:</b> {note}
         </p>
         {:else}

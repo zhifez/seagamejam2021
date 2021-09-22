@@ -52,6 +52,7 @@ const initGameState = {
 export const game = writable({...initGameState});
 
 const tradableItemsMax = 4;
+export const roundsPerFeedingPhase = 3;
 
 export const initGame = (playerCount) => {
     let gameState = {...initGameState};
@@ -556,7 +557,7 @@ export const endTurn = (passed = false) => {
         else {
             setShowEndRound(true);
             nextState.canEndRound = true;
-            nextState.isFeedingPhase = (nextState.round % 3 === 2);
+            nextState.isFeedingPhase = (nextState.round % roundsPerFeedingPhase === 2);
             if (nextState.isFeedingPhase) {
                 nextState.endRoundResults = {};
                 nextPlayers.forEach((player, p) => {
