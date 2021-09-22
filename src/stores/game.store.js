@@ -34,6 +34,7 @@ const initGameState = {
     ],
     round: 0, turn: 0, 
     canEndRound: false,
+    isFeedingPhase: false,
     endRoundResults: null,
     roundActions: {},
     crownActionLayer: 0,
@@ -78,6 +79,7 @@ export const refreshTradableItems = () => {
 
 export const system = writable({
     hasStarted: false,
+    showEndRound: false,
     showActiveHumanHire: false,
     activeHumanHire: null,
     showActiveCrownAction: false,
@@ -91,6 +93,14 @@ export const setHasStarted = () => {
     system.update(state => {
         let nextState = {...state};
         nextState.hasStarted = true;
+        return nextState;
+    });
+}
+
+export const setShowEndRound = (show) => {
+    system.update(state => {
+        let nextState = {...state};
+        nextState.showEndRound = show;
         return nextState;
     });
 }
@@ -544,16 +554,20 @@ export const endTurn = (passed = false) => {
             nextState.turn = turn % nextPlayers.length;
         }
         else {
+            setShowEndRound(true);
             nextState.canEndRound = true;
-            nextState.endRoundResults = {};
-            nextPlayers.forEach((player, p) => {
-                let food = player.storedItems.filter(item => item === 'food').length;
-                let minusVP = player.crows - food;
-                nextState.endRoundResults[p] = {
-                    food,
-                    minusVP,
-                };
-            });
+            nextState.isFeedingPhase = (nextState.round % 3 === 2);
+            if (nextState.isFeedingPhase) {
+                nextState.endRoundResults = {};
+                nextPlayers.forEach((player, p) => {
+                    let food = player.storedItems.filter(item => item === 'food').length;
+                    let minusVP = player.crows - food;
+                    nextState.endRoundResults[p] = {
+                        food,
+                        minusVP,
+                    };
+                });
+            }
         }
         nextState.players = nextPlayers;
         return nextState;
@@ -581,7 +595,9 @@ export const endRound = () => {
         let vps = [];
         for (let a=0; a<nextPlayers.length; ++a) {
             nextPlayers[a].utilizedCrows = 0;
-            nextPlayers[a].vp -= nextState.endRoundResults[a].minusVP;
+            if (nextState.isFeedingPhase) {
+                nextPlayers[a].vp -= nextState.endRoundResults[a].minusVP;
+            }
             
             // Consume one food per crow
             for (let c=0; c<nextPlayers[a].crows; ++c) {
@@ -608,6 +624,7 @@ export const endRound = () => {
             }
             nextPlayers[a].humanHires = nextHumanHires;
         }
+        nextState.isFeedingPhase = false;
 
         // Calculate end game results
         let max = Math.max(...vps);

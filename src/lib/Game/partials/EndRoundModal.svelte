@@ -1,8 +1,15 @@
 <script>
-    import { endRound, game } from '../../../stores/game.store';
+    import { endRound, game, setShowEndRound } from '../../../stores/game.store';
     import Modal from '../../../components/Modal.svelte';
     import Button from '../../../components/Button.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
+
+    const onEndRound = () => {
+        setShowEndRound(false);
+        setTimeout(() => {
+            endRound();
+        }, 500);
+    }
 </script>
 
 <Modal 
@@ -11,8 +18,15 @@
 >
     <div class="modal-end-round bg-yellow-300 rounded-md text-black p-5">
         <h1 class="text-2xl font-semibold">
-            End of Round - Feeding Phase
+            End of Round {$game.round + 1}
+            {#if $game.isFeedingPhase}
+             - Feeding Phase
+            {/if}
         </h1>
+        {#if !$game.isFeedingPhase}
+        <p>{2 - $game.round % 3} more round{2 - $game.round % 3 > 1 ? 's' : ''} to Feeding Phase.</p>
+        {/if}
+        {#if $game.isFeedingPhase}
         <hr class="my-3 border-black" />
         <div class="grid grid-cols-4 gap-3">
             {#each $game.players as player, p}
@@ -46,12 +60,13 @@
             </div>
             {/each}
         </div>
+        {/if}
         <hr class="my-3 border-black" />
         <div class="flex justify-end gap-2">
             <Button 
                 label="End Round"
                 textClass={'text-lg'}
-                on:click={endRound}
+                on:click={onEndRound}
             />
         </div>
     </div>

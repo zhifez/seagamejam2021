@@ -61,7 +61,7 @@
             <p class="text-2xl">Thank you for playing</p>
             <h1 class="text-4xl font-semibold mb-2">A Crown for Crows</h1>
             <p>
-                <span>If you find the game fun/mediocre/heavily imbalance, feel free to contact the developer at </span>
+                <span>If you find the game fun/mediocre/heavily unbalanced, feel free to contact the developer at </span>
                 <a class="text-blue-600 hover:underline" href="mailto:hello@zhifez.com?subject=Your game is shit, and here's why">
                     hello@zhifez.com
                 </a>

@@ -14,7 +14,7 @@
 {#if !$system.hasStarted}
 <StartMenuModal />
 {/if}
-{#if $game.canEndRound}
+{#if $system.showEndRound}
 <EndRoundModal />
 {/if}
 {#if $system.showActiveHumanHire}
