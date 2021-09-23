@@ -152,13 +152,15 @@ const playerHasItem = (player, condition) => {
     let quantity = condition.quantity;
     // Check from storage
     player.storedItems.forEach(item => {
-        if (item === condition.key) {
+        if (item === condition.key
+            || (condition.orKeys && condition.orKeys.indexOf(item) >= 0) ) {
             --quantity;
         }
     });
     // Check from human hires
     player.humanHires.forEach(hire => {
-        if (hire.type === condition.key) {
+        if (hire.type === condition.key
+            || (condition.orKeys && condition.orKeys.indexOf(hire.type) >= 0)) {
             --quantity;
         }
     });
@@ -313,17 +315,24 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
 const fulfilActionConditions = (player, conditions) => {
     const _fulfil = (item) => {
         for (let a=0; a<item.quantity; ++a) {
-            let index = player.storedItems.indexOf(item.key);
-            if (index >= 0) {
-                player.storedItems.splice(item.key, 1);
-            }
-            else {
-                for (let h=0; h<player.humanHires.length; ++h) {
-                    if (player.humanHires[h].type === item.key) {
-                        ++player.humanHires[h].hiredLifespan;
+            let allKeys = [
+                item.key,
+                ...(item.orKeys ?? [])
+            ];
+            allKeys.forEach(key => {
+                let index = player.storedItems.indexOf(key);
+                if (index >= 0) {
+                    player.storedItems.splice(key, 1);
+                }
+                else {
+                    for (let h=0; h<player.humanHires.length; ++h) {
+                        if (player.humanHires[h].type === key) {
+                            ++player.humanHires[h].hiredLifespan;
+                            break;
+                        }
                     }
                 }
-            }
+            });
         }
     }
 
