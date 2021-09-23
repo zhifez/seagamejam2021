@@ -4,6 +4,11 @@
     import { failure } from '../../../common/toastTheme';
     import ActionCardModal from '../../../components/ActionCardModal.svelte';
 
+    let activeTradeItem;
+    $: {
+        activeTradeItem = $system.activeTradeItem;
+    }
+
     const onCloseModal = () => {
         setActiveTradeItem(null);
     }
@@ -17,21 +22,21 @@
             }
         }
         
-        const error = canTakeAction(coreActionIndex, $system.activeTradeItem.actionIndex);
+        const error = canTakeAction(coreActionIndex, activeTradeItem.actionIndex);
         if (error) {
             failure(error);
             return;
         }
 
-        takeAction(coreActionIndex, $system.activeTradeItem.actionIndex);
+        takeAction(coreActionIndex, activeTradeItem.actionIndex);
         onCloseModal();
     }
 </script>
 
 <ActionCardModal 
-    activeData={$system.activeTradeItem}
+    activeData={activeTradeItem}
     conditionLabel="Costs"
-    takeActionLabel={`Get ${$system.activeTradeItem.name}`}
+    takeActionLabel={`Get ${activeTradeItem.name}`}
     onCloseModal={onCloseModal}
     onTakeAction={onTakeAction}
 />

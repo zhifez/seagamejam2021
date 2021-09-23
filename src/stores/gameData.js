@@ -225,10 +225,16 @@ export const actions = [
 
 export const crownActions = {
     'crown': {
-        name: "Steal the Crown",
+        name: 'The Crown',
+        hint: `The crows' final path to salvation.`,
         icon: GiImperialCrown,
         conditions: [
-            { key: 'crow', quantity: 6 },
+            {
+                name: 'Steal it with 6 Crows',
+                conds: [
+                    { key: 'crow', quantity: 6 },
+                ],
+            },
         ],
         rewards: [
             { key: 'vp', quantity: 50 },
@@ -236,80 +242,170 @@ export const crownActions = {
         isEndGame: true,
     },
     'rune': {
-        name: "Destroy Rune",
+        name: 'Protective Rune',
+        hint: 'Somehow it prevents any living thing from getting close.',
         icon: GiRuneStone,
         conditions: [
-            { key: 'magician', quantity: 1 },
-            { key: 'magic-tablet', quantity: 1 },
-            { key: 'magic-sphere', quantity: 1 },
+            {
+                name: 'Disable it with a Magician',
+                conds: [
+                    { key: 'magician', quantity: 1 },
+                    { key: 'magic-tablet', quantity: 1 },
+                    { key: 'magic-sphere', quantity: 1 },
+                ],
+            },
         ],
         rewards: [
             { key: 'vp', quantity: 20 },
         ],
     },
     'trap': {
-        name: "Disable Trap", // With thief or magician
+        name: 'Trap', // With thief or magician
+        hint: 'Kills anyone who steps on it.',
         icon: GiMantrap,
         conditions: [
-            { 
-                key: 'human', 
-                orKeys: [ 'thief', 'magician', 'mercenary', 'spy' ], 
-                quantity: 1 
+            {
+                name: 'Experienced Trap Disabler',
+                conds: [
+                    { key: 'mercenary', quantity: 1 },
+                ],
             },
+            {
+                name: 'Inexperienced Trap Disabler',
+                conds: [
+                    { key: 'thief', quantity: 1 },
+                    { key: 'stone', quantity: 5 },
+                ],
+            }
         ],
         rewards: [
             { key: 'vp', quantity: 18 },
         ],
     },
-    'crown-guard': {
-        name: "Crown Guard", // Bribe or kill
+    'guard-crown': {
+        name: 'Crown Guards', // Bribe or kill
+        hint: 'Guard the Crown.',
         icon: GiGuards,
+        conditions: [
+            {
+                name: 'Assassinate Them',
+                conds: [
+                    { key: 'mercenary', quantity: 1 },
+                    { key: 'sword-heavy', quantity: 1 },
+                ],
+            },
+            {
+                name: 'Bribe Them',
+                conds: [
+                    { key: 'spy', quantity: 1 },
+                    { key: 'gem', quantity: 5 },
+                ],
+            }
+        ],
         rewards: [
             { key: 'vp', quantity: 10 },
         ],
     },
     'guard': {
-        name: "Guard", // With mercenary
+        name: 'Guard', // With mercenary
+        hint: 'Guards the Crown Guards that guard the Crown.',
         icon: GiGuardedTower,
+        conditions: [
+            {
+                name: 'Assassinate Them',
+                conds: [
+                    { key: 'mercenary', orKeys: ['thief'], quantity: 1 },
+                    { key: 'sword-normal', orKeys: ['sword-heavy'], quantity: 1 },
+                ],
+            },
+            {
+                name: 'Bribe Them',
+                conds: [
+                    { key: 'spy', quantity: 1 },
+                    { key: 'gem', quantity: 2 },
+                ],
+            }
+        ],
         rewards: [
             { key: 'vp', quantity: 3 },
         ],
     },
     'room': {
-        name: "Unlock Treasure Room", // With treasure key
+        name: 'Treasure Room', // With treasure key
+        hint: `There's treasure in them.`,
         icon: GiClosedDoors,
+        conditions: [
+            {
+                name: 'Unlock It',
+                conds: [
+                    { key: 'thief', quantity: 1 },
+                    { key: 'key-treasure', quantity: 1 },
+                ],
+            },
+        ],
         rewards: [
+            { key: 'gem', quantity: 10 },
             { key: 'vp', quantity: 5 },
         ],
     },
     'door': {
-        name: "Unlock Door", // With normal key
+        name: 'Locked Door', // With normal key
+        hint: `It's locked.`,
         icon: GiWoodenDoor,
         conditions: [
-            { key: 'thief', quantity: 1 },
-            { key: 'key-skeleton', quantity: 1 },
+            {
+                name: 'Unlock It',
+                conds: [
+                    { key: 'thief', quantity: 1 },
+                    { key: 'key-skeleton', quantity: 1 },
+                ],
+            },
         ],
         rewards: [
             { key: 'vp', quantity: 2 },
         ],
     },
     'wall-str': {
-        name: "Break Strong Wall", // With mercenary
+        name: 'Break Strong Wall', // With mercenary
         icon: GiDefensiveWall,
         conditions: [
-            { key: 'thief', quantity: 1 },
-            { key: 'bomb', quantity: 2 },
+            {
+                name: 'Destroy It',
+                conds: [
+                    { key: 'thief', orKeys: ['mercenary', 'spy'], quantity: 1 },
+                    { key: 'bomb', quantity: 5 },
+                ],
+            },
+            {
+                name: `Wreck It`,
+                conds: [
+                    { key: 'mercenary', quantity: 1 },
+                    { key: 'hammer-sledge', quantity: 1 },
+                ],
+            }
         ],
         rewards: [
             { key: 'vp', quantity: 5 },
         ],
     },
     'wall': {
-        name: "Break Wall", // With mercenary
+        name: 'Break Wall', // With mercenary
         icon: GiStoneWall,
         conditions: [
-            { key: 'thief', quantity: 1 },
-            { key: 'bomb', quantity: 1 },
+            {
+                name: 'Destroy It',
+                conds: [
+                    { key: 'thief', orKeys: ['mercenary', 'spy'], quantity: 1 },
+                    { key: 'bomb', quantity: 2 },
+                ],
+            },
+            {
+                name: `Wreck It`,
+                conds: [
+                    { key: 'mercenary', quantity: 1 },
+                    { key: 'hammer-sledge', quantity: 1 },
+                ],
+            }
         ],
         rewards: [
             { key: 'vp', quantity: 2 },
@@ -332,7 +428,7 @@ export const dungeonLayerIsComplete = (layer, completedCount) => {
 
 export const dungeonLayers = [
     ['wall', 'door', 'guard'],
-    ['wall-str', 'room', 'crown-guard'],
+    ['wall-str', 'room', 'guard-crown'],
     ['rune', 'trap'],
     ['crown']
 ];
@@ -580,6 +676,20 @@ export const tradeItems = {
         ],
         space: 1,
         rarity: 10,
+    },
+    'bomb': {
+        name: 'Bomb',
+        icon: GiUnlitBomb,
+        hint: 'For destruction use.',
+        type: 'weapon',
+        conditions: [
+            { key: 'gem', quantity: 5 },
+        ],
+        rewards: [
+            { key: 'bomb', quantity: 1 },
+        ],
+        space: 1,
+        rarity: 5,
     },
 };
 

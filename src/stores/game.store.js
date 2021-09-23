@@ -148,28 +148,50 @@ export const setActiveTradeItem = (data) => {
     });
 }
 
-export const playerHasMetConditions = (player, conditions) => {
-    let conds = (conditions ?? []).reduce((results, item, index) => {
-        for (let a=0; a<item.quantity; ++a) {
-            results.push(item.key);
-        }
-        return results;
-    }, []);
+const playerHasItem = (player, condition) => {
+    let quantity = condition.quantity;
     // Check from storage
     player.storedItems.forEach(item => {
-        let index = conds.indexOf(item);
-        if (index >= 0) {
-            conds.splice(index, 1);
+        if (item === condition.key) {
+            --quantity;
         }
     });
     // Check from human hires
     player.humanHires.forEach(hire => {
-        let index = conds.indexOf(hire.type);
-        if (index >= 0) {
-            conds.splice(index, 1);
+        if (hire.type === condition.key) {
+            --quantity;
         }
     });
-    return (conds.length <= 0);
+    return quantity <= 0;
+}
+
+export const playerHasMetConditions = (player, conditions) => {
+    if (!conditions || conditions.length <= 0) {
+        return true;
+    }
+
+    for (let i=0; i<conditions.length; ++i) {
+        let cond = conditions[i];
+        if ('conds' in cond) {
+            let subCondsMet = cond.conds.length;
+            for (let a=0; a<cond.conds.length; ++a) {
+                if (!playerHasItem(player, cond.conds[a])) {
+                    break;
+                }
+
+                --subCondsMet;
+            }
+            if (subCondsMet <= 0) {
+                return true;
+            }
+        }
+        else {
+            if (!playerHasItem(player, cond.key)) {
+                return false;
+            }
+        }
+    }
+    return false;
 }
 
 export const hasEnoughItem = (itemKey, quantity) => {
@@ -289,24 +311,48 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
 }
 
 const fulfilActionConditions = (player, conditions) => {
-    if (conditions && conditions.length > 0) {
-        conditions.forEach(item => {
-            for (let a=0; a<item.quantity; ++a) {
-                let index = player.storedItems.indexOf(item.key);
-                if (index >= 0) {
-                    player.storedItems.splice(item.key, 1);
-                }
-                else {
-                    for (let h=0; h<player.humanHires.length; ++h) {
-                        if (player.humanHires[h].type === item.key) {
-                            ++player.humanHires[h].hiredLifespan;
-                        }
+    const _fulfil = (item) => {
+        for (let a=0; a<item.quantity; ++a) {
+            let index = player.storedItems.indexOf(item.key);
+            if (index >= 0) {
+                player.storedItems.splice(item.key, 1);
+            }
+            else {
+                for (let h=0; h<player.humanHires.length; ++h) {
+                    if (player.humanHires[h].type === item.key) {
+                        ++player.humanHires[h].hiredLifespan;
                     }
                 }
             }
-        });
+        }
     }
 
+    if (conditions && conditions.length > 0) {
+        for (let c=0; c<conditions.length; ++c) {
+            let cond = conditions[c];
+            if ('conds' in cond) {
+                let subCondsMet = cond.conds.length;
+                for (let a=0; a<cond.conds.length; ++a) {
+                    if (!playerHasItem(player, cond.conds[a])) {
+                        break;
+                    }
+
+                    --subCondsMet;
+                }
+                if (subCondsMet <= 0) {
+                    for (let a=0; a<cond.conds.length; ++a) {
+                        _fulfil(cond.conds[a]);
+                    }
+                    break;
+                }
+            }
+            else {
+                _fulfil(cond);
+            }
+        }
+    }
+
+    // Remove human hire once lifespan has ended
     let nextHumanHires = [];
     player.humanHires.forEach(hire => {
         if (hire.hiredLifespan < hire.lifespan) {
@@ -393,10 +439,12 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
         );
 
         // Fulfil rewards
-        nextPlayers[nextState.turn] = fulfilActionRewards(
-            nextPlayers[nextState.turn],
-            activeAction.rewards
-        );
+        if (!coreAction.type.includes('human')) {
+            nextPlayers[nextState.turn] = fulfilActionRewards(
+                nextPlayers[nextState.turn],
+                activeAction.rewards
+            );
+        }
         
         if (coreAction.type.includes('upgrade')) {
             if (coreAction.type.includes('nest')) {

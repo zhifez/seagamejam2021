@@ -27,7 +27,7 @@
         }
         let layer = dungeonLayers[layerIndex];
         action = crownActions[layer[(x + y) % layer.length]];
-        disabled = $game.crownActionLayer < layerIndex;
+        // disabled = $game.crownActionLayer < layerIndex;
 
         crownActionKey = `${x}-${y}`;
         if (layerIndex in $game.completedCrownActions
@@ -64,7 +64,7 @@
     {:else}
     <div 
         class={`w-12 h-12 2xl:w-16 2xl:h-16 p-1 rounded-md shadow bg-yellow-300
-        ${disabled ? 'opacity-20' : 'cursor-pointer hover:bg-yellow-200'}
+        ${disabled ? 'opacity-50' : 'cursor-pointer hover:bg-yellow-200'}
         `}
         on:click={onClick}
     >
