@@ -27,7 +27,9 @@
         }
         let layer = dungeonLayers[layerIndex];
         action = crownActions[layer[(x + y) % layer.length]];
-        // disabled = $game.crownActionLayer < layerIndex;
+        if (import.meta.env.VITE_SHOW_ALL_CROWN_ACTION !== 'true') {
+            disabled = $game.crownActionLayer < layerIndex;
+        }
 
         crownActionKey = `${x}-${y}`;
         if (layerIndex in $game.completedCrownActions
