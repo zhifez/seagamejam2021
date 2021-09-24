@@ -37,3 +37,15 @@ Then run:
 | **itemIconMap** | For system to decide what icon to display for which item key. |
 | **tradeItems** | For "Trade with Black Market" action to randomly select (can repeat) 3 items to sell, also come with its own icon reference. |
 | **humanHires** | For "Hire Human" action to display what kind of human player can hire for their quest. |
+
+# Environment Variables
+
+There are a few .env variables in the game for testing purposes, namely:
+
+| Variables | Definitions |
+|---|---|
+| VITE_BYPASS_CROWN_ACTION_CONDITIONS | Crown challenge's conditions won't be checked when taking the action. |
+| VITE_BYPASS_TRADE_CONDITIONS | Trade Item's conditions won't be checked when buying an item |
+| VITE_BYPASS_TRADE_REFRESH_CONDITIONS | Player's gem won't be checked when refreshing Trade Item. |
+| VITE_BYPASS_HUMAN_HIRE_CONDITIONS | Human Hire's conditions won't be checked when hiring a human. |
+| VITE_SHOW_ALL_CROWN_ACTION | All Crown challenges will be revealed. |
