@@ -40,7 +40,9 @@ Then run:
 
 # Environment Variables
 
-There are a few .env variables in the game for testing purposes, namely:
+There are a few .env variables in the game for testing purposes.
+
+You can create your own .env file and add the following variables, set value to "true".
 
 | Variables | Definitions |
 |---|---|
