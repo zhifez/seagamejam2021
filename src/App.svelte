@@ -12,12 +12,14 @@
         pausable: false,
         dismissable: true,
         reversed: false,
-        intro: { x: 256 },
+        // intro: { x: 256 },
+        // reversed: true,
+        intro: { y: -192 },
         theme: {
             'green': 'text-green-500',
             'yellow': 'text-yellow-800',
             'red': 'text-red-600'
-        }
+        },
     };
 </script>
 
