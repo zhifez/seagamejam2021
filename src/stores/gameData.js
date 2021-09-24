@@ -501,7 +501,7 @@ export const tradeItems = {
         hint: 'Receive 1 food.',
         type: 'food',
         conditions: [
-            { key: 'gem', quantity: 3 },
+            { key: 'gem', quantity: 2 },
         ],
         rewards: [
             { key: 'food', quantity: 1 },
@@ -515,7 +515,8 @@ export const tradeItems = {
         hint: 'Receive 2 food.',
         type: 'food',
         conditions: [
-            { key: 'gem', quantity: 5 },
+            { key: 'stick', quantity: 2 },
+            { key: 'gem', quantity: 3 },
         ],
         rewards: [
             { key: 'food', quantity: 2 },
@@ -529,7 +530,9 @@ export const tradeItems = {
         hint: 'Receive 3 food.',
         type: 'food',
         conditions: [
-            { key: 'gem', quantity: 7 },
+            { key: 'stick', quantity: 2 },
+            { key: 'stone', quantity: 2 },
+            { key: 'gem', quantity: 2 },
         ],
         rewards: [
             { key: 'food', quantity: 3 },
@@ -543,7 +546,8 @@ export const tradeItems = {
         hint: 'Instantly upgrade your nest.',
         type: 'nest',
         conditions: [
-            { key: 'gem', quantity: 8 },
+            { key: 'food', quantity: 2 },
+            { key: 'gem', quantity: 6 },
         ],
         rewards: [
             { key: 'nest', quantity: 1 },
@@ -557,7 +561,8 @@ export const tradeItems = {
         hint: 'Instantly upgrade your storage.',
         type: 'storage',
         conditions: [
-            { key: 'gem', quantity: 10 },
+            { key: 'food', quantity: 3 },
+            { key: 'gem', quantity: 5 },
         ],
         rewards: [
             { key: 'storage', quantity: 1 },
@@ -571,7 +576,8 @@ export const tradeItems = {
         hint: 'Instantly get a crow, as long as you have the nest space.',
         type: 'crow',
         conditions: [
-            { key: 'gem', quantity: 10 },
+            { key: 'food', quantity: 2 },
+            { key: 'gem', quantity: 4 },
         ],
         rewards: [
             { key: 'crow', quantity: 1 },
@@ -585,6 +591,7 @@ export const tradeItems = {
         hint: 'Unlock certain door.',
         type: 'crown',
         conditions: [
+            { key: 'food', quantity: 3 },
             { key: 'gem', quantity: 5 },
         ],
         rewards: [
@@ -599,7 +606,8 @@ export const tradeItems = {
         hint: 'Unlock a very important door.',
         type: 'crown',
         conditions: [
-            { key: 'gem', quantity: 10 },
+            { key: 'food', quantity: 3 },
+            { key: 'gem', quantity: 8 },
         ],
         rewards: [
             { key: 'key-treasure', quantity: 1 },
@@ -613,7 +621,8 @@ export const tradeItems = {
         hint: 'Can kill a regular guard, when wielded by a human.',
         type: 'weapon',
         conditions: [
-            { key: 'gem', quantity: 7 },
+            { key: 'food', quantity: 4 },
+            { key: 'gem', quantity: 5 },
         ],
         rewards: [
             { key: 'sword-normal', quantity: 1 },
@@ -641,7 +650,9 @@ export const tradeItems = {
         hint: 'For crushing and breaking hard object, as well as killing living things.',
         type: 'weapon',
         conditions: [
-            { key: 'gem', quantity: 10 },
+            { key: 'stone', quantity: 1 },
+            { key: 'food', quantity: 2 },
+            { key: 'gem', quantity: 5 },
         ],
         rewards: [
             { key: 'hammer-sledge', quantity: 1 },
@@ -655,7 +666,9 @@ export const tradeItems = {
         hint: 'For casting magic use.',
         type: 'weapon',
         conditions: [
-            { key: 'gem', quantity: 8 },
+            { key: 'stone', quantity: 2 },
+            { key: 'food', quantity: 3 },
+            { key: 'gem', quantity: 7 },
         ],
         rewards: [
             { key: 'magic-tablet', quantity: 1 },
@@ -669,7 +682,9 @@ export const tradeItems = {
         hint: 'For casting magic use.',
         type: 'weapon',
         conditions: [
-            { key: 'gem', quantity: 7 },
+            { key: 'stone', quantity: 2 },
+            { key: 'food', quantity: 2 },
+            { key: 'gem', quantity: 5 },
         ],
         rewards: [
             { key: 'magic-sphere', quantity: 1 },
@@ -683,7 +698,9 @@ export const tradeItems = {
         hint: 'For destruction use.',
         type: 'weapon',
         conditions: [
-            { key: 'gem', quantity: 5 },
+            { key: 'stone', quantity: 1 },
+            { key: 'food', quantity: 2 },
+            { key: 'gem', quantity: 3 },
         ],
         rewards: [
             { key: 'bomb', quantity: 1 },
@@ -728,8 +745,8 @@ export const humanHires = {
         hint: 'Can open doors, unlock traps, bomb stuff.',
         type: 'thief',
         conditions: [
-            { key: 'gem', quantity: 3 },
             { key: 'food', quantity: 4 },
+            { key: 'gem', quantity: 3 },
         ],
         rewards: [
             { key: 'thief', quantity: 1 },
@@ -743,8 +760,8 @@ export const humanHires = {
         hint: 'Can cast useful magic.',
         type: 'magician',
         conditions: [
-            { key: 'gem', quantity: 7 },
             { key: 'food', quantity: 3 },
+            { key: 'gem', quantity: 7 },
         ],
         rewards: [
             { key: 'magician', quantity: 1 },
@@ -758,8 +775,8 @@ export const humanHires = {
         hint: 'Does all the killings, and nothing else.',
         type: 'mercenary',
         conditions: [
-            { key: 'gem', quantity: 5 },
             { key: 'food', quantity: 5 },
+            { key: 'gem', quantity: 5 },
         ],
         rewards: [
             { key: 'mercenary', quantity: 1 },
@@ -773,8 +790,8 @@ export const humanHires = {
         hint: 'Bribe people, get things moving, with the right amount of gems.',
         type: 'spy',
         conditions: [
-            { key: 'gem', quantity: 8 },
             { key: 'food', quantity: 2 },
+            { key: 'gem', quantity: 8 },
         ],
         rewards: [
             { key: 'spy', quantity: 1 },

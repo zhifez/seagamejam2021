@@ -17,7 +17,7 @@
     export let rows = 1;
 
     let activePlayer;
-    let refreshRequirements = 2;
+    let refreshRequirements;
     $: {
         activePlayer = $game.players[$game.turn];
         if (type.includes('upgrade')) {
@@ -44,8 +44,17 @@
             }
         }
 
+        refreshRequirements = 0;
+        $game.tradableItems.forEach(item => {
+            if (!item.sold) {
+                ++refreshRequirements;
+            }
+        });
         if ($game.players.length <= 1) {
-            refreshRequirements = 1;
+            refreshRequirements = Math.min(
+                refreshRequirements > 2 ? 2 : 1, 
+                refreshRequirements
+            );
         }
     }
 
@@ -60,6 +69,7 @@
     }
 
     const onRefreshItems = () => {
+        console.log('refresh items');
         if (import.meta.env.VITE_BYPASS_TRADE_REFRESH_CONDITIONS !== 'true') {
             const error = hasEnoughItem('gem', refreshRequirements);
             if (error) {
@@ -158,8 +168,11 @@
                 
                 <div class="flex justify-center mt-1">
                     <button 
-                        class="text-sm mt-2 px-2 py-1 rounded-md bg-yellow-800 hover:bg-yellow-700 text-white"
+                        class={`text-sm mt-2 px-2 py-1 rounded-md bg-yellow-800 text-white
+                        ${refreshRequirements <= 0 ? 'opacity-50' : 'hover:bg-yellow-700'}
+                        `}
                         on:click={onRefreshItems}
+                        disabled={refreshRequirements <= 0}
                     >
                         <div class="flex items-center justify-center">
                             <p>Refresh items for {refreshRequirements}</p>

@@ -51,7 +51,7 @@ const initGameState = {
 
 export const game = writable({...initGameState});
 
-const tradableItemsMax = 4;
+export const tradableItemsMax = 4;
 export const roundsPerFeedingPhase = 3;
 
 export const initGame = (playerCount) => {
