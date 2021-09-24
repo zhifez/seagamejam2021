@@ -32,6 +32,11 @@
         <About />
     </Route>
     <Route to="/">
-        <Game />
+        <div class="hidden md:block">
+            <Game />
+        </div>
+        <div class="block md:hidden h-screen flex flex-col justify-center text-center">
+            <p>This game is not supported in mobile.</p>
+        </div>
     </Route>
 </Router>
