@@ -29,7 +29,7 @@
                         <a class="underline" target="_blank" href="https://fontawesome.com/">FontAwesome</a>,
                         <a class="underline" target="_blank" href="https://game-icons.net/">GameIcons</a>,
                         <a class="underline" target="_blank" href="https://ionic.io/ionicons">Ionicons</a>,
-                        <a class="underline" target="_blank" href="https://fonts.google.com/icons">GoogleIcons</a>.
+                        <a class="underline" target="_blank" href="https://primer.style/octicons/">GitHub Octicons</a>.
                     </p>
                 </div>
             </div>

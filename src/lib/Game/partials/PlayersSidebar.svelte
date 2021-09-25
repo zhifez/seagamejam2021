@@ -1,14 +1,16 @@
 <script>
-    import { endTurn, game, setShowInstructions } from '../../../stores/game.store';
+    import { canExchangeItemsForOne, endTurn, game, setExchangeItemsForOne, setShowInstructions } from '../../../stores/game.store';
     import { getNestCapacity, getStorageCapacity, itemIconMap, tradeItems } from '../../../stores/gameData';
-    import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
+    import { failure } from '../../../common/toastTheme';
     import Tooltip from '../../../components/Tooltip.svelte';
     import Button from '../../../components/Button.svelte';
+    import SmallActionButton from '../../../components/SmallActionButton.svelte';
     import HumanHireCard from './HumanHireCard.svelte';
+    import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import IoIosClose from 'svelte-icons/io/IoIosClose.svelte';
     import GoHome from 'svelte-icons/go/GoHome.svelte';
     import GiLockedChest from 'svelte-icons/gi/GiLockedChest.svelte';
-    import FaUser from 'svelte-icons/fa/FaUser.svelte'
+    import FaUser from 'svelte-icons/fa/FaUser.svelte';
 
     let activePlayer;
     let storedItems = [];
@@ -33,6 +35,16 @@
                 });
             }
         }
+    }
+
+    const onBtnExchange = () => {
+        const error = canExchangeItemsForOne();
+        if (error) {
+            failure(error);
+            return;
+        }
+
+        setExchangeItemsForOne(true);
     }
 
     const onBtnEndTurn = () => {
@@ -136,6 +148,20 @@
                 </div>
                 {/each}
             </div>
+
+            <div class="flex justify-center mt-1">
+                <Tooltip
+                    subtitle="Exchange 3 items of the same type with 1 new item."
+                >
+                    <SmallActionButton
+                        on:click={onBtnExchange}
+                        disabled={activePlayer.hasTakenAction}
+                    >
+                        <span>Exchange 3:1</span>
+                    </SmallActionButton>
+                </Tooltip>
+            </div>
+
             <hr class="mt-3 my-2 border-t-2 border-black" />
             <!-- HUMAN -->
             <div class="flex justify-between items-center mb-2">

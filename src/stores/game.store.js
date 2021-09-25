@@ -55,6 +55,7 @@ const initGameState = {
 export const game = writable({...initGameState});
 
 export const tradableItemsMax = 4;
+export const exchangeItemsMax = 3;
 export const roundsPerFeedingPhase = 3;
 
 export const initGame = (playerCount) => {
@@ -84,6 +85,7 @@ export const refreshTradableItems = () => {
 export const system = writable({
     hasStarted: false,
     showInstructions: false,
+    showExchangeItemsForOne: false,
     showEndRound: false,
     showActiveHumanHire: false,
     activeHumanHire: null,
@@ -106,6 +108,14 @@ export const setShowInstructions = (show) => {
     system.update(state => {
         let nextState = {...state};
         nextState.showInstructions = show;
+        return nextState;
+    });
+}
+
+export const setExchangeItemsForOne = (show) => {
+    system.update(state => {
+        let nextState = {...state};
+        nextState.showExchangeItemsForOne = show;
         return nextState;
     });
 }
@@ -249,6 +259,43 @@ export const useItem = (itemKey, quantity) => {
                 nextPlayers[nextState.turn].storedItems.splice(itemIndex, 1);
             }
         }
+
+        nextState.players = nextPlayers;
+        return nextState;
+    });
+}
+
+export const canExchangeItemsForOne = () => {
+    let gameState = get(game);
+    let activePlayer = gameState.players[gameState.turn];
+    
+    let counts = {};
+    for (let a=0; a<activePlayer.storedItems.length; ++a) {
+        let item = activePlayer.storedItems[a];
+        if (!(item in counts)) {
+            counts[item] = 0;
+        }
+        ++counts[item];
+        if (counts[item] >= exchangeItemsMax) {
+            return null;
+        }
+    }
+    
+    return ERROR_NOT_ENOUGH_RESOURCES_ACTION;
+}
+
+export const exchangeItemsForOne = (fromItemKey, toItemKey) => {
+    game.update(state => {
+        let nextState = {...state};
+        let nextPlayers = [...state.players];
+
+        for (let a=0; a<exchangeItemsMax; ++a) {
+            let itemIndex = nextPlayers[nextState.turn].storedItems.indexOf(fromItemKey);
+            if (itemIndex >= 0) {
+                nextPlayers[nextState.turn].storedItems.splice(itemIndex, 1);
+            }
+        }
+        nextPlayers[nextState.turn].storedItems.push(toItemKey);
 
         nextState.players = nextPlayers;
         return nextState;

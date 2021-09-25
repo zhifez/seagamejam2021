@@ -5,6 +5,7 @@
     import ActionCard from './partials/ActionCard.svelte';
     import StartMenuModal from './partials/StartMenuModal.svelte';
     import InstructionsModal from './partials/InstructionsModal.svelte';
+    import ExchangeItemsForOneModal from './partials/ExchangeItemsForOneModal.svelte';
     import EndRoundModal from './partials/EndRoundModal.svelte';
     import HumanHireModal from './partials/HumanHireModal.svelte';
     import CrownActionModal from './partials/CrownActionModal.svelte';
@@ -17,6 +18,9 @@
 {/if}
 {#if $system.showInstructions}
 <InstructionsModal />
+{/if}
+{#if $system.showExchangeItemsForOne}
+<ExchangeItemsForOneModal />
 {/if}
 {#if $system.showEndRound}
 <EndRoundModal />

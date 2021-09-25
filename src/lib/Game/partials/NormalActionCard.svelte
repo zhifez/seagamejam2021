@@ -4,6 +4,7 @@
     import Tooltip from '../../../components/Tooltip.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import HumanHireCard from './HumanHireCard.svelte';
+    import SmallActionButton from '../../../components/SmallActionButton.svelte';
     import { failure } from '../../../common/toastTheme';
     import TradeItemCard from './TradeItemCard.svelte';
     import FaGem from 'svelte-icons/fa/FaGem.svelte';
@@ -166,10 +167,7 @@
                 </div>
                 
                 <div class="flex justify-center mt-1">
-                    <button 
-                        class={`text-sm mt-2 px-2 py-1 rounded-md bg-yellow-800 text-white
-                        ${refreshRequirements <= 0 ? 'opacity-50' : 'hover:bg-yellow-700'}
-                        `}
+                    <SmallActionButton
                         on:click={onRefreshItems}
                         disabled={refreshRequirements <= 0}
                     >
@@ -179,7 +177,7 @@
                                 <FaGem />
                             </div>
                         </div>
-                    </button>
+                    </SmallActionButton>
                 </div>
             </div>
             {/if}
