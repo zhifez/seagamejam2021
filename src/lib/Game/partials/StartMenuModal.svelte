@@ -21,7 +21,7 @@
                 <h1 class="text-4xl font-semibold">A Crown for Crows</h1>
                 <p>A worker placement game about managing crows to steal a crown, in the long run.</p>
                 
-                <div class="mt-2 text-sm">
+                <div class="mt-2">
                     <p><b>Developed by:</b> <a class="underline" target="_blank" href="https://zhifez.com/">zhifez</a></p>
                     
                     <p>
@@ -40,9 +40,9 @@
         
         <br class="my-5" />
 
-        <div class="text-sm">
+        <div>
             <p class="font-bold">Instructions:</p>
-            <ul class="list-outside">
+            <ul class="list-outside text-sm">
                 {#each instructions as instruct, i}
                 <li>{i + 1}. {@html instruct}</li>
                 {/each}
