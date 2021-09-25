@@ -184,20 +184,29 @@ const playerHasItem = (player, condition, level = 0) => {
         }
     }
 
-    // Check from storage
-    player.storedItems.forEach(item => {
-        if (item === condition.key
-            || (condition.orKeys && condition.orKeys.indexOf(item) >= 0) ) {
-            --quantity;
-        }
-    });
-    // Check from human hires
-    player.humanHires.forEach(hire => {
-        if (hire.type === condition.key
-            || (condition.orKeys && condition.orKeys.indexOf(hire.type) >= 0)) {
-            --quantity;
-        }
-    });
+    switch (condition.key) {
+    case 'crow':
+        const crowsLeft = (player.crows - player.utilizedCrows);
+        quantity -= crowsLeft;
+        break;
+
+    default:
+        // Check from storage
+        player.storedItems.forEach(item => {
+            if (item === condition.key
+                || (condition.orKeys && condition.orKeys.indexOf(item) >= 0) ) {
+                --quantity;
+            }
+        });
+        // Check from human hires
+        player.humanHires.forEach(hire => {
+            if (hire.type === condition.key
+                || (condition.orKeys && condition.orKeys.indexOf(hire.type) >= 0)) {
+                --quantity;
+            }
+        });
+        break;
+    }
 
     return quantity <= 0;
 }
@@ -409,6 +418,12 @@ const fulfilActionConditions = (player, conditions, level = 0) => {
             }
         }
         if (quantity <= 0) {
+            return;
+        }
+
+        if (cond.key === 'crow') {
+            player.utilizedCrows = quantity;
+            player.hasTakenAction = true;
             return;
         }
         
