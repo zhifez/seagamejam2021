@@ -1,6 +1,6 @@
 <script>
     import { instructions } from '../../../stores/gameData';
-    import { setShowInstructions } from '../../../stores/game.store';
+    import { formatInstruction, setShowInstructions } from '../../../stores/game.store';
     import Button from '../../../components/Button.svelte';
     import Modal from '../../../components/Modal.svelte';
 
@@ -31,7 +31,7 @@
             <p class="font-bold text-lg">Instructions:</p>
             <ul class="list-outside text-sm">
                 {#each instructions as instruct, i}
-                <li>{i + 1}. {@html instruct}</li>
+                <li>{i + 1}. {@html formatInstruction(instruct)}</li>
                 {/each}
             </ul>
         </div>

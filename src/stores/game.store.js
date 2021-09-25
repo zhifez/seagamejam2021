@@ -1,6 +1,6 @@
 import { warning } from "../common/toastTheme";
 import { get, writable } from "svelte/store";
-import { actions, dungeonLayerIsComplete, getNestCapacity, getRandomTradableItems, getStorageCapacity, humanHires } from "./gameData";
+import { actions, dungeonLayerIsComplete, getNestCapacity, getRandomTradableItems, getStorageCapacity, humanHires, instructions } from "./gameData";
 
 const ERROR_NOT_ENOUGH_RESOURCES_ACTION = 'You do not have sufficient resources to take this action.';
 const ERROR_NOT_ENOUGH_RESOURCES_ITEM = 'You do not have sufficient resources to trade this item.';
@@ -57,6 +57,12 @@ export const game = writable({...initGameState});
 export const tradableItemsMax = 4;
 export const exchangeItemsMax = 3;
 export const roundsPerFeedingPhase = 3;
+
+export const formatInstruction = (instruction) => {
+    return instruction
+    .replaceAll('{exchangeItemsMax}', exchangeItemsMax)
+    .replaceAll('{roundsPerFeedingPhase}', roundsPerFeedingPhase);
+}
 
 export const initGame = (playerCount) => {
     let gameState = {...initGameState};

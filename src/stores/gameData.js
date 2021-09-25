@@ -34,7 +34,7 @@ import GiGems from 'svelte-icons/gi/GiGems.svelte';
 
 const nestCapacityDefault = 2;
 const nestCapacityPerLevel = 2;
-const storageCapacityDefault = 5;
+const storageCapacityDefault = 6;
 const storageCapacityPerLevel = 3;
 
 export const getNestCapacity = (level) => {
@@ -862,10 +862,10 @@ export const humanHires = {
 
 export const instructions = [
     'Click on an action slot to take the action.',
-    'You are only allowed to take one action per turn, with the exception of the <b>Crown Challenge</b>.',
+    'You are only allowed to take <b>one action per turn</b>, with the exception of the <b>Crown Challenge</b>.',
     'You can take as many <b>Crown Challenges</b> as you want as long as you have the right resources.',
-    'You may exchange <b>3 items of the same type</b> in your storage for 1 new item, using <b>"Exchange 3:1"</b>.',
-    'Every 3 rounds, the game will enter a <b>Feeding Phase</b>, where each crow will have to be fed exactly 1 food.',
-    '<b>1 VP</b> will be deducted per unfed crow.',
+    'You may exchange <b>{exchangeItemsMax} items of the same type</b> in your storage for <b>1 new item</b>, using <b>"Exchange {exchangeItemsMax}:1"</b>.',
+    'Every <b>{roundsPerFeedingPhase} rounds</b>, the game will enter a <b>Feeding Phase</b>, where <b>each crow will have to be fed exactly 1 food</b>.',
+    '<b>1 VP</b> will be deducted per <b>unfed crow</b>.',
     'The game ends when a player has retrieve the <b>Crown</b> (center of "Crown Challenges").',
 ];

@@ -1,5 +1,5 @@
 <script>
-    import { canExchangeItemsForOne, endTurn, game, setExchangeItemsForOne, setShowInstructions } from '../../../stores/game.store';
+    import { canExchangeItemsForOne, endTurn, exchangeItemsMax, game, setExchangeItemsForOne, setShowInstructions } from '../../../stores/game.store';
     import { getNestCapacity, getStorageCapacity, itemIconMap, tradeItems } from '../../../stores/gameData';
     import { failure } from '../../../common/toastTheme';
     import Tooltip from '../../../components/Tooltip.svelte';
@@ -151,13 +151,13 @@
 
             <div class="flex justify-center mt-1">
                 <Tooltip
-                    subtitle="Exchange 3 items of the same type with 1 new item."
+                    subtitle={`Exchange ${exchangeItemsMax} items of the same type with 1 new item.`}
                 >
                     <SmallActionButton
                         on:click={onBtnExchange}
                         disabled={activePlayer.hasTakenAction}
                     >
-                        <span>Exchange 3:1</span>
+                        <span>Exchange {exchangeItemsMax}:1</span>
                     </SmallActionButton>
                 </Tooltip>
             </div>
