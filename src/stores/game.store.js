@@ -679,7 +679,8 @@ export const takeCrownAction = (crownAction) => {
         else {
             if (dungeonLayerIsComplete(
                     crownAction.layer, 
-                    Object.keys(nextCrownActions).length
+                    Object.keys(nextCrownActions).length,
+                    nextState.players.length
                 )) {
                 if (nextState.crownActionLayer < crownAction.layer + 1) {
                     ++nextState.crownActionLayer;

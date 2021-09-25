@@ -172,7 +172,7 @@ export const actions = [
     {
         name: 'Crown Challenges',
         hint: 'You can take any of these challenges any time during your turn.',
-        note: `The next layer of Crown challenges will be unlocked after two third of the current layer's challenges are solved.`,
+        note: `The next layer of Crown challenges will be unlocked after two third of the current layer's challenges are solved. For a 1 player game, player only have to solve one third of the challenges.`,
         type: 'crown-action'
     },
     {
@@ -439,12 +439,17 @@ export const currentCrownChallengeCount = (layer) => {
     let actualSize = dungeonSize - (layer * 2);
     return (actualSize - layer + actualSize - layer - 1) * 2;
 }
-export const dungeonLayerIsComplete = (layer, completedCount) => {
+export const dungeonLayerIsComplete = (layer, completedCount, playerCount) => {
     const totalChallenges = currentCrownChallengeCount(layer);
     if (import.meta.env.VITE_BYPASS_CROWN_ACTION_CONDITIONS === 'true') {
         return (completedCount / totalChallenges >= 1/10); // testing
     }
-    return (completedCount / totalChallenges >= 2/3);
+    if (playerCount <= 1) {
+        return (completedCount / totalChallenges >= 1/3);
+    }
+    else {
+        return (completedCount / totalChallenges >= 2/3);
+    }
 };
 
 export const dungeonLayers = [
