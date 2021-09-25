@@ -1,5 +1,5 @@
 <script>
-    import { endRound, endTurn, game } from '../../../stores/game.store';
+    import { endTurn, game, setShowInstructions } from '../../../stores/game.store';
     import { getNestCapacity, getStorageCapacity, itemIconMap, tradeItems } from '../../../stores/gameData';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import Tooltip from '../../../components/Tooltip.svelte';
@@ -37,21 +37,21 @@
         }
     }
 
-    const onBtnPass = () => {
-        endTurn(true);
-    }
-
     const onBtnEndTurn = () => {
         endTurn();
     }
 
-    const onBtnEndRound = () => {
-        endRound();
+    const onBtnPass = () => {
+        endTurn(true);
+    }
+
+    const onBtnInstruction = () => {
+        setShowInstructions(true);
     }
 </script>
 
 <div class="w-full h-screen bg-yellow-300 flex flex-col border-r-2 border-yellow-800">
-    <div class="flex items-center p-4 text-lg">
+    <div class="flex items-center p-3">
         <h1 class="font-semibold">Round {$game.round + 1}:</h1>
         <p class="ml-2">{activePlayer.name}</p>
     </div>
@@ -59,7 +59,7 @@
     <div class={`grid grid-cols-${Math.max(2, $game.players.length)}`}>
         {#each $game.players as player, i}
         <div 
-            class={`col-span-1 text-${player.color} p-2
+            class={`col-span-1 text-${player.color} p-1
             border-b-4 mx-2
             ${$game.turn === i ? 'border-yellow-800' : 'border-transparent'}
             `}
@@ -70,7 +70,7 @@
         </div>
         {/each}
     </div>
-    <div class="h-full p-4 flex flex-col justify-between">
+    <div class="h-full p-3 flex flex-col justify-between">
         <div>
             <div class="flex items-center mb-1">
                 <h5 class="font-semibold">VP:</h5>
@@ -101,7 +101,7 @@
                 </div>
                 {/each}
             </div>
-            <hr class="mt-5 my-3 border-t-2 border-black" />
+            <hr class="mt-3 my-2 border-t-2 border-black" />
             <!-- STORAGE -->
             <div class="flex justify-between items-center mb-2">
                 <div class="flex items-center">
@@ -138,7 +138,7 @@
                 </div>
                 {/each}
             </div>
-            <hr class="mt-5 my-3 border-t-2 border-black" />
+            <hr class="mt-3 my-2 border-t-2 border-black" />
             <!-- HUMAN -->
             <div class="flex justify-between items-center mb-2">
                 <div class="flex items-center">
@@ -163,24 +163,29 @@
                 {/each}
             </div>            
         </div>
-        <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-2">
             <Button 
                 label="End Turn"
-                textClass={'text-lg'}
                 on:click={onBtnEndTurn}
                 disabled={!activePlayer.hasTakenAction || $game.canEndRound}
             />
             {#if !activePlayer.hasTakenAction}
             <Button 
                 label="Pass"
+                hint="Will utilizes a Crow"
                 color="red-500"
                 hoverColor="red-400"
-                textClass={'text-lg'}
-                hint="Will utilizes a Crow"
                 on:click={onBtnPass}
                 disabled={$game.canEndRound}
             />
             {/if}
+            <Button 
+                label="Instructions"
+                color="yellow-500"
+                hoverColor="yellow-400"
+                textClass="text-sm"
+                on:click={onBtnInstruction}
+            />
         </div>
     </div>
 </div>

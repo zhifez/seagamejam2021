@@ -1,9 +1,10 @@
 <script>
     import { actions } from '../../stores/gameData';
-    import { game, system } from '../../stores/game.store';
+    import { system } from '../../stores/game.store';
     import PlayersSidebar from './partials/PlayersSidebar.svelte';
     import ActionCard from './partials/ActionCard.svelte';
     import StartMenuModal from './partials/StartMenuModal.svelte';
+    import InstructionsModal from './partials/InstructionsModal.svelte';
     import EndRoundModal from './partials/EndRoundModal.svelte';
     import HumanHireModal from './partials/HumanHireModal.svelte';
     import CrownActionModal from './partials/CrownActionModal.svelte';
@@ -13,6 +14,9 @@
 
 {#if !$system.hasStarted}
 <StartMenuModal />
+{/if}
+{#if $system.showInstructions}
+<InstructionsModal />
 {/if}
 {#if $system.showEndRound}
 <EndRoundModal />

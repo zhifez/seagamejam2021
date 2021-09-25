@@ -80,6 +80,7 @@ export const refreshTradableItems = () => {
 
 export const system = writable({
     hasStarted: false,
+    showInstructions: false,
     showEndRound: false,
     showActiveHumanHire: false,
     activeHumanHire: null,
@@ -94,6 +95,14 @@ export const setHasStarted = () => {
     system.update(state => {
         let nextState = {...state};
         nextState.hasStarted = true;
+        return nextState;
+    });
+}
+
+export const setShowInstructions = (show) => {
+    system.update(state => {
+        let nextState = {...state};
+        nextState.showInstructions = show;
         return nextState;
     });
 }
