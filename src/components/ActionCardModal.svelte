@@ -20,7 +20,7 @@
 >
     <div class="flex flex-col items-center">
         <div 
-            class={`modal-wrapper ${bgColor} rounded-lg text-black p-4
+            class={`modal-wrapper ${bgColor} rounded-lg text-black px-4 py-6
             flex flex-col justify-between items-center text-center`}
         >
             <div class="h-2/5 flex flex-col items-center pb-2">

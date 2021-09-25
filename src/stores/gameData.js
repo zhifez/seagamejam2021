@@ -30,6 +30,7 @@ import GiStoneTablet from 'svelte-icons/gi/GiStoneTablet.svelte';
 import GiStoneSphere from 'svelte-icons/gi/GiStoneSphere.svelte';
 import GiLockedChest from 'svelte-icons/gi/GiLockedChest.svelte';
 import GoHome from 'svelte-icons/go/GoHome.svelte';
+import GiGems from 'svelte-icons/gi/GiGems.svelte';
 
 const nestCapacityDefault = 2;
 const nestCapacityPerLevel = 2;
@@ -384,7 +385,8 @@ export const crownActions = {
         ],
     },
     'wall-str': {
-        name: 'Break Strong Wall', // With mercenary
+        name: 'Strong Wall', // With mercenary
+        hint: 'Strongest wall in the region.',
         icon: GiDefensiveWall,
         conditions: [
             {
@@ -407,7 +409,8 @@ export const crownActions = {
         ],
     },
     'wall': {
-        name: 'Break Wall', // With mercenary
+        name: 'Wall', // With mercenary
+        hint: 'A very breakable wall.',
         icon: GiStoneWall,
         conditions: [
             {
@@ -477,7 +480,7 @@ export const itemIconMap = {
         iconColor: 'text-yellow-600',
     },
     'gem': {
-        name: `Someone's Gem`,
+        name: `Gem`,
         hint: 'Stolen; For trading use',
         icon: FaGem,
         iconColor: 'text-green-400',
@@ -558,16 +561,47 @@ export const tradeItems = {
         space: 1,
         rarity: 7,
     },
+    'pouch-gem-2': {
+        name: 'Gem Pouch',
+        icon: FaGem,
+        hint: 'Receive 2 Gems.',
+        type: 'gem',
+        conditions: [
+            { key: 'stick', quantity: 2 },
+            { key: 'stone', quantity: 2 },
+        ],
+        rewards: [
+            { key: 'gem', quantity: 2 },
+        ],
+        space: 1,
+        rarity: 2,
+    },
+    'pouch-gems-4': {
+        name: 'Big Gem Pouch',
+        icon: GiGems,
+        hint: 'Receive 4 Gems.',
+        type: 'gem',
+        conditions: [
+            { key: 'stick', quantity: 1 },
+            { key: 'stone', quantity: 3 },
+            { key: 'food', quantity: 2 },
+        ],
+        rewards: [
+            { key: 'gem', quantity: 4 },
+        ],
+        space: 1,
+        rarity: 4,
+    },
     'upgrade-nest': {
         name: 'Upgrade Nest',
         icon: GoHome,
         hint: 'Instantly upgrade your nest.',
         type: 'nest',
         conditions: [
-            { key: 'stick', quantity: 1 },
+            { key: 'stick', quantity: 2 },
             { key: 'stone', quantity: 2 },
             { key: 'food', quantity: 2 },
-            { key: 'gem', quantity: 3 },
+            { key: 'gem', quantity: 2 },
         ],
         rewards: [
             { key: 'nest', quantity: 1 },
@@ -621,7 +655,7 @@ export const tradeItems = {
             { key: 'key-skeleton', quantity: 1 },
         ],
         space: 1,
-        rarity: 6,
+        rarity: 4,
     },
     'key-treasure': {
         name: 'Treasure Key',
@@ -637,7 +671,7 @@ export const tradeItems = {
             { key: 'key-treasure', quantity: 1 },
         ],
         space: 1,
-        rarity: 10,
+        rarity: 9,
     },
     'sword-normal': {
         name: 'Sword',
@@ -816,7 +850,7 @@ export const humanHires = {
         type: 'spy',
         conditions: [
             { key: 'food', quantity: 2 },
-            { key: 'gem', quantity: 6 },
+            { key: 'gem', quantity: 5 },
         ],
         rewards: [
             { key: 'spy', quantity: 1 },

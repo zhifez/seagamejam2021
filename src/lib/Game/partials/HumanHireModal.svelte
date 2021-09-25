@@ -37,7 +37,7 @@
 <ActionCardModal 
     activeData={activeHumanHire}
     contentWidget={`<p class="text-xs bg-red-500 text-white px-2 py-1 rounded-md mt-1">
-        Lasts ${activeHumanHire.lifespan} round${activeHumanHire.lifespan > 1 ? 's' : ''}
+        Lasts ${activeHumanHire.lifespan} Round${activeHumanHire.lifespan > 1 ? 's' : ''}
     </p>`}
     takeActionLabel={`Hire ${activeHumanHire.name}`}
     onCloseModal={onCloseModal}
