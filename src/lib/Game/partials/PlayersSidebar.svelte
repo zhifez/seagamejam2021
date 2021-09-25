@@ -14,25 +14,23 @@
     let storedItems = [];
     $: {
         activePlayer = $game.players[$game.turn];
-        if (storedItems.length !== activePlayer.storedItems.length) {
-            storedItems = [];
-            for (let a=0; a<activePlayer.storedItems.length; ++a) {
-                let key = activePlayer.storedItems[a];
-                if (key in itemIconMap) {
-                    storedItems.push ({
-                        ...itemIconMap[key]
-                    });
-                }
-                else if (key in tradeItems) {
-                    storedItems.push({
-                        ...tradeItems[key]
-                    });
-                }
-                else {
-                    storedItems.push({
-                        name: key
-                    });
-                }
+        storedItems = [];
+        for (let a=0; a<activePlayer.storedItems.length; ++a) {
+            let key = activePlayer.storedItems[a];
+            if (key in itemIconMap) {
+                storedItems.push ({
+                    ...itemIconMap[key]
+                });
+            }
+            else if (key in tradeItems) {
+                storedItems.push({
+                    ...tradeItems[key]
+                });
+            }
+            else {
+                storedItems.push({
+                    name: key
+                });
             }
         }
     }

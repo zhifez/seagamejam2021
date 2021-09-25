@@ -18,6 +18,7 @@
             <div class="col-span-5">
                 <p class="uppercase text-sm">SEA Game Jam 2021</p>
                 <h1 class="text-4xl font-semibold">A Crown for Crows</h1>
+                <p>A worker placement game about managing crows to steal a crown, in the long run.</p>
             </div>
             <div class="col-span-1 text-sm text-right font-semibold">
                 <p>Version: 1.0.0</p>

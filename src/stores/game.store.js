@@ -2,7 +2,10 @@ import { warning } from "../common/toastTheme";
 import { get, writable } from "svelte/store";
 import { actions, dungeonLayerIsComplete, getNestCapacity, getRandomTradableItems, getStorageCapacity, humanHires } from "./gameData";
 
-const ERROR_NOT_ENOUGH_RESOURCES = 'You do not have the resource to take this action.';
+const ERROR_NOT_ENOUGH_RESOURCES_ACTION = 'You do not have sufficient resources to take this action.';
+const ERROR_NOT_ENOUGH_RESOURCES_ITEM = 'You do not have sufficient resources to trade this item.';
+const ERROR_NOT_ENOUGH_RESOURCES_HUMAN = 'You do not have sufficient resources to hire this human.';
+const ERROR_NOT_ENOUGH_CROW = 'You do not have enough Crow for this action.';
 
 const colors = [
     'red-500',
@@ -157,8 +160,14 @@ export const setActiveTradeItem = (data) => {
     });
 }
 
-const playerHasItem = (player, condition) => {
+const playerHasItem = (player, condition, level = 0) => {
     let quantity = condition.quantity;
+    if (level > 0) {
+        if ('additionPerLevel' in condition) {
+            quantity += condition.additionPerLevel * (level - 1);
+        }
+    }
+
     // Check from storage
     player.storedItems.forEach(item => {
         if (item === condition.key
@@ -173,36 +182,41 @@ const playerHasItem = (player, condition) => {
             --quantity;
         }
     });
+
     return quantity <= 0;
 }
 
-export const playerHasMetConditions = (player, conditions) => {
+export const playerHasMetConditions = (player, conditions, level = 0) => {
     if (!conditions || conditions.length <= 0) {
         return true;
     }
 
+    let condCount = conditions.length;
     for (let i=0; i<conditions.length; ++i) {
         let cond = conditions[i];
         if ('conds' in cond) {
-            let subCondsMet = cond.conds.length;
+            let subCondCount = cond.conds.length;
             for (let a=0; a<cond.conds.length; ++a) {
-                if (!playerHasItem(player, cond.conds[a])) {
+                if (!playerHasItem(player, cond.conds[a], level)) {
                     break;
                 }
 
-                --subCondsMet;
+                --subCondCount;
             }
-            if (subCondsMet <= 0) {
+            if (subCondCount <= 0) {
                 return true;
             }
         }
         else {
-            if (!playerHasItem(player, cond.key)) {
+            if (playerHasItem(player, cond, level)) {
+                --condCount;
+            }
+            else {
                 return false;
             }
         }
     }
-    return false;
+    return condCount <= 0;
 }
 
 export const hasEnoughItem = (itemKey, quantity) => {
@@ -219,7 +233,7 @@ export const hasEnoughItem = (itemKey, quantity) => {
         }
     }
     if (totalInStorage < quantity) {
-        return ERROR_NOT_ENOUGH_RESOURCES;
+        return ERROR_NOT_ENOUGH_RESOURCES_ACTION;
     }
     return null;
 }
@@ -277,12 +291,24 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
         activeAction = coreAction.actions[Math.min(selectedActionIndex, coreAction.actions.length - 1)];
     }
 
+    // Check conditions
+    let level = 0;
+    if (coreAction.type.includes('upgrade')) {
+        if (coreAction.type.includes('nest')) {
+            level = activePlayer.nestLevel;
+        }
+        else {
+            level = activePlayer.storageLevel;
+        }
+    }
 
     let conditionsAreMet = playerHasMetConditions(
         activePlayer, 
-        activeAction ? activeAction.conditions : []
+        activeAction ? activeAction.conditions : [],
+        level
     );
     
+    // Send error message
     if (coreAction.type.includes('take')) {
         if (activePlayer.storedItems.length >= getStorageCapacity(activePlayer.storageLevel)) {
             return 'Your Storage is full.';
@@ -290,7 +316,7 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
     }
     else if (coreAction.type.includes('upgrade')) {
         if (!conditionsAreMet) {
-            return `You do not have the resource to take this action.`;
+            return ERROR_NOT_ENOUGH_RESOURCES_ACTION;
         }
     }
     else if (coreAction.type.includes('reproduce')) {
@@ -301,37 +327,47 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
             return `Your Nest cannot occupy anymore Crow.`;
         }
         if (activePlayer.crows - activePlayer.utilizedCrows < 2) {
-            return 'You do not have enough Crow for this action.';
+            return ERROR_NOT_ENOUGH_CROW;
         }
     }
     else if (coreAction.type.includes('trade')) {
         if (import.meta.env.VITE_BYPASS_TRADE_CONDITIONS !== 'true') {
             if (!conditionsAreMet) {
-                return `You do not have the resource to trade this item.`;
+                return ERROR_NOT_ENOUGH_RESOURCES_ITEM;
             }
         }
     }
     else if (coreAction.type.includes('human')) {
         if (import.meta.env.VITE_BYPASS_HUMAN_HIRE_CONDITIONS !== 'true') {
             if (!conditionsAreMet) {
-                return `You do not have the resource to hire this human.`;
+                return ERROR_NOT_ENOUGH_RESOURCES_HUMAN;
             }
         }
     }
     return null;
 }
 
-const fulfilActionConditions = (player, conditions) => {
-    const _fulfil = (item) => {
-        for (let a=0; a<item.quantity; ++a) {
+const fulfilActionConditions = (player, conditions, level = 0) => {
+    const _fulfil = (cond) => {
+        let quantity = cond.quantity;
+        if (level > 0) {
+            if ('additionPerLevel' in cond) {
+                quantity += cond.additionPerLevel * (level - 1);
+            }
+        }
+        if (quantity <= 0) {
+            return;
+        }
+        
+        for (let a=0; a<quantity; ++a) {
             let allKeys = [
-                item.key,
-                ...(item.orKeys ?? [])
+                cond.key,
+                ...(cond.orKeys ?? [])
             ];
             allKeys.forEach(key => {
                 let index = player.storedItems.indexOf(key);
                 if (index >= 0) {
-                    player.storedItems.splice(key, 1);
+                    player.storedItems.splice(index, 1);
                 }
                 else {
                     for (let h=0; h<player.humanHires.length; ++h) {
@@ -351,7 +387,7 @@ const fulfilActionConditions = (player, conditions) => {
             if ('conds' in cond) {
                 let subCondsMet = cond.conds.length;
                 for (let a=0; a<cond.conds.length; ++a) {
-                    if (!playerHasItem(player, cond.conds[a])) {
+                    if (!playerHasItem(player, cond.conds[a], level)) {
                         break;
                     }
 
@@ -451,9 +487,20 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
         }
         
         // Fulfil conditions
+        let level = 0;
+        if (coreAction.type.includes('upgrade')) {
+            if (coreAction.type.includes('nest')) {
+                level = nextPlayers[nextState.turn].nestLevel;
+            }
+            else {
+                level = nextPlayers[nextState.turn].storageLevel;
+            }
+        }
+
         nextPlayers[nextState.turn] = fulfilActionConditions(
             nextPlayers[nextState.turn],
-            activeAction.conditions
+            activeAction.conditions,
+            level
         );
 
         // Fulfil rewards
@@ -533,7 +580,7 @@ export const canTakeCrownAction = (crownAction) => {
 
     let activePlayer = gameState.players[gameState.turn];
     if (!playerHasMetConditions(activePlayer, crownAction.conditions)) {
-        return ERROR_NOT_ENOUGH_RESOURCES;
+        return ERROR_NOT_ENOUGH_RESOURCES_ACTION;
     }
     return null;
 }
@@ -664,13 +711,13 @@ export const endRound = () => {
             nextPlayers[a].utilizedCrows = 0;
             if (nextState.isFeedingPhase) {
                 nextPlayers[a].vp -= nextState.endRoundResults[a].minusVP;
-            }
             
-            // Consume one food per crow
-            for (let c=0; c<nextPlayers[a].crows; ++c) {
-                let itemIndex = nextPlayers[a].storedItems.indexOf('food');
-                if (itemIndex >= 0) {
-                    nextPlayers[a].storedItems.splice(itemIndex, 1);
+                // Consume one food per crow
+                for (let c=0; c<nextPlayers[a].crows; ++c) {
+                    let itemIndex = nextPlayers[a].storedItems.indexOf('food');
+                    if (itemIndex >= 0) {
+                        nextPlayers[a].storedItems.splice(itemIndex, 1);
+                    }
                 }
             }
 

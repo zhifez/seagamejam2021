@@ -151,11 +151,20 @@ export const actions = [
         actions: [
             {
                 name: 'Upgrade your Nest',
+                hint: 'Costs one item less per condition.',
+                conditions: [
+                    { key: 'stick', quantity: 2, additionPerLevel: 1 },
+                    { key: 'stone', quantity: 2, additionPerLevel: 2 }
+                ],
+                space: 1,
+            },
+            {
+                name: 'Upgrade your Nest',
                 conditions: [
                     { key: 'stick', quantity: 3, additionPerLevel: 1 },
                     { key: 'stone', quantity: 3, additionPerLevel: 2 }
                 ],
-                space: 0,
+                space: -1,
             },
         ]
     },
@@ -188,11 +197,20 @@ export const actions = [
         actions: [
             {
                 name: 'Upgrade your Storage',
+                hint: 'Costs one item less per condition.',
                 conditions: [
                     { key: 'stick', quantity: 3, additionPerLevel: 1 },
-                    { key: 'stone', quantity: 0, additionPerLevel: 3 }
+                    { key: 'stone', quantity: 0, additionPerLevel: 2 }
                 ],
-                space: 0,
+                space: 1,
+            },
+            {
+                name: 'Upgrade your Storage',
+                conditions: [
+                    { key: 'stick', quantity: 4, additionPerLevel: 1 },
+                    { key: 'stone', quantity: 1, additionPerLevel: 2 }
+                ],
+                space: -1,
             },
         ]
     },
@@ -546,8 +564,10 @@ export const tradeItems = {
         hint: 'Instantly upgrade your nest.',
         type: 'nest',
         conditions: [
+            { key: 'stick', quantity: 1 },
+            { key: 'stone', quantity: 2 },
             { key: 'food', quantity: 2 },
-            { key: 'gem', quantity: 6 },
+            { key: 'gem', quantity: 3 },
         ],
         rewards: [
             { key: 'nest', quantity: 1 },
@@ -561,8 +581,10 @@ export const tradeItems = {
         hint: 'Instantly upgrade your storage.',
         type: 'storage',
         conditions: [
+            { key: 'stick', quantity: 1 },
+            { key: 'stone', quantity: 1 },
             { key: 'food', quantity: 3 },
-            { key: 'gem', quantity: 5 },
+            { key: 'gem', quantity: 3 },
         ],
         rewards: [
             { key: 'storage', quantity: 1 },
@@ -576,8 +598,9 @@ export const tradeItems = {
         hint: 'Instantly get a crow, as long as you have the nest space.',
         type: 'crow',
         conditions: [
+            { key: 'stone', quantity: 1 },
             { key: 'food', quantity: 2 },
-            { key: 'gem', quantity: 4 },
+            { key: 'gem', quantity: 3 },
         ],
         rewards: [
             { key: 'crow', quantity: 1 },
@@ -591,8 +614,8 @@ export const tradeItems = {
         hint: 'Unlock certain door.',
         type: 'crown',
         conditions: [
-            { key: 'food', quantity: 3 },
-            { key: 'gem', quantity: 5 },
+            { key: 'food', quantity: 1 },
+            { key: 'gem', quantity: 3 },
         ],
         rewards: [
             { key: 'key-skeleton', quantity: 1 },
@@ -606,8 +629,9 @@ export const tradeItems = {
         hint: 'Unlock a very important door.',
         type: 'crown',
         conditions: [
+            { key: 'stone', quantity: 1 },
             { key: 'food', quantity: 3 },
-            { key: 'gem', quantity: 8 },
+            { key: 'gem', quantity: 4 },
         ],
         rewards: [
             { key: 'key-treasure', quantity: 1 },
@@ -621,8 +645,8 @@ export const tradeItems = {
         hint: 'Can kill a regular guard, when wielded by a human.',
         type: 'weapon',
         conditions: [
-            { key: 'food', quantity: 4 },
-            { key: 'gem', quantity: 5 },
+            { key: 'food', quantity: 2 },
+            { key: 'gem', quantity: 3 },
         ],
         rewards: [
             { key: 'sword-normal', quantity: 1 },
@@ -636,7 +660,9 @@ export const tradeItems = {
         hint: 'Can kill a tougher guard, when wielded by a human.',
         type: 'weapon',
         conditions: [
-            { key: 'gem', quantity: 14 },
+            { key: 'food', quantity: 2 },
+            { key: 'stone', quantity: 2 },
+            { key: 'gem', quantity: 5 },
         ],
         rewards: [
             { key: 'sword-heavy', quantity: 1 },
@@ -698,9 +724,8 @@ export const tradeItems = {
         hint: 'For destruction use.',
         type: 'weapon',
         conditions: [
-            { key: 'stone', quantity: 1 },
-            { key: 'food', quantity: 2 },
-            { key: 'gem', quantity: 3 },
+            { key: 'stone', quantity: 2 },
+            { key: 'gem', quantity: 2 }
         ],
         rewards: [
             { key: 'bomb', quantity: 1 },
@@ -745,7 +770,7 @@ export const humanHires = {
         hint: 'Can open doors, unlock traps, bomb stuff.',
         type: 'thief',
         conditions: [
-            { key: 'food', quantity: 4 },
+            { key: 'food', quantity: 1 },
             { key: 'gem', quantity: 3 },
         ],
         rewards: [
@@ -760,8 +785,8 @@ export const humanHires = {
         hint: 'Can cast useful magic.',
         type: 'magician',
         conditions: [
-            { key: 'food', quantity: 3 },
-            { key: 'gem', quantity: 7 },
+            { key: 'food', quantity: 2 },
+            { key: 'gem', quantity: 5 },
         ],
         rewards: [
             { key: 'magician', quantity: 1 },
@@ -775,8 +800,8 @@ export const humanHires = {
         hint: 'Does all the killings, and nothing else.',
         type: 'mercenary',
         conditions: [
-            { key: 'food', quantity: 5 },
-            { key: 'gem', quantity: 5 },
+            { key: 'food', quantity: 3 },
+            { key: 'gem', quantity: 3 },
         ],
         rewards: [
             { key: 'mercenary', quantity: 1 },
@@ -791,7 +816,7 @@ export const humanHires = {
         type: 'spy',
         conditions: [
             { key: 'food', quantity: 2 },
-            { key: 'gem', quantity: 8 },
+            { key: 'gem', quantity: 6 },
         ],
         rewards: [
             { key: 'spy', quantity: 1 },

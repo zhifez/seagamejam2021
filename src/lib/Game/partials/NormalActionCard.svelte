@@ -21,10 +21,10 @@
     $: {
         activePlayer = $game.players[$game.turn];
         if (type.includes('upgrade')) {
-            if (actions[0].conditions
-                && actions[0].conditions.length > 0) {
-                hint = 'Requires';
-                actions[0].conditions.forEach((cond, index) => {
+            if (actions[1].conditions
+                && actions[1].conditions.length > 0) {
+                hint = 'Next Upgrade:';
+                actions[1].conditions.forEach((cond, index) => {
                     let quantity = cond.quantity;
                     if (type.includes('nest')) {
                         quantity += cond.additionPerLevel * (activePlayer.nestLevel - 1);
@@ -69,7 +69,6 @@
     }
 
     const onRefreshItems = () => {
-        console.log('refresh items');
         if (import.meta.env.VITE_BYPASS_TRADE_REFRESH_CONDITIONS !== 'true') {
             const error = hasEnoughItem('gem', refreshRequirements);
             if (error) {
