@@ -1,6 +1,6 @@
 <script>
     import { humanHires, itemIconMap } from '../../../stores/gameData';
-    import { game, canTakeAction, takeAction, refreshTradableItems, hasEnoughItem, useItem } from '../../../stores/game.store';
+    import { game, canTakeAction, takeAction, refreshTradableItems, hasEnoughItem, useItem, canExchangeItemsForOne, setExchangeItems } from '../../../stores/game.store';
     import Tooltip from '../../../components/Tooltip.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import HumanHireCard from './HumanHireCard.svelte';
@@ -66,6 +66,14 @@
             return;
         }
 
+        if (type.includes('exchange')) {
+            setExchangeItems(
+                actions[Math.min(actions.length - 1, selectedActionIndex)]
+                .conditions[0].quantity
+            );
+            return;
+        }
+
         takeAction(index, selectedActionIndex);
     }
 
@@ -85,7 +93,7 @@
 
 <div class={`col-span-1 row-span-${rows}`}>
     <div 
-        class={`rounded-md bg-yellow-300 shadow-md h-full p-2 pb-3
+        class={`rounded-md bg-yellow-300 shadow-md h-full p-2 py-1 2xl:py-2 pb-3
         flex flex-col justify-between
         `}
     >
@@ -95,7 +103,7 @@
         </section>
         
         {#if actions}
-        <div class="grid grid-cols-4 gap-2">
+        <div class="flex justify-center gap-2">
             {#each actions as action, a}
             {#each Array(action.space <= 0 ? ($game.players.length + action.space) : action.space) as _, s}
             <Tooltip
@@ -103,7 +111,7 @@
                 subtitle={action.hint}
             >
                 <div 
-                    class={`w-full h-12 2xl:h-20 rounded-md p-1 cursor-pointer relative
+                    class={`w-10 h-10 2xl:w-16 2xl:h-16 rounded-md p-1 cursor-pointer relative
                     ${(action.conditions && action.conditions.length > 0
                     && (!action.rewards || action.rewards.length <= 0)) ? 'rounded-full bg-yellow-500' : 'bg-white'}
                     `}
@@ -126,6 +134,10 @@
                         {/each}
                         {/if}
                         {/each}
+                    </div>
+                    {:else if action.space === 1}
+                    <div class="h-full flex flex-col justify-center text-center">
+                        <p>-1</p>
                     </div>
                     {/if}
 
@@ -184,7 +196,7 @@
 
             <!-- HUMAN HIRE -->
             {#if type.includes('human')}
-            <div class="grid grid-cols-4 2xl:grid-cols-4 gap-2">
+            <div class="grid grid-cols-4 gap-2">
                 {#each Object.keys(humanHires) as key, k}
                 <Tooltip
                     title={humanHires[key].name}

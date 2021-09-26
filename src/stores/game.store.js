@@ -55,12 +55,10 @@ const initGameState = {
 export const game = writable({...initGameState});
 
 export const tradableItemsMax = 4;
-export const exchangeItemsMax = 3;
 export const roundsPerFeedingPhase = 3;
 
 export const formatInstruction = (instruction) => {
     return instruction
-    .replaceAll('{exchangeItemsMax}', exchangeItemsMax)
     .replaceAll('{roundsPerFeedingPhase}', roundsPerFeedingPhase);
 }
 
@@ -91,7 +89,8 @@ export const refreshTradableItems = () => {
 export const system = writable({
     hasStarted: false,
     showInstructions: false,
-    showExchangeItemsForOne: false,
+    showExchangeItems: false,
+    exchangeItemsMin: 3,
     showEndRound: false,
     showActiveHumanHire: false,
     activeHumanHire: null,
@@ -118,10 +117,16 @@ export const setShowInstructions = (show) => {
     });
 }
 
-export const setExchangeItemsForOne = (show) => {
+export const setExchangeItems = (count) => {
     system.update(state => {
         let nextState = {...state};
-        nextState.showExchangeItemsForOne = show;
+        if (count) {
+            nextState.showExchangeItems = true;
+            nextState.exchangeItemsMin = count;
+        }
+        else {
+            nextState.showExchangeItems = false;
+        }
         return nextState;
     });
 }
@@ -185,6 +190,20 @@ const playerHasItem = (player, condition, level = 0) => {
     }
 
     switch (condition.key) {
+    case 'any-same':
+        let systemState = get(system);
+        let itemGroups = {};
+        player.storedItems.forEach(item => {
+            if (!(item in itemGroups)) {
+                itemGroups[item] = 0;
+            }
+            ++itemGroups[item];
+            if (itemGroups[item] >= systemState.exchangeItemsMin) {
+                quantity = 0;
+            }
+        });
+        break;
+
     case 'crow':
         const crowsLeft = (player.crows - player.utilizedCrows);
         quantity -= crowsLeft;
@@ -282,6 +301,7 @@ export const useItem = (itemKey, quantity) => {
 
 export const canExchangeItemsForOne = () => {
     let gameState = get(game);
+    let systemState = get(system);
     let activePlayer = gameState.players[gameState.turn];
     
     let counts = {};
@@ -291,7 +311,7 @@ export const canExchangeItemsForOne = () => {
             counts[item] = 0;
         }
         ++counts[item];
-        if (counts[item] >= exchangeItemsMax) {
+        if (counts[item] >= systemState.exchangeItemsMin) {
             return null;
         }
     }
@@ -300,11 +320,13 @@ export const canExchangeItemsForOne = () => {
 }
 
 export const exchangeItemsForOne = (fromItemKey, toItemKey) => {
+    let systemState = get(system);
+
     game.update(state => {
         let nextState = {...state};
         let nextPlayers = [...state.players];
 
-        for (let a=0; a<exchangeItemsMax; ++a) {
+        for (let a=0; a<systemState.exchangeItemsMin; ++a) {
             let itemIndex = nextPlayers[nextState.turn].storedItems.indexOf(fromItemKey);
             if (itemIndex >= 0) {
                 nextPlayers[nextState.turn].storedItems.splice(itemIndex, 1);
@@ -404,6 +426,11 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
             if (!conditionsAreMet) {
                 return ERROR_NOT_ENOUGH_RESOURCES_HUMAN;
             }
+        }
+    }
+    else if (coreAction.type.includes('exchange')) {
+        if (!conditionsAreMet) {
+            return ERROR_NOT_ENOUGH_RESOURCES_ACTION;
         }
     }
     return null;

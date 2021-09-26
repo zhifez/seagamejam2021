@@ -152,7 +152,7 @@ export const actions = [
         actions: [
             {
                 name: 'Upgrade your Nest',
-                hint: 'Costs one item less per condition.',
+                hint: 'Costs one less item per type.',
                 conditions: [
                     { key: 'stick', quantity: 2, additionPerLevel: 1 },
                     { key: 'stone', quantity: 2, additionPerLevel: 2 }
@@ -176,11 +176,10 @@ export const actions = [
         type: 'crown-action'
     },
     {
-        name: 'Reproduce',
-        hint: 'Once per round, send 2 Crows here to reproduce a new Crow, to be used in the next round.',
-        note: 'You can only take this action once per round.',
+        name: 'Reproduce (for next round)',
+        hint: 'Reproduce a new Crow with 2 Crows.',
         type: 'reproduce-action',
-        rows: 2,
+        rows: 1,
         actions: [
             {
                 name: 'Try for baby',
@@ -213,6 +212,29 @@ export const actions = [
                 ],
                 space: -1,
             },
+        ]
+    },
+    {
+        name: 'Exchange with Bank',
+        hint: 'Exchange 3 items for 1 new item.',
+        type: 'exchange-action',
+        actions: [
+            {
+                name: '2 for 1',
+                hint: 'Exchange 2 items of the same type for 1 new item',
+                conditions: [
+                    { key: 'any-same', quantity: 2 }
+                ],
+                space: 1,
+            },
+            {
+                name: '3 for 1',
+                hint: 'Exchange 3 items of the same type for 1 new item',
+                conditions: [
+                    { key: 'any-same', quantity: 3 }
+                ],
+                space: -1,
+            }
         ]
     },
     {
@@ -869,7 +891,6 @@ export const instructions = [
     'Click on an action slot to take the action.',
     'You are only allowed to take <b>one action per turn</b>, with the exception of the <b>Crown Challenge</b>.',
     'You can take as many <b>Crown Challenges</b> as you want as long as you have the right resources.',
-    'You may exchange <b>{exchangeItemsMax} items of the same type</b> in your storage for <b>1 new item</b>, using <b>"Exchange {exchangeItemsMax}:1"</b>.',
     'Every <b>{roundsPerFeedingPhase} rounds</b>, the game will enter a <b>Feeding Phase</b>, where <b>each crow will have to be fed exactly 1 food</b>.',
     '<b>1 VP</b> will be deducted per <b>unfed crow</b>.',
     'The game ends when a player has retrieve the <b>Crown</b> (center of "Crown Challenges").',

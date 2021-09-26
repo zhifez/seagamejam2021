@@ -1,6 +1,6 @@
 <script>
     import { itemIconMap } from '../../../stores/gameData';
-    import { exchangeItemsForOne, exchangeItemsMax, game, setExchangeItemsForOne } from '../../../stores/game.store';
+    import { exchangeItemsForOne, game, setExchangeItems, system } from '../../../stores/game.store';
     import Modal from '../../../components/Modal.svelte';
     import Button from '../../../components/Button.svelte';
 
@@ -8,10 +8,12 @@
         'stick', 'stone', 'food', 'gem'
     ];
 
+    let exchangeItemsMin;
     let itemGroups;
     let fromItem;
     let toItem;
     $: {
+        exchangeItemsMin = $system.exchangeItemsMin;
         const activePlayer = $game.players[$game.turn];
         itemGroups = {};
         activePlayer.storedItems.forEach(item => {
@@ -33,7 +35,7 @@
     }
 
     const onCloseModal = () => {
-        setExchangeItemsForOne(false);
+        setExchangeItems(null);
     }
 
     const onExchange = () => {
@@ -48,8 +50,8 @@
 >
     <div class="modal-exchange-three flex flex-col justify-between p-3">
         <div class="text-center">
-            <h1 class="text-xl font-semibold">Exchange {exchangeItemsMax}:1</h1>
-            <h1>Exchange {exchangeItemsMax} items of the same type with 1 new item.</h1>
+            <h1 class="text-xl font-semibold">Exchange {exchangeItemsMin}:1</h1>
+            <h1>Exchange {exchangeItemsMin} items of the same type with 1 new item.</h1>
         </div>
         
         <hr class="my-3 border-black" />
@@ -59,16 +61,16 @@
                 <h1 class="font-semibold mb-2">Select item group:</h1>
                 <div class="flex flex-col gap-2">
                     {#each Object.keys(itemGroups) as key}
-                    {#if itemGroups[key] >= exchangeItemsMax}
+                    {#if itemGroups[key] >= exchangeItemsMin}
                     <div 
-                        class={`grid grid-cols-${exchangeItemsMax} gap-2 
+                        class={`grid grid-cols-${exchangeItemsMin} gap-2 
                         cursor-pointer rounded-md p-1
                         border-2 border-yellow-500 hover:border-yellow-700
                         ${fromItem === key ? 'bg-white' : ''}
                         `}
                         on:click={() => onSelectFromItem(key)}
                     >
-                        {#each Array(exchangeItemsMax) as _}
+                        {#each Array(exchangeItemsMin) as _}
                         <div class={`col-span-1 gap-2 h-8 ${itemIconMap[key].iconColor}`}>
                             <svelte:component this={itemIconMap[key].icon} />
                         </div>
@@ -111,7 +113,7 @@
                 on:click={onCloseModal}
             />
             <Button 
-                label={`Exchange ${exchangeItemsMax}x ${fromItem ?? '???'} to 1x ${toItem ?? '???'}`}
+                label={`Exchange ${exchangeItemsMin}x ${fromItem ?? '???'} to 1x ${toItem ?? '???'}`}
                 on:click={onExchange}
                 disabled={!fromItem || !toItem}
             />

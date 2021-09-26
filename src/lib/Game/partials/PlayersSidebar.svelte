@@ -1,10 +1,8 @@
 <script>
-    import { canExchangeItemsForOne, endTurn, exchangeItemsMax, game, setExchangeItemsForOne, setShowInstructions } from '../../../stores/game.store';
+    import { endTurn, game, setShowInstructions } from '../../../stores/game.store';
     import { getNestCapacity, getStorageCapacity, itemIconMap, tradeItems } from '../../../stores/gameData';
-    import { failure } from '../../../common/toastTheme';
     import Tooltip from '../../../components/Tooltip.svelte';
     import Button from '../../../components/Button.svelte';
-    import SmallActionButton from '../../../components/SmallActionButton.svelte';
     import HumanHireCard from './HumanHireCard.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import IoIosClose from 'svelte-icons/io/IoIosClose.svelte';
@@ -35,16 +33,6 @@
                 });
             }
         }
-    }
-
-    const onBtnExchange = () => {
-        const error = canExchangeItemsForOne();
-        if (error) {
-            failure(error);
-            return;
-        }
-
-        setExchangeItemsForOne(true);
     }
 
     const onBtnEndTurn = () => {
@@ -147,19 +135,6 @@
                     {/if}
                 </div>
                 {/each}
-            </div>
-
-            <div class="flex justify-center mt-1">
-                <Tooltip
-                    subtitle={`Exchange ${exchangeItemsMax} items of the same type with 1 new item.`}
-                >
-                    <SmallActionButton
-                        on:click={onBtnExchange}
-                        disabled={activePlayer.hasTakenAction}
-                    >
-                        <span>Exchange {exchangeItemsMax}:1</span>
-                    </SmallActionButton>
-                </Tooltip>
             </div>
 
             <hr class="mt-3 my-2 border-t-2 border-black" />

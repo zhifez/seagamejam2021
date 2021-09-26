@@ -19,7 +19,7 @@
 {#if $system.showInstructions}
 <InstructionsModal />
 {/if}
-{#if $system.showExchangeItemsForOne}
+{#if $system.showExchangeItems}
 <ExchangeItemsForOneModal />
 {/if}
 {#if $system.showEndRound}
