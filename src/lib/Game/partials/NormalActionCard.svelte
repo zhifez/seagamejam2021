@@ -1,6 +1,6 @@
 <script>
     import { humanHires, itemIconMap } from '../../../stores/gameData';
-    import { game, canTakeAction, takeAction, refreshTradableItems, hasEnoughItem, useItem, setExchangeItems } from '../../../stores/game.store';
+    import { game, canTakeAction, takeAction, refreshTradableItems, hasEnoughItem, useItem, setExchangeItemsInfo } from '../../../stores/game.store';
     import Tooltip from '../../../components/Tooltip.svelte';
     import FaCrow from 'svelte-icons/fa/FaCrow.svelte';
     import HumanHireCard from './HumanHireCard.svelte';
@@ -61,10 +61,14 @@
 
     const onTakeAction = (selectedActionIndex) => {
         if (type.includes('exchange')) {
-            setExchangeItems(
+            setExchangeItemsInfo(
                 false,
-                actions[Math.min(actions.length - 1, selectedActionIndex)]
-                .conditions[0].quantity
+                {
+                    index,
+                    actionIndex: selectedActionIndex,
+                    min: actions[Math.min(actions.length - 1, selectedActionIndex)]
+                    .conditions[0].quantity
+                }
             );
         }
 
@@ -75,7 +79,7 @@
         }
 
         if (type.includes('exchange')) {
-            setExchangeItems(true);
+            setExchangeItemsInfo(true);
             return;
         }
 

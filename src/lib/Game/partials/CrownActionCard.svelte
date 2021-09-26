@@ -22,12 +22,14 @@
         }
 
         completedInLayer = 0;
-        if ($game.completedCrownActions
-            && $game.completedCrownActions.length > 0) {
-            Object.keys($game.completedCrownActions).forEach(key => {
-                if ($game.completedCrownActions[key].layer === layer) {
-                    ++completedInLayer;
-                }
+        let completedActions = $game.completedCrownActions;
+        if (completedActions && Object.keys(completedActions).length > 0) {
+            Object.keys(completedActions).forEach(key => {
+                Object.keys(completedActions[key]).forEach(subKey => {
+                    if (completedActions[key][subKey].layer === layer) {
+                        ++completedInLayer;
+                    }
+                });
             });
         }
     }

@@ -90,7 +90,9 @@ export const system = writable({
     hasStarted: false,
     showInstructions: false,
     showExchangeItems: false,
-    exchangeItemsMin: 3,
+    exchangeItemsInfo: {
+        min: 3,
+    },
     showEndRound: false,
     showActiveHumanHire: false,
     activeHumanHire: null,
@@ -117,12 +119,12 @@ export const setShowInstructions = (show) => {
     });
 }
 
-export const setExchangeItems = (show, count = null) => {
+export const setExchangeItemsInfo = (show, info = null) => {
     system.update(state => {
         let nextState = {...state};
         nextState.showExchangeItems = show;
-        if (count) {
-            nextState.exchangeItemsMin = count;
+        if (info) {
+            nextState.exchangeItemsInfo = info;
         }
         return nextState;
     });
@@ -195,7 +197,7 @@ const playerHasItem = (player, condition, level = 0) => {
                 itemGroups[item] = 0;
             }
             ++itemGroups[item];
-            if (itemGroups[item] >= systemState.exchangeItemsMin) {
+            if (itemGroups[item] >= systemState.exchangeItemsInfo.min) {
                 quantity = 0;
             }
         });
@@ -308,7 +310,7 @@ export const canExchangeItemsForOne = () => {
             counts[item] = 0;
         }
         ++counts[item];
-        if (counts[item] >= systemState.exchangeItemsMin) {
+        if (counts[item] >= systemState.exchangeItemsInfo.min) {
             return null;
         }
     }
@@ -318,12 +320,13 @@ export const canExchangeItemsForOne = () => {
 
 export const exchangeItemsForOne = (fromItemKey, toItemKey) => {
     let systemState = get(system);
+    let exchangeInfo = systemState.exchangeItemsInfo;
 
     game.update(state => {
         let nextState = {...state};
         let nextPlayers = [...state.players];
 
-        for (let a=0; a<systemState.exchangeItemsMin; ++a) {
+        for (let a=0; a<exchangeInfo.min; ++a) {
             let itemIndex = nextPlayers[nextState.turn].storedItems.indexOf(fromItemKey);
             if (itemIndex >= 0) {
                 nextPlayers[nextState.turn].storedItems.splice(itemIndex, 1);
@@ -449,8 +452,7 @@ const fulfilActionConditions = (player, conditions, level = 0) => {
         }
 
         if (cond.key === 'crow') {
-            player.utilizedCrows = quantity;
-            player.hasTakenAction = true;
+            player.utilizedCrows += quantity;
             return;
         }
         
@@ -639,14 +641,14 @@ export const takeAction = (coreActionIndex, selectedActionIndex) => {
                 }
             );
         }
-
+        
         if (!nextPlayers[nextState.turn].hasTakenAction) {
             // Store action log
             nextRoundActions[coreActionIndex] = {...nextRoundActions[coreActionIndex]};
             nextRoundActions[coreActionIndex][selectedActionIndex] = [
                 ...(nextRoundActions[coreActionIndex][selectedActionIndex] ?? [])
             ];
-
+            console.log(coreActionIndex, selectedActionIndex);
             nextRoundActions[coreActionIndex][selectedActionIndex].push(
                 nextPlayers[nextState.turn].color
             );
@@ -717,6 +719,7 @@ export const takeCrownAction = (crownAction) => {
 
         if (crownAction.isEndGame) {
             nextState.isEndGame = true;
+            activePlayer.hasTakenAction = (activePlayer.utilizedCrows >= activePlayer.crows);
             warning(`${activePlayer.name} stole the crown!`.toUpperCase());
         }
         else {

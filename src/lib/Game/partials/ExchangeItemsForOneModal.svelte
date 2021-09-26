@@ -1,27 +1,30 @@
 <script>
     import { itemIconMap } from '../../../stores/gameData';
-    import { exchangeItemsForOne, game, setExchangeItems, system } from '../../../stores/game.store';
+    import { exchangeItemsForOne, game, setExchangeItemsInfo, system, takeAction } from '../../../stores/game.store';
     import Modal from '../../../components/Modal.svelte';
     import Button from '../../../components/Button.svelte';
+    import { get } from 'svelte/store';
 
     const exchangeSelections = [
         'stick', 'stone', 'food', 'gem'
     ];
 
-    let exchangeItemsMin;
+    let exchangeInfo;
     let itemGroups;
     let fromItem;
     let toItem;
     $: {
-        exchangeItemsMin = $system.exchangeItemsMin;
+        exchangeInfo = $system.exchangeItemsInfo;
         const activePlayer = $game.players[$game.turn];
         itemGroups = {};
         activePlayer.storedItems.forEach(item => {
-            if (!(item in itemGroups)) {
-                itemGroups[item] = 0;
-            }
-            if (itemGroups[item] < 3) {
-                ++itemGroups[item];
+            if (exchangeSelections.indexOf(item) >= 0) {
+                if (!(item in itemGroups)) {
+                    itemGroups[item] = 0;
+                }
+                if (itemGroups[item] < exchangeInfo.min) {
+                    ++itemGroups[item];
+                }
             }
         });
     }
@@ -35,11 +38,16 @@
     }
 
     const onCloseModal = () => {
-        setExchangeItems(false);
+        setExchangeItemsInfo(null);
     }
 
     const onExchange = () => {
         exchangeItemsForOne(fromItem, toItem);
+        const systemState = get(system);
+        takeAction(
+            systemState.exchangeItemsInfo.index,
+            systemState.exchangeItemsInfo.actionIndex
+        );
         onCloseModal();
     }
 </script>
@@ -50,8 +58,8 @@
 >
     <div class="modal-exchange-three flex flex-col justify-between p-3">
         <div class="text-center">
-            <h1 class="text-xl font-semibold">Exchange {exchangeItemsMin}:1</h1>
-            <h1>Exchange {exchangeItemsMin} items of the same type with 1 new item.</h1>
+            <h1 class="text-xl font-semibold">Exchange {exchangeInfo.min}:1</h1>
+            <h1>Exchange {exchangeInfo.min} items of the same type with 1 new item.</h1>
         </div>
         
         <hr class="my-3 border-black" />
@@ -61,16 +69,16 @@
                 <h1 class="font-semibold mb-2">Select item group:</h1>
                 <div class="flex flex-col gap-2">
                     {#each Object.keys(itemGroups) as key}
-                    {#if itemGroups[key] >= exchangeItemsMin}
+                    {#if itemGroups[key] >= exchangeInfo.min}
                     <div 
-                        class={`grid grid-cols-${exchangeItemsMin} gap-2 
+                        class={`grid grid-cols-${exchangeInfo.min} gap-2 
                         cursor-pointer rounded-md p-1
                         border-2 border-yellow-500 hover:border-yellow-700
                         ${fromItem === key ? 'bg-white' : ''}
                         `}
                         on:click={() => onSelectFromItem(key)}
                     >
-                        {#each Array(exchangeItemsMin) as _}
+                        {#each Array(exchangeInfo.min) as _}
                         <div class={`col-span-1 gap-2 h-8 ${itemIconMap[key].iconColor}`}>
                             <svelte:component this={itemIconMap[key].icon} />
                         </div>
@@ -113,7 +121,7 @@
                 on:click={onCloseModal}
             />
             <Button 
-                label={`Exchange ${exchangeItemsMin}x ${fromItem ?? '???'} to 1x ${toItem ?? '???'}`}
+                label={`Exchange ${exchangeInfo.min}x ${fromItem ?? '???'} to 1x ${toItem ?? '???'}`}
                 on:click={onExchange}
                 disabled={!fromItem || !toItem}
             />

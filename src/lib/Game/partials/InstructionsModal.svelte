@@ -1,7 +1,6 @@
 <script>
     import { instructions } from '../../../stores/gameData';
     import { formatInstruction, setShowInstructions } from '../../../stores/game.store';
-    import Button from '../../../components/Button.svelte';
     import Modal from '../../../components/Modal.svelte';
 
     const onClose = () => {
@@ -14,15 +13,10 @@
     on:close={onClose}
 >
     <div class="modal-start-menu p-3">
-        <div class="grid grid-cols-6 gap-3">
-            <div class="col-span-5">
-                <p class="uppercase text-sm">SEA Game Jam 2021</p>
-                <h1 class="text-4xl font-semibold">A Crown for Crows</h1>
-                <p>A worker placement game about managing crows to steal a crown, in the long run.</p>
-            </div>
-            <div class="col-span-1 text-sm text-right font-semibold">
-                <p>Version: 1.0.0</p>
-            </div>
+        <div>
+            <p class="uppercase text-sm">SEA Game Jam 2021</p>
+            <h1 class="text-4xl font-semibold">A Crown for Crows</h1>
+            <p>A worker placement game about managing crows to steal a crown, in the long run.</p>
         </div>
         
         <hr class="my-3 border-black" />

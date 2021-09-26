@@ -51,3 +51,7 @@ You can create your own .env file and add the following variables, set value to 
 | VITE_BYPASS_TRADE_REFRESH_CONDITIONS | Player's gem won't be checked when refreshing Trade Item. |
 | VITE_BYPASS_HUMAN_HIRE_CONDITIONS | Human Hire's conditions won't be checked when hiring a human. |
 | VITE_SHOW_ALL_CROWN_ACTION | All Crown challenges will be revealed. |
+
+# Additional Notes/Warnings
+
+1. The game isn't fully optimized and you may experience some lagging issues after the game hot-reload a few times. When that happen, just restart the process and everything will be fast again.

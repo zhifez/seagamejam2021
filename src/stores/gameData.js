@@ -381,7 +381,7 @@ export const crownActions = {
             {
                 name: 'Unlock It',
                 conds: [
-                    { key: 'thief', quantity: 1 },
+                    { key: 'thief', orKeys: ['mercenary', 'spy'], quantity: 1 },
                     { key: 'key-treasure', quantity: 1 },
                 ],
             },
@@ -417,7 +417,7 @@ export const crownActions = {
                 name: 'Destroy It',
                 conds: [
                     { key: 'thief', orKeys: ['mercenary', 'spy'], quantity: 1 },
-                    { key: 'bomb', quantity: 5 },
+                    { key: 'bomb', quantity: 4 },
                 ],
             },
             {
@@ -554,7 +554,7 @@ export const tradeItems = {
             { key: 'gem', quantity: 3 },
         ],
         rewards: [
-            { key: 'food', quantity: 1 },
+            { key: 'food', quantity: 2 },
         ],
         space: 1,
         rarity: 1,
@@ -569,7 +569,7 @@ export const tradeItems = {
             { key: 'gem', quantity: 3 },
         ],
         rewards: [
-            { key: 'food', quantity: 2 },
+            { key: 'food', quantity: 4 },
         ],
         space: 1,
         rarity: 4,
@@ -585,7 +585,7 @@ export const tradeItems = {
             { key: 'gem', quantity: 2 },
         ],
         rewards: [
-            { key: 'food', quantity: 3 },
+            { key: 'food', quantity: 6 },
         ],
         space: 1,
         rarity: 7,
@@ -677,7 +677,7 @@ export const tradeItems = {
         hint: 'Unlock certain door.',
         type: 'crown',
         conditions: [
-            { key: 'food', quantity: 1 },
+            { key: 'stone', quantity: 2 },
             { key: 'gem', quantity: 3 },
         ],
         rewards: [
@@ -700,7 +700,7 @@ export const tradeItems = {
             { key: 'key-treasure', quantity: 1 },
         ],
         space: 1,
-        rarity: 9,
+        rarity: 7,
     },
     'sword-normal': {
         name: 'Sword',
@@ -708,8 +708,9 @@ export const tradeItems = {
         hint: 'Can kill a regular guard, when wielded by a human.',
         type: 'weapon',
         conditions: [
+            { key: 'stone', quantity: 1 },
             { key: 'food', quantity: 2 },
-            { key: 'gem', quantity: 3 },
+            { key: 'gem', quantity: 2 },
         ],
         rewards: [
             { key: 'sword-normal', quantity: 1 },
@@ -763,7 +764,7 @@ export const tradeItems = {
             { key: 'magic-tablet', quantity: 1 },
         ],
         space: 1,
-        rarity: 10,
+        rarity: 8,
     },
     'magic-sphere': {
         name: 'Magic Sphere',
@@ -779,7 +780,7 @@ export const tradeItems = {
             { key: 'magic-sphere', quantity: 1 },
         ],
         space: 1,
-        rarity: 10,
+        rarity: 8,
     },
     'bomb': {
         name: 'Bomb',
@@ -787,7 +788,7 @@ export const tradeItems = {
         hint: 'For destruction use.',
         type: 'weapon',
         conditions: [
-            { key: 'stone', quantity: 2 },
+            { key: 'stone', quantity: 1 },
             { key: 'gem', quantity: 2 }
         ],
         rewards: [

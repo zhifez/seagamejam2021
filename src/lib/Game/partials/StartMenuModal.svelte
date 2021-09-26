@@ -4,6 +4,8 @@
     import Button from '../../../components/Button.svelte';
     import Modal from '../../../components/Modal.svelte';
 
+    const version = 'v1.0.1';
+
     const onPlayerAmount = (amount) => {
         initGame(amount);
         setHasStarted();
@@ -34,11 +36,11 @@
                 </div>
             </div>
             <div class="col-span-1 text-sm text-right font-semibold">
-                <p>Version: 1.0.0</p>
+                <p>Version: {version}</p>
             </div>
         </div>
         
-        <br class="my-5" />
+        <hr class="my-4 border-black" />
 
         <div>
             <p class="font-bold">Instructions:</p>
@@ -49,7 +51,18 @@
             </ul>
         </div>
 
-        <br class="my-5" />
+        <br class="my-3" />
+
+        <div>
+            <p class="font-bold">Release Notes ({version}):</p>
+            <ul class="list-outside text-sm">
+                <li>- Fixed some game breaking bugs.</li>
+                <li>- Added Bank action for items exchange.</li>
+                <li>- Tested the game for a solo (1 Player) experience.</li>
+            </ul>
+        </div>
+
+        <hr class="my-4 border-black" />
 
         <div>
             <p class="font-semibold mb-2">Select number of players:</p>
