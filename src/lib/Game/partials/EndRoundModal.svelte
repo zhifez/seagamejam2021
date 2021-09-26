@@ -58,7 +58,7 @@
                     <p>Minus {$game.endRoundResults[p].minusVP} VP.</p>
                     <p class="mt-3"><b>Total VP:</b> {player.vp - $game.endRoundResults[p].minusVP}</p>
                     {:else}
-                    <p>Crows are all fed up!</p>
+                    <p>There's enough food for all crows.</p>
                     <p class="mt-3"><b>Total VP:</b> {player.vp}</p>
                     {/if}
                 </div>

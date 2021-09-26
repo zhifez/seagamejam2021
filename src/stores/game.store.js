@@ -1,11 +1,11 @@
 import { warning } from "../common/toastTheme";
 import { get, writable } from "svelte/store";
-import { actions, dungeonLayerIsComplete, getNestCapacity, getRandomTradableItems, getStorageCapacity, humanHires, instructions } from "./gameData";
+import { actions, dungeonLayerIsComplete, getNestCapacity, getRandomTradableItems, getStorageCapacity, humanHires, buildingMaxLevel } from "./gameData";
 
 const ERROR_NOT_ENOUGH_RESOURCES_ACTION = 'You do not have sufficient resources to take this action.';
 const ERROR_NOT_ENOUGH_RESOURCES_ITEM = 'You do not have sufficient resources to trade this item.';
 const ERROR_NOT_ENOUGH_RESOURCES_HUMAN = 'You do not have sufficient resources to hire this human.';
-const ERROR_NOT_ENOUGH_CROW = 'You do not have enough Crow for this action.';
+const ERROR_NOT_ENOUGH_CROW = 'You do not have enough unutilized crow for this action.';
 
 const colors = [
     'red-500',
@@ -117,15 +117,12 @@ export const setShowInstructions = (show) => {
     });
 }
 
-export const setExchangeItems = (count) => {
+export const setExchangeItems = (show, count = null) => {
     system.update(state => {
         let nextState = {...state};
+        nextState.showExchangeItems = show;
         if (count) {
-            nextState.showExchangeItems = true;
             nextState.exchangeItemsMin = count;
-        }
-        else {
-            nextState.showExchangeItems = false;
         }
         return nextState;
     });
@@ -266,9 +263,9 @@ export const playerHasMetConditions = (player, conditions, level = 0) => {
 export const hasEnoughItem = (itemKey, quantity) => {
     let gameState = get(game);
     let activePlayer = gameState.players[gameState.turn];
-    if (activePlayer.hasTakenAction) {
-        return 'You have already taken an action!<br />Take a Crown Challenge or end your turn.';
-    }
+    // if (activePlayer.hasTakenAction) {
+    //     return 'You have already taken an action!<br />Take a Crown Challenge or end your turn.';
+    // }
 
     let totalInStorage = 0;
     for (let a=0; a<activePlayer.storedItems.length; ++a) {
@@ -303,7 +300,7 @@ export const canExchangeItemsForOne = () => {
     let gameState = get(game);
     let systemState = get(system);
     let activePlayer = gameState.players[gameState.turn];
-    
+
     let counts = {};
     for (let a=0; a<activePlayer.storedItems.length; ++a) {
         let item = activePlayer.storedItems[a];
@@ -383,6 +380,9 @@ export const canTakeAction = (coreActionIndex, selectedActionIndex) => {
         }
         else {
             level = activePlayer.storageLevel;
+        }
+        if (level >= buildingMaxLevel) {
+            return 'You have reached the maximum level of upgrade for this building.'
         }
     }
 
@@ -711,6 +711,7 @@ export const takeCrownAction = (crownAction) => {
         nextCrownActions[crownActionKey] = {
             playerName: activePlayer.name,
             playerColor: activePlayer.color,
+            layer: crownAction.layer,
         };
         nextState.completedCrownActions[crownAction.layer] = nextCrownActions;
 

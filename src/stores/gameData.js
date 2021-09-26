@@ -36,6 +36,7 @@ const nestCapacityDefault = 2;
 const nestCapacityPerLevel = 2;
 const storageCapacityDefault = 5;
 const storageCapacityPerLevel = 3;
+export const buildingMaxLevel = 5;
 
 export const getNestCapacity = (level) => {
     return nestCapacityDefault + nestCapacityPerLevel * (level - 1);
@@ -172,8 +173,8 @@ export const actions = [
     },
     {
         name: 'Crown Challenges',
-        hint: 'You can take any of these challenges any time during your turn.',
-        note: `The next layer of Crown challenges will be unlocked after two third of the current layer's challenges are solved. For a 1 player game, player only have to solve one third of the challenges.`,
+        hint: 'You can take these challenges at any time during your turn.',
+        note: `The next layer of Crown challenges will be unlocked after two third of the current layer's challenges are solved. For a 1 player game, player only have to solve 25% of the current layer's challenges.`,
         type: 'crown-action'
     },
     {
@@ -432,7 +433,7 @@ export const crownActions = {
         ],
     },
     'wall': {
-        name: 'Wall', // With mercenary
+        name: 'Breakable Wall', // With mercenary
         hint: 'A very breakable wall.',
         icon: GiStoneWall,
         conditions: [
@@ -468,7 +469,7 @@ export const dungeonLayerIsComplete = (layer, completedCount, playerCount) => {
         return (completedCount / totalChallenges >= 1/10); // testing
     }
     if (playerCount <= 1) {
-        return (completedCount / totalChallenges >= 1/3);
+        return (completedCount / totalChallenges >= 1/4);
     }
     else {
         return (completedCount / totalChallenges >= 2/3);
@@ -547,10 +548,10 @@ export const tradeItems = {
     'ticket-food': {
         name: 'Food Ticket',
         icon: FaDrumstickBite,
-        hint: 'Receive 1 food.',
+        hint: 'Receive 2 food.',
         type: 'food',
         conditions: [
-            { key: 'gem', quantity: 2 },
+            { key: 'gem', quantity: 3 },
         ],
         rewards: [
             { key: 'food', quantity: 1 },
@@ -559,9 +560,9 @@ export const tradeItems = {
         rarity: 1,
     },
     'ticket-food-2': {
-        name: 'Double Food Ticket',
+        name: 'Quadruple Food Ticket',
         icon: GiMeat,
-        hint: 'Receive 2 food.',
+        hint: 'Receive 4 food.',
         type: 'food',
         conditions: [
             { key: 'stick', quantity: 2 },
@@ -574,9 +575,9 @@ export const tradeItems = {
         rarity: 4,
     },
     'ticket-food-3': {
-        name: 'Triple Food Ticket',
+        name: 'Sextuple Food Ticket',
         icon: GiHotMeal,
-        hint: 'Receive 3 food.',
+        hint: 'Receive 6 food.',
         type: 'food',
         conditions: [
             { key: 'stick', quantity: 2 },
@@ -589,7 +590,7 @@ export const tradeItems = {
         space: 1,
         rarity: 7,
     },
-    'pouch-gem-2': {
+    'pouch-gems-2': {
         name: 'Gem Pouch',
         icon: FaGem,
         hint: 'Receive 2 Gems.',
@@ -793,7 +794,7 @@ export const tradeItems = {
             { key: 'bomb', quantity: 1 },
         ],
         space: 1,
-        rarity: 5,
+        rarity: 4,
     },
 };
 

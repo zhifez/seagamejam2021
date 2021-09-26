@@ -27,7 +27,7 @@
 </script>
 
 <ActionCardModal 
-    activeData={{...$system.activeCrownAction, actionIndex: 0}}
+    activeData={{...action, actionIndex: 0}}
     takeActionLabel="Take Challenge"
     onCloseModal={onCloseModal}
     onTakeAction={onTakeCrownAction}

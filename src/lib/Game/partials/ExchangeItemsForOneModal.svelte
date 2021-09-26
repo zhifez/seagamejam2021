@@ -35,7 +35,7 @@
     }
 
     const onCloseModal = () => {
-        setExchangeItems(null);
+        setExchangeItems(false);
     }
 
     const onExchange = () => {
