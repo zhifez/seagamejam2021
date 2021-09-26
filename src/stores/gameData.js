@@ -34,7 +34,7 @@ import GiGems from 'svelte-icons/gi/GiGems.svelte';
 
 const nestCapacityDefault = 2;
 const nestCapacityPerLevel = 2;
-const storageCapacityDefault = 6;
+const storageCapacityDefault = 5;
 const storageCapacityPerLevel = 3;
 
 export const getNestCapacity = (level) => {
@@ -151,7 +151,7 @@ export const actions = [
         type: 'upgrade-nest-action',
         actions: [
             {
-                name: 'Upgrade your Nest',
+                name: 'Discount',
                 hint: 'Costs one less item per type.',
                 conditions: [
                     { key: 'stick', quantity: 2, additionPerLevel: 1 },
@@ -161,6 +161,7 @@ export const actions = [
             },
             {
                 name: 'Upgrade your Nest',
+                hint: 'Upgrade at regular costs.',
                 conditions: [
                     { key: 'stick', quantity: 3, additionPerLevel: 1 },
                     { key: 'stone', quantity: 3, additionPerLevel: 2 }
@@ -196,8 +197,8 @@ export const actions = [
         type: 'upgrade-storage-action',
         actions: [
             {
-                name: 'Upgrade your Storage',
-                hint: 'Costs one item less per condition.',
+                name: 'Discount',
+                hint: 'Costs one less item per type.',
                 conditions: [
                     { key: 'stick', quantity: 3, additionPerLevel: 1 },
                     { key: 'stone', quantity: 0, additionPerLevel: 2 }
@@ -205,7 +206,8 @@ export const actions = [
                 space: 1,
             },
             {
-                name: 'Upgrade your Storage',
+                name: 'Upgrade your Nest',
+                hint: 'Upgrade at regular costs.',
                 conditions: [
                     { key: 'stick', quantity: 4, additionPerLevel: 1 },
                     { key: 'stone', quantity: 1, additionPerLevel: 2 }
@@ -216,7 +218,6 @@ export const actions = [
     },
     {
         name: 'Exchange with Bank',
-        hint: 'Exchange 3 items for 1 new item.',
         type: 'exchange-action',
         actions: [
             {
