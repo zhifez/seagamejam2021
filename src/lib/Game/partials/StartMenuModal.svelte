@@ -4,7 +4,7 @@
     import Button from '../../../components/Button.svelte';
     import Modal from '../../../components/Modal.svelte';
 
-    const version = 'v1.0.1';
+    const version = 'v1.0.0';
 
     const onPlayerAmount = (amount) => {
         initGame(amount);
