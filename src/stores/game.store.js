@@ -775,7 +775,7 @@ export const endTurn = (passed = false) => {
                 nextState.endRoundResults = {};
                 nextPlayers.forEach((player, p) => {
                     let food = player.storedItems.filter(item => item === 'food').length;
-                    let minusVP = player.crows - food;
+                    let minusVP = player.crows - Math.min(player.crows, food);
                     nextState.endRoundResults[p] = {
                         food,
                         minusVP,

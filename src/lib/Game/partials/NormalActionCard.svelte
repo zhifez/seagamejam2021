@@ -120,7 +120,7 @@
                 subtitle={action.hint}
             >
                 <div 
-                    class={`w-10 h-10 2xl:w-16 2xl:h-16 rounded-md p-1 cursor-pointer relative
+                    class={`w-12 h-12 2xl:w-16 2xl:h-16 rounded-md p-1 cursor-pointer relative
                     ${(action.conditions && action.conditions.length > 0
                     && (!action.rewards || action.rewards.length <= 0)) ? 'rounded-full bg-yellow-500' : 'bg-white'}
                     `}
