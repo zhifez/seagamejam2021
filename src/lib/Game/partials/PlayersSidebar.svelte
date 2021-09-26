@@ -86,7 +86,7 @@
             </div>
             <div class="flex flex-wrap gap-1">
                 {#each Array(getNestCapacity(activePlayer.nestLevel)) as _, i}
-                <div class="w-6 h-6 border-b-2 border-yellow-800">
+                <div class="w-6 h-6 2xl:w-9 2xl:h-9 border-b-2 border-yellow-800">
                     {#if i < activePlayer.crows}
                     <div 
                         class={`h-full
@@ -113,7 +113,7 @@
             <div class="flex flex-wrap gap-1">
                 {#each Array(getStorageCapacity(activePlayer.storageLevel)) as _, i}
                 <div 
-                    class={`w-8 h-8 border-b-2 border-yellow-800
+                    class={`w-8 h-8 2xl:w-10 2xl:h-10 border-b-2 border-yellow-800
                     ${i < storedItems.length ? 'bg-white' : ''}
                     `}
                 >
