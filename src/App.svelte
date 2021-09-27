@@ -3,7 +3,9 @@
     import { Router, Route } from 'svelte-navigator';
     import { SvelteToast } from '@zerodevx/svelte-toast'
     import Game from './lib/Game/Game.svelte';
+    import Main from './lib/Main/Main.svelte';
     import About from './lib/About.svelte';
+import HiddenInMobile from './components/HiddenInMobile.svelte';
 
     const options = {
         duration: 2000,
@@ -28,15 +30,17 @@
 <SvelteToast options={options} />
 
 <Router>
-    <Route to="/about">
-        <About />
-    </Route>
-    <Route to="/">
-        <div class="hidden md:block">
+    <Route path="/">
+        <HiddenInMobile>
             <Game />
-        </div>
-        <div class="block md:hidden h-screen flex flex-col justify-center text-center">
-            <p>This game is not supported in mobile.</p>
-        </div>
+        </HiddenInMobile>
+    </Route>
+    <Route path="/networking">
+        <HiddenInMobile>
+            <Main />
+        </HiddenInMobile>
+    </Route>
+    <Route path="/about">
+        <About />
     </Route>
 </Router>
