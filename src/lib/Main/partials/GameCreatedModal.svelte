@@ -33,7 +33,7 @@
     on:close={onCloseModal}
 >
     <div class="modal-wrapper bg-yellow-400 rounded-md p-5">
-        <div class="flex flex-col gap-3">
+        <div class="flex flex-col items-center gap-3">
             <h1 class="font-semibold text-2xl">New Game Created</h1>
             <p>Here's the link to your session</p>
             <div 
