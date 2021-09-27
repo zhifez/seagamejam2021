@@ -31,13 +31,11 @@ import HiddenInMobile from './components/HiddenInMobile.svelte';
 
 <Router>
     <Route path="/">
+        <Main />
+    </Route>
+    <Route path="/game/:id">
         <HiddenInMobile>
             <Game />
-        </HiddenInMobile>
-    </Route>
-    <Route path="/networking">
-        <HiddenInMobile>
-            <Main />
         </HiddenInMobile>
     </Route>
     <Route path="/about">
