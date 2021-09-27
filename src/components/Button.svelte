@@ -4,8 +4,8 @@
     export let label = '';
     export let hint = '';
     export let color = 'blue-500';
-    export let hoverColor = 'blue-400';
-    export let textColor = 'white';
+    export let hoverClass = null;
+    export let textColor = null;
     export let textClass = 'text-md';
     export let outline = false;
     export let block = false;
@@ -25,8 +25,11 @@
 <button 
     class={`rounded-md shadow px-4 py-2
     ${outline ? 'border-2 border' : 'bg'}-${color}
-    text-${textColor}
-    ${disabled ? 'opacity-50 cursor-default' : `hover:bg-${hoverColor}`}
+    text-${textColor ?? (outline ? color : 'white')}
+    ${disabled ? 
+        'opacity-50 cursor-default' : 
+        (outline ? `hover:bg-${color} hover:text-white` : `hover:opacity-75`)
+    }
     ${block ? 'w-full' : ''}
     `}
     on:click={onClick}

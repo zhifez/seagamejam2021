@@ -173,7 +173,6 @@
                 label="Pass"
                 hint="Will utilizes a Crow"
                 color="red-500"
-                hoverColor="red-400"
                 on:click={onBtnPass}
                 disabled={$game.canEndRound}
             />
@@ -181,7 +180,6 @@
             <Button 
                 label="Instructions"
                 color="yellow-500"
-                hoverColor="yellow-400"
                 textClass="text-sm"
                 on:click={onBtnInstruction}
             />

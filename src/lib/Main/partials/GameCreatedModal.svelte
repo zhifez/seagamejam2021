@@ -33,9 +33,9 @@
     on:close={onCloseModal}
 >
     <div class="modal-wrapper bg-yellow-400 rounded-md p-5">
-        <div class="flex flex-col items-center gap-3">
+        <div class="flex flex-col gap-3">
             <h1 class="font-semibold text-2xl">New Game Created</h1>
-            <p>Here's the link to your session</p>
+            <p>Here's the link to your session:</p>
             <div 
                 class="w-full p-2 rounded-md bg-gray-100 cursor-pointer text-sm relative"
                 on:click={onClickUrl}
@@ -43,7 +43,7 @@
                 <button class="absolute top-2 right-2 h-5 text-gray-400">
                     <FaRegCopy />
                 </button>
-                <p>{url}</p>
+                <p class="overflow-ellipsis">{url}</p>
             </div>
             {#if linkCopied}
             <p class="text-sm">Link copied!</p>

@@ -97,7 +97,6 @@
             <Button 
                 label="Cancel"
                 color="white"
-                hoverColor="white"
                 textColor="black"
                 on:click={onCloseModal}
             />

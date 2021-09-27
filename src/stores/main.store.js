@@ -8,6 +8,7 @@ export const mainState = writable({
     isLoading: false,
     showGameId: false,
     gameId: null,
+    imageSrc: null,
 });
 
 const updateMainState = (key, value) => {
@@ -22,20 +23,15 @@ export const setShowGameId = (show) => {
     updateMainState('showGameId', show)
 }
 
-export const createGame = async (playerCount) => {
-    let players = [];
-    for (let a=0; a<playerCount; ++a) {
-        players.push({
-            name: `Player ${a + 1}`,
-            isClaimed: false,
-        });
-    }
-    
+export const setImageSrc = (image) => {
+    updateMainState('imageSrc', image);
+}
+
+export const createGame = async () => {
     updateMainState('isLoading', true);
     const gameRef = await addDoc(
         collection(db, 'games'),
         {
-            players,
             isCompleted: false,
             states: [],
             date_created: new Date(),
