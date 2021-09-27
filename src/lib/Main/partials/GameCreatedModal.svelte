@@ -6,7 +6,7 @@
     let url = window.location.host;
     $: {
         if ($mainState.gameId) {
-            url += `/#/${$mainState.gameId}`;
+            url += `/#/game/${$mainState.gameId}`;
         }
     }
 
