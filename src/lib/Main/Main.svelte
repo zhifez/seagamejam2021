@@ -44,7 +44,7 @@
             <h1 class="text-4xl font-semibold">A Crown for Crows</h1>
             <p>A worker placement game about managing crows to steal a crown, in the long run.</p>
 
-            <!-- <div class="text-center">
+            <div class="text-center">
                 <p><b>Developed by:</b> <a class="underline" target="_blank" href="https://zhifez.com/">zhifez</a></p>
                 
                 <p>
@@ -54,7 +54,7 @@
                     <a class="underline" target="_blank" href="https://ionic.io/ionicons">Ionicons</a>,
                     <a class="underline" target="_blank" href="https://primer.style/octicons/">GitHub Octicons</a>.
                 </p>
-            </div> -->
+            </div>
 
         </div>
 
