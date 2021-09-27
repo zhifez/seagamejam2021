@@ -1,8 +1,8 @@
 <script>
-    import { Link } from 'svelte-navigator';
+    import { link } from 'svelte-spa-router';
 </script>
 
 <div class="p-3">
     <h1>A Crown for Crows</h1>
-    <Link to="game">Play the Game</Link>
+    <a use:link href="/game">Play the Game</a>
 </div>

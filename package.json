@@ -20,6 +20,6 @@
   "dependencies": {
     "firebase": "^9.1.0",
     "svelte-icons": "^2.1.0",
-    "svelte-navigator": "^3.1.5"
+    "svelte-spa-router": "^3.2.0"
   }
 }

@@ -1,13 +1,16 @@
 <script>
     import TailwindCSS from './TailwindCSS.svelte';
-    import { Router, Route, createHistory, createMemorySource } from 'svelte-navigator';
-    import { SvelteToast } from '@zerodevx/svelte-toast'
+    import Router from 'svelte-spa-router';
+    import { SvelteToast } from '@zerodevx/svelte-toast';
     import Game from './lib/Game/Game.svelte';
     import Main from './lib/Main/Main.svelte';
     import About from './lib/About.svelte';
-    import HiddenInMobile from './components/HiddenInMobile.svelte';
 
-    const memoryHistory = createHistory(createMemorySource());
+    const routes = {
+        '/': Main,
+        '/game': Game,
+        '/about': About
+    };
 
     const options = {
         duration: 2000,
@@ -31,16 +34,4 @@
 
 <SvelteToast options={options} />
 
-<Router history={memoryHistory}>
-    <Route path="/">
-        <Main />
-    </Route>
-    <Route path="/game/:id">
-        <HiddenInMobile>
-            <Game />
-        </HiddenInMobile>
-    </Route>
-    <Route path="/about">
-        <About />
-    </Route>
-</Router>
+<Router {routes} />
